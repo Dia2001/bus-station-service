@@ -19,9 +19,8 @@ public class Trip {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "car_id", referencedColumnName = "car_id")
     private Car car;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-    private User user;
+    @ManyToMany(mappedBy = "trip")
+    private Set<User> users = new HashSet<>();
     @Column(name = "province_start", nullable = false, length = 20)
     private String provinceStart;
     @Column(name = "province_end", nullable = false, length = 20)
