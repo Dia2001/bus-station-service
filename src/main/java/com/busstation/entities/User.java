@@ -9,6 +9,8 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -53,4 +55,10 @@ public class User {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", nullable = false, referencedColumnName = "account_id")
     private Account account;
+
+    @OneToMany (mappedBy ="leave")
+    public Set<Leave> leaves = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
+    private User user;
 }
