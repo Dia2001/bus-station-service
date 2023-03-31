@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +19,8 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @Table(name = "tbl_userr")
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -56,9 +58,15 @@ public class User {
     @JoinColumn(name = "account_id", nullable = false, referencedColumnName = "account_id")
     private Account account;
 
-    @OneToMany (mappedBy ="leave")
+    @OneToMany (mappedBy ="user")
     public Set<Leave> leaves = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
-    private User user;
+    private Employee employee;
+
+    @ManyToMany(mappedBy = "users")
+    private Set<Trip> trips = new HashSet<>();
+
+    @OneToMany (mappedBy ="user")
+    public Set<Order> orders = new HashSet<>();
 }

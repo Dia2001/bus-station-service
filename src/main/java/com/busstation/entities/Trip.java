@@ -4,22 +4,22 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_trip")
 @Data
-public class Trip {
+public class Trip implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "trip_id",length = 36)
     private String tripId;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
-    private Car car;
-    @ManyToMany(mappedBy = "trip")
-    private Set<User> users = new HashSet<>();
     @Column(name = "province_start", nullable = false, length = 20)
     private String provinceStart;
     @Column(name = "province_end", nullable = false, length = 20)
@@ -33,4 +33,11 @@ public class Trip {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "update_at")
     private Date updateAt;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "trip_user",
+            joinColumns = @JoinColumn(name = "trip_id", referencedColumnName = "trip_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
+    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "trips")
+    private List<Car> cars;
 }

@@ -8,13 +8,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serializable;
+
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
 @AllArgsConstructor
 @Table(name = "tbl_token")
-public class Token {
+public class Token implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")

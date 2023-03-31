@@ -6,13 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Table(name = "tbl_car")
 @Data
-public class Car {
+public class Car  implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -33,21 +35,9 @@ public class Car {
     @JsonIgnore
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chair> chairs;
-    @JsonIgnore
-    @OneToOne(mappedBy = "car", fetch = FetchType.LAZY)
-    private Trip trip;
 
+    @ManyToOne
+    @JoinColumn(name = "trip_id", nullable = false)
+    private Trip trips;
 
-    public List<Chair> getChairs() {
-
-        return chairs == null ? null : new ArrayList<>(chairs);
-    }
-    public void setChairs(List<Chair> chairs) {
-
-        if (chairs == null) {
-            this.chairs = null;
-        } else {
-            this.chairs = Collections.unmodifiableList(chairs);
-        }
-    }
 }
