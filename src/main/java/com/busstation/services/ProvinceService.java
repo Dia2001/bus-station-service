@@ -10,4 +10,5 @@ import java.util.List;
 public interface ProvinceService {
    boolean  createProvince(List<Province> provinces);
    boolean  createCity(List<City> cities);
+
 }
