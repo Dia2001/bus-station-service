@@ -21,28 +21,14 @@ public class TripServiceImpl implements TripService {
     @Autowired
     private TripRepository tripRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
-    public TripResponse createTrip(TripRequest tripRequest) throws IOException {
-
-        /*
-        * convert object tripRequest to an array byte.  byte[] bytes = ...
-        * object ByteArrayInputStream to read the bytes of the object tripRequest
-        * convert it to a DataInput object using DataInputStream.
-        * parse request body using custom date format. TripRequest parsedRequest = ...
-        * */
-
-        byte[] bytes = objectMapper.writeValueAsBytes(tripRequest);
-        ByteArrayInputStream basis = new ByteArrayInputStream(bytes);
-        DataInputStream dis = new DataInputStream(basis);
-        TripRequest parsedRequest = objectMapper.readValue((DataInput) dis, TripRequest.class);
+    public TripResponse createTrip(TripRequest tripRequest){
 
         Trip trip = new Trip();
-        trip.setProvinceStart(parsedRequest.getProvinceStart());
-        trip.setProvinceEnd(parsedRequest.getProvinceEnd());
-        trip.setTimeStart(parsedRequest.getTimeStart());
+        trip.setProvinceStart(tripRequest.getProvinceStart());
+        trip.setProvinceEnd(tripRequest.getProvinceEnd());
+        trip.setTimeStart(tripRequest.getTimeStart());
 
         Trip newTrip = tripRepository.save(trip);
 
@@ -56,7 +42,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Trip updateTrip(String id, TripRequest newTripRequest) {
+    public TripResponse updateTrip(String id, TripRequest newTripRequest) {
 
         Trip trip = tripRepository.findById(id).orElseThrow(()-> new RuntimeException("Trip does not exist"));
 
@@ -65,7 +51,15 @@ public class TripServiceImpl implements TripService {
         trip.setTimeStart(newTripRequest.getTimeStart());
         trip.setUpdateAt(new Date());
 
-        return tripRepository.save(trip);
+        tripRepository.save(trip);
+
+        TripResponse tripResponse = new TripResponse();
+        tripResponse.setTripId(trip.getTripId());
+        tripResponse.setProvinceStart(trip.getProvinceStart());
+        tripResponse.setProvinceEnd(trip.getProvinceEnd());
+        tripResponse.setTimeStart(trip.getTimeStart());
+
+        return tripResponse;
     }
 
     @Override

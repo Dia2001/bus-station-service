@@ -9,11 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-@Service
 public interface TripService {
-    TripResponse createTrip(TripRequest tripRequest) throws IOException;
+    TripResponse createTrip(TripRequest tripRequest);
 
-    Trip updateTrip(String id, TripRequest newTripRequest);
+    TripResponse updateTrip(String id, TripRequest newTripRequest);
 
     Boolean deleteTrip(String id);
 }
