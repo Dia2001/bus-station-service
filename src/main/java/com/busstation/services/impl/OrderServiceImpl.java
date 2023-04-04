@@ -56,19 +56,15 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setOrderID(newOrder.getOrderID());
         orderResponse.setUser(userResponse);
 
-        orderDetailRequest.setOrderId(orderResponse.getOrderID());
-
 
         Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
-
-        Order order = orderRepository.findById(orderDetailRequest.getOrderId()).orElseThrow(()->new EntityNotFoundException("Order does not exist"));
 
         Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
 
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setStatus(orderDetailRequest.getStatus());
         orderDetail.setChair(chair);
-        orderDetail.setOrder(order);
+        orderDetail.setOrder(newOrder);
         orderDetail.setTicket(ticket);
 
         OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
@@ -80,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setOrderDetailId(newOrderDetail.getOrderDetailId());
         orderDetailResponse.setStatus(newOrderDetail.getStatus());
         orderDetailResponse.setChair(setupChairResponse(chair));
-        orderDetailResponse.setOrder(setupOrderResponse(order));
+        orderDetailResponse.setOrder(setupOrderResponse(newOrder));
         orderDetailResponse.setTicket(setupTicketResponse(ticket));
 
         orderResponse.setOrderDetail(orderDetailResponse);
