@@ -36,7 +36,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
 
-        Order order = orderRepository.findById(orderDetailRequest.getOrderId()).orElseThrow(()->new EntityNotFoundException("Order does not exist"));
+        Order order = orderRepository.findById(orderDetail.getOrder().getOrderID()).orElseThrow(()->new EntityNotFoundException("Order does not exist"));
 
         Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
 
