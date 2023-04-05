@@ -1,16 +1,15 @@
 package com.busstation.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tbl_chair")
 public class Chair  implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -25,4 +24,8 @@ public class Chair  implements Serializable {
 
     @Column(name = "chair_number", length = 11, nullable = false)
     private int chairNumber;
+
+
+    @Column(name = "status")
+    private Boolean status;
 }

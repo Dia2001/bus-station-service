@@ -8,12 +8,12 @@ import com.busstation.repositories.LeaveRepository;
 import com.busstation.repositories.UserRepository;
 import com.busstation.services.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class LeaveServiceImpl implements LeaveService {
 
 
@@ -49,7 +49,7 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public LeaveResponse updatedLeave(String leaveId, LeaveRequest request) {
-        Leave updateLeave = leaveRepository.findById(leaveId).orElseThrow(() -> new RuntimeException("Car does not exist"));
+        Leave updateLeave = leaveRepository.findById(leaveId).orElseThrow(() -> new RuntimeException("Leave does not exist"));
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User does not exist"));
         updateLeave.setDateStart(request.getDateStart());
         updateLeave.setDateEnd(request.getDateEnd());
