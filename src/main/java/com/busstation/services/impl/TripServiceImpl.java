@@ -1,18 +1,19 @@
 package com.busstation.services.impl;
 
 import com.busstation.entities.Trip;
+import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.TripResponse;
 import com.busstation.repositories.TripRepository;
 import com.busstation.services.TripService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.Date;
 
 @Service
@@ -44,7 +45,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripResponse updateTrip(String id, TripRequest newTripRequest) {
 
-        Trip trip = tripRepository.findById(id).orElseThrow(()-> new RuntimeException("Trip does not exist"));
+        Trip trip = tripRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Trip does not exist"));
 
         trip.setProvinceStart(newTripRequest.getProvinceStart());
         trip.setProvinceEnd(newTripRequest.getProvinceEnd());
@@ -65,8 +66,37 @@ public class TripServiceImpl implements TripService {
     @Override
     public Boolean deleteTrip(String id) {
 
-        Trip trip = tripRepository.findById(id).orElseThrow(()-> new RuntimeException("Trip does not exist"));
+        Trip trip = tripRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Trip does not exist"));
         tripRepository.delete(trip);
         return true;
+    }
+
+    @Override
+    public Page<TripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest, int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
+
+        if(searchTripRequest.getProvinceStart() == null && searchTripRequest.getDateTime() == null){
+
+            Page<Trip> trips = tripRepository.findAll(pageable);
+
+            Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
+            return tripResponsePage;
+        }
+
+        if(searchTripRequest.getDateTime() == null){
+
+            Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(), searchTripRequest.getProvinceEnd(), pageable);
+
+            Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
+            return tripResponsePage;
+        }
+
+        Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEndAndDateTime(searchTripRequest.getProvinceStart(), searchTripRequest.getProvinceEnd(),
+                searchTripRequest.getDateTime(), pageable);
+
+        Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
+
+        return tripResponsePage;
     }
 }

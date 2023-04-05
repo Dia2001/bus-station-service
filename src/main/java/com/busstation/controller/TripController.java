@@ -1,11 +1,12 @@
 package com.busstation.controller;
 
 import com.busstation.entities.Trip;
+import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.TripResponse;
-import com.busstation.repositories.TripRepository;
 import com.busstation.services.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,17 @@ public class TripController {
 
     @Autowired
     private TripService tripService;
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getAllTripsByProvinceStartAndProvinceEndDateTime(
+            @RequestBody SearchTripRequest searchTripRequest,
+            @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize){
+
+        Page<TripResponse> trips = tripService.getAllTripsByProvinceStartAndProvinceEndDateTime(searchTripRequest,pageNo,pageSize);
+
+        return new ResponseEntity<>(trips, HttpStatus.OK);
+    }
 
     @PostMapping("/add")
     public ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest){
