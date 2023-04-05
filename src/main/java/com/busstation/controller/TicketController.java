@@ -1,9 +1,13 @@
 package com.busstation.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.busstation.entities.Ticket;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.response.TicketResponse;
+import com.busstation.repositories.TicketRepository;
 import com.busstation.services.TicketService;
 
 @RestController
@@ -20,6 +26,9 @@ import com.busstation.services.TicketService;
 public class TicketController {
 	@Autowired
 	private TicketService ticketService;
+	
+	@Autowired
+	private TicketRepository ticketRepository;
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> createTicket(@RequestBody TicketRequest ticketRequest) {
@@ -39,5 +48,17 @@ public class TicketController {
 			return new ResponseEntity<>("Deleted !!!", HttpStatus.OK);
 		}
 		return new ResponseEntity<>("Delete failed !!!", HttpStatus.BAD_GATEWAY);
+	}
+	
+	@GetMapping
+	public List<Ticket> getAllTicket(){
+		return ticketRepository.findAll();
+	}
+	
+	@GetMapping
+	@RequestMapping("/pagination/{pageNumber}/{pageSize}")
+	public Page<Ticket>ticketPagination(@PathVariable int pageNumber,@PathVariable int pageSize){
+		// Page number start : 0
+		return ticketService.getTicketPagination(pageNumber, pageSize);
 	}
 }

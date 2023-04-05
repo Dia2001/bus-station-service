@@ -1,6 +1,9 @@
 package com.busstation.services.impl;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import com.busstation.entities.Ticket;
@@ -51,6 +54,12 @@ public class TicketServiceImpl implements TicketService {
 		ticketRepository.delete(ticket);
 		
 		return true;
+	}
+
+	@Override
+	public Page<Ticket> getTicketPagination(int pageNumber, int pageSize) {
+		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+		return ticketRepository.findAll(pageable);
 	}
 
 }
