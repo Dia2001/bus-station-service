@@ -20,4 +20,6 @@ public interface TripService {
     Boolean deleteTrip(String id);
 
     Page<SearchTripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest, int pageNo, int pageSize);
+
+    Page<TripResponse> getAllTrips(int pageNo, int pageSize);
 }

@@ -77,9 +77,9 @@ public class TripServiceImpl implements TripService {
 
         Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
 
-        if(searchTripRequest.getProvinceStart() == null && searchTripRequest.getDateTime() == null){
+        if(searchTripRequest.getProvinceStart() == null && searchTripRequest.getProvinceEnd() == null){
 
-            Page<Trip> trips = tripRepository.findAll(pageable);
+            Page<Trip> trips = tripRepository.findAllTrips(pageable);
 
             Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
 
@@ -101,5 +101,17 @@ public class TripServiceImpl implements TripService {
         Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
 
         return searchTripResponsePage;
+    }
+
+    @Override
+    public Page<TripResponse> getAllTrips(int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
+
+        Page<Trip> trips = tripRepository.findAll(pageable);
+
+        Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
+
+        return tripResponsePage;
     }
 }
