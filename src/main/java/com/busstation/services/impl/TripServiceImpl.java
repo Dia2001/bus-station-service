@@ -3,6 +3,7 @@ package com.busstation.services.impl;
 import com.busstation.entities.Trip;
 import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TripRequest;
+import com.busstation.payload.response.SearchTripResponse;
 import com.busstation.payload.response.TripResponse;
 import com.busstation.repositories.TripRepository;
 import com.busstation.services.TripService;
@@ -72,7 +73,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Page<TripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest, int pageNo, int pageSize) {
+    public Page<SearchTripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest, int pageNo, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
 
@@ -80,23 +81,25 @@ public class TripServiceImpl implements TripService {
 
             Page<Trip> trips = tripRepository.findAll(pageable);
 
-            Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
-            return tripResponsePage;
+            Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
+
+            return searchTripResponsePage;
         }
 
         if(searchTripRequest.getDateTime() == null){
 
             Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(), searchTripRequest.getProvinceEnd(), pageable);
 
-            Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
-            return tripResponsePage;
+            Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
+
+            return searchTripResponsePage;
         }
 
         Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEndAndDateTime(searchTripRequest.getProvinceStart(), searchTripRequest.getProvinceEnd(),
                 searchTripRequest.getDateTime(), pageable);
 
-        Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
+        Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
 
-        return tripResponsePage;
+        return searchTripResponsePage;
     }
 }

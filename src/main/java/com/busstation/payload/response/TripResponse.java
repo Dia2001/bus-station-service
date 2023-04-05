@@ -19,11 +19,4 @@ public class TripResponse {
     private String provinceEnd;
 
     private Date timeStart;
-
-    public TripResponse(Trip trip) {
-        this.tripId = trip.getTripId();
-        this.provinceStart = trip.getProvinceStart();
-        this.provinceEnd = trip.getProvinceEnd();
-        this.timeStart = trip.getTimeStart();
-    }
 }
