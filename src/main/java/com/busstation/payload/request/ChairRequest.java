@@ -13,4 +13,5 @@ import lombok.Setter;
 public class ChairRequest {
 	private int chairNumber;
 	private String carId;
+	private Boolean status;
 }

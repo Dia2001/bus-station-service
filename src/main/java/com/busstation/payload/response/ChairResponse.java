@@ -13,4 +13,5 @@ public class ChairResponse {
 	private String chairId;
 	private String carId;
 	private int chairNumber;
+	private Boolean status;
 }

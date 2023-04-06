@@ -26,6 +26,7 @@ public class ChairServiceImpl implements ChairService {
 		Chair chair = new Chair();
 		chair.setChairNumber(request.getChairNumber());
 		chair.setCar(car);
+		chair.setStatus(request.getStatus());
 		chairRepository.save(chair);
 
 		Chair newChair = chairRepository.save(chair);
@@ -33,7 +34,10 @@ public class ChairServiceImpl implements ChairService {
 		chairResponse.setChairId(newChair.getChairId());
 		chairResponse.setChairNumber(newChair.getChairNumber());
 		chairResponse.setCarId(newChair.getCar().getCarId());
-
+		chairResponse.setStatus(newChair.getStatus());
+		
+		//No exception handling : chair number
+		
 		return chairResponse;
 	}
 
@@ -45,7 +49,10 @@ public class ChairServiceImpl implements ChairService {
 				.orElseThrow(() -> new RuntimeException("Car ID does not exist"));
 		chair.setCar(car);
 		chair.setChairNumber(request.getChairNumber());
+		chair.setStatus(request.getStatus());
 		chairRepository.save(chair);
+		
+		//No exception handling : chair number
 		
 		return true;
 	}

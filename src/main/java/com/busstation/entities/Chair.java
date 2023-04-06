@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -15,8 +17,9 @@ import java.io.Serializable;
 public class Chair  implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "chair_id")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "chair_id",length = 36, nullable = false)
     private String chairId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,4 +28,7 @@ public class Chair  implements Serializable {
 
     @Column(name = "chair_number", length = 11, nullable = false)
     private int chairNumber;
+    
+    @Column(name = "status",nullable = false)
+    private Boolean status;
 }
