@@ -1,10 +1,12 @@
 package com.busstation.controller;
 
+import com.busstation.payload.response.ChairResponse;
 import com.busstation.services.ChairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/chairs")
@@ -15,21 +17,35 @@ public class ChairController {
 
     //Show all chair by Car
     @GetMapping("/{carId}")
-    public ResponseEntity<?> showAllChairNumberByCar(
-            @PathVariable("carId") String carId,
-            @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    public ResponseEntity<?> showAllChairNumberByCar(@PathVariable("carId") String carId, @RequestParam(value = "pageNo", defaultValue = "0") int pageNo, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
-            return new ResponseEntity<>(chairService.showAllChair(carId, pageNo, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(chairService.showAllChair(carId, pageNo, pageSize), HttpStatus.OK);
     }
 
     //Search ChairNumber by CarId
     @GetMapping("/{carId}/{chairNumber}")
-    public ResponseEntity<?> searchChairNumber(
-            @PathVariable("carId") String carId,
-            @PathVariable("chairNumber") int chairNumber
-    ) {
+    public ResponseEntity<?> searchChairNumber(@PathVariable("carId") String carId, @PathVariable("chairNumber") int chairNumber) {
         return new ResponseEntity<>(chairService.searchChairNumber(carId, chairNumber), HttpStatus.OK);
 
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createChair(@RequestBody ChairRequest chairRequest) {
+        ChairResponse chairResponse = chairService.addChair(chairRequest);
+        return new ResponseEntity<>(chairResponse, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/{chairId}")
+    public ResponseEntity<?> updateChair(@RequestBody ChairRequest request, @PathVariable("chairId") String chairId) {
+        chairService.updateChair(chairId, request);
+        return new ResponseEntity<>("Updated !!!", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{chairId}")
+    public ResponseEntity<?> deleteChiar(@PathVariable("chairId") String chairId) {
+        if (chairService.deleteChair(chairId)) {
+            return new ResponseEntity<>("Deleted !!!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Delete failed !!!", HttpStatus.BAD_GATEWAY);
     }
 }
