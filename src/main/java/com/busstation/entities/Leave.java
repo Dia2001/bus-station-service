@@ -1,9 +1,10 @@
 package com.busstation.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -11,7 +12,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "tbl_leave")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Leave implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,11 +40,4 @@ public class Leave implements Serializable {
     private Date createAt;
     protected void onCreate() { createAt = new Date(); }
 
-    @JsonIgnore
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

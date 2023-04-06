@@ -2,10 +2,8 @@ package com.busstation.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -13,27 +11,25 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@NoArgsConstructor
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @Table(name = "tbl_userr")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "user_id", length = 36, nullable = false)
     private String userId;
 
-   // @Column(name = "account_id", length = 36, nullable = false,unique = true)
-    //private String accountId;
-
     @Column(name = "full_name", length = 50, nullable = false)
     private String fullName;
 
-    @Column(name = "phone_number", length = 12, nullable = false,unique = true)
+    @Column(name = "phone_number", length = 12, nullable = false)
     private  String phoneNumber;
 
     @Column(name = "email", length = 50, nullable = false,unique = true)
@@ -43,25 +39,24 @@ public class User implements Serializable {
     private String address;
 
     @Column(name = "status")
-    private boolean status;
+    private Boolean status;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", columnDefinition = "DATE DEFAULT CURRENT_DATE", nullable = false)
-    private Date createdDate;
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    private Date createdAt;
 
-    protected void onCreate() { createdDate = new Date(); }
     @Column(name = "updated_at", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate;
+    private Date updatedAt;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "account_id", nullable = false, referencedColumnName = "account_id")
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @OneToMany (mappedBy ="user")
     public Set<Leave> leaves = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private Employee employee;
 
     @ManyToMany(mappedBy = "users")

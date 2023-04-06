@@ -1,7 +1,7 @@
 package com.busstation.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -12,7 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tbl_trip")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Trip implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

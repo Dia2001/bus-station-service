@@ -2,10 +2,8 @@ package com.busstation.entities;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -30,30 +28,25 @@ public class Account  implements Serializable {
     @Column(name = "username", length = 50, nullable = false,unique = true)
     private String username;
 
-    @Column(name = "password", length = 100, nullable = false,unique = true)
+    @Column(name = "password", length = 100, nullable = false)
     public String password;
 
-   // @Column(name = "role_id", length = 50,nullable = false, columnDefinition = "bit default 1")
-   // public boolean roleId;
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    private Date createdAt;
 
+    @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", columnDefinition = "DATE DEFAULT CURRENT_DATE", nullable = false)
-    private Date createdDate;
+    private Date updatedAt;
 
-    protected void onCreate() { createdDate = new Date(); }
-    @Column(name = "updated_at", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedDate;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "account")
+    @OneToOne( mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;
 
-    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Token> tokens;
-
 
 }

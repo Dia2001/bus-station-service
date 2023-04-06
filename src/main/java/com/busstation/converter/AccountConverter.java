@@ -1,4 +1,5 @@
 package com.busstation.converter;
 
-public class demo {
+public class AccountConverter {
+
 }
