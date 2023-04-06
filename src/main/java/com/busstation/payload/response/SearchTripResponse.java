@@ -36,6 +36,7 @@ public class SearchTripResponse {
 
         List<CarResponse> carResponseList = new ArrayList<>();
 
+
         for(Car item : trip.getCars()){
 
             List<ChairResponse> chairResponseList = new ArrayList<>();

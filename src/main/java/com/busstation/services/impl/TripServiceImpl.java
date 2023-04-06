@@ -1,11 +1,14 @@
 package com.busstation.services.impl;
 
 import com.busstation.entities.Trip;
+import com.busstation.entities.User;
 import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.SearchTripResponse;
 import com.busstation.payload.response.TripResponse;
+import com.busstation.payload.response.UserByTripIdResponse;
 import com.busstation.repositories.TripRepository;
+import com.busstation.repositories.UserRepository;
 import com.busstation.services.TripService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,9 @@ public class TripServiceImpl implements TripService {
 
     @Autowired
     private TripRepository tripRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Override
@@ -73,7 +79,8 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public Page<SearchTripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest, int pageNo, int pageSize) {
+    public Page<SearchTripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest,
+                                                                                     int pageNo, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
 
@@ -88,14 +95,16 @@ public class TripServiceImpl implements TripService {
 
         if(searchTripRequest.getDateTime() == null){
 
-            Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(), searchTripRequest.getProvinceEnd(), pageable);
+            Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(),
+                    searchTripRequest.getProvinceEnd(), pageable);
 
             Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
 
             return searchTripResponsePage;
         }
 
-        Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEndAndDateTime(searchTripRequest.getProvinceStart(), searchTripRequest.getProvinceEnd(),
+        Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEndAndDateTime(searchTripRequest.getProvinceStart(),
+                searchTripRequest.getProvinceEnd(),
                 searchTripRequest.getDateTime(), pageable);
 
         Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
@@ -114,4 +123,19 @@ public class TripServiceImpl implements TripService {
 
         return tripResponsePage;
     }
+
+    @Override
+    public Page<UserByTripIdResponse> getAllUserByTrip(String tripId, int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+
+        Page<User> users = userRepository.findByTrips_TripId(tripId, pageable);
+
+        Page<UserByTripIdResponse> userByTripIdResponsePage = users.map(UserByTripIdResponse::new);
+
+
+        return userByTripIdResponsePage;
+    }
+
+
 }

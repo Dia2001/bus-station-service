@@ -7,6 +7,10 @@ import com.busstation.repositories.*;
 import com.busstation.services.OrderDetailService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -32,13 +36,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetailResponse updateOrderDetail(String orderDetailId, OrderDetailRequest orderDetailRequest) {
 
-        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId).orElseThrow(()->new EntityNotFoundException("Order Detail does not exist"));
+        OrderDetail orderDetail = orderDetailRepository.findById(orderDetailId).orElseThrow(() -> new EntityNotFoundException("Order Detail does not exist"));
 
-        Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
+        Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(() -> new EntityNotFoundException("chair does not exist"));
 
-        Order order = orderRepository.findById(orderDetail.getOrder().getOrderID()).orElseThrow(()->new EntityNotFoundException("Order does not exist"));
+        Order order = orderRepository.findById(orderDetail.getOrder().getOrderID()).orElseThrow(() -> new EntityNotFoundException("Order does not exist"));
 
-        Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
+        Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(() -> new EntityNotFoundException("Ticker does not exist"));
 
         orderDetail.setStatus(orderDetailRequest.getStatus());
         orderDetail.setChair(chair);
@@ -58,8 +62,33 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         return orderDetailResponse;
     }
-    public UserResponse setupUserResponse(Order order){
-        User user = userRepository.findById(order.getUser().getUserId()).orElseThrow(()->new EntityNotFoundException("User does not exist"));
+
+    @Override
+    public Page<OrderDetailResponse> getAllOrderDetail(int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").descending());
+
+        Page<OrderDetail> orderDetails = orderDetailRepository.findAll(pageable);
+
+        Page<OrderDetailResponse> orderDetailPage = orderDetails.map(OrderDetailResponse::new);
+
+        return orderDetailPage;
+    }
+
+    @Override
+    public Page<OrderDetailResponse> getAllOrderDetailByUser(String userId, int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").descending());
+
+        Page<OrderDetail> orderDetails = orderDetailRepository.findAllByUserId(userId,pageable);
+
+        Page<OrderDetailResponse> orderDetailPage = orderDetails.map(OrderDetailResponse::new);
+
+        return orderDetailPage;
+    }
+
+    public UserResponse setupUserResponse(Order order) {
+        User user = userRepository.findById(order.getUser().getUserId()).orElseThrow(() -> new EntityNotFoundException("User does not exist"));
 
         UserResponse userResponse = new UserResponse();
         userResponse.setUserId(user.getUserId());
@@ -72,7 +101,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return userResponse;
     }
 
-    public ChairResponse  setupChairResponse(Chair chair){
+    public ChairResponse setupChairResponse(Chair chair) {
 
         ChairResponse chairResponse = new ChairResponse();
         chairResponse.setChairId(chair.getChairId());
@@ -82,7 +111,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return chairResponse;
     }
 
-    public OrderResponse  setupOrderResponse(Order order){
+    public OrderResponse setupOrderResponse(Order order) {
 
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setOrderID(order.getOrderID());
@@ -91,7 +120,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         return orderResponse;
     }
 
-    public TicketResponse  setupTicketResponse(Ticket ticket){
+    public TicketResponse setupTicketResponse(Ticket ticket) {
 
         TicketResponse ticketResponse = new TicketResponse();
         ticketResponse.setTicketId(ticket.getTicketId());

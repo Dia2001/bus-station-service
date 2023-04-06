@@ -7,6 +7,10 @@ import com.busstation.repositories.*;
 import com.busstation.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -34,6 +38,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private TripRepository tripRepository;
+
+    @Autowired
+    private ProvinceRepository provinceRepository;
 
 
 
@@ -91,10 +98,34 @@ public class OrderServiceImpl implements OrderService {
         return orderResponse;
     }
 
+    @Override
+    public OrderDetailResponse searchOrderById(String orderId) {
+
+        OrderDetail orderDetail = orderDetailRepository.findByOrder_OrderID(orderId);
+
+        Order order = orderRepository.findById(orderDetail.getOrder().getOrderID()).orElseThrow(() -> new EntityNotFoundException("Order does not exist"));
+
+        Chair chair = chairRepository.findById(orderDetail.getChair().getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
+
+        Ticket ticket = ticketRepository.findById(orderDetail.getTicket().getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
+
+
+        OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
+
+        orderDetailResponse.setOrderDetailId(orderDetail.getOrderDetailId());
+        orderDetailResponse.setStatus(orderDetail.getStatus());
+        orderDetailResponse.setOrder(setupOrderResponse(order));
+        orderDetailResponse.setTicket(setupTicketResponse(ticket));
+        orderDetailResponse.setChair(setupChairResponse(chair));
+
+
+        return orderDetailResponse;
+    }
+
     public String getOrderId(String tripId){
 
         final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        final int LENGTH = 11;
+        final int LENGTH = 15;
 
         Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
 
@@ -103,7 +134,8 @@ public class OrderServiceImpl implements OrderService {
                 .collect(StringBuilder::new,
                         StringBuilder::append,
                         StringBuilder::append).toString();
-        provinceEnd += "-";
+        Province province = provinceRepository.findByName(trip.getProvinceEnd());
+        provinceEnd += province.getProvinceId() + "-";
 
         Random random = new Random();
         StringBuilder builder = new StringBuilder();

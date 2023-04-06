@@ -1,6 +1,5 @@
 package com.busstation.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -58,15 +57,20 @@ public class User implements Serializable {
     @JoinColumn(name = "account_id", nullable = false, referencedColumnName = "account_id")
     private Account account;
 
-    @OneToMany (mappedBy ="user")
+    @OneToMany (mappedBy ="user", fetch = FetchType.LAZY)
     public Set<Leave> leaves = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private Employee employee;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Trip> trips = new HashSet<>();
 
-    @OneToMany (mappedBy ="user")
+    @OneToMany (mappedBy ="user", fetch = FetchType.LAZY)
     public Set<Order> orders = new HashSet<>();
+
+
+    public boolean getStatus() {
+        return status;
+    }
 }

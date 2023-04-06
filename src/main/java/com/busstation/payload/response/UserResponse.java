@@ -1,8 +1,13 @@
 package com.busstation.payload.response;
 
+import com.busstation.entities.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserResponse {
 
     private String userId;
@@ -16,4 +21,8 @@ public class UserResponse {
     private String address;
 
     private boolean status;
+
+    public boolean getStatus() {
+        return this.status;
+    }
 }
