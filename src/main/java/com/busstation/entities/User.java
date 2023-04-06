@@ -1,6 +1,5 @@
 package com.busstation.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -45,23 +44,27 @@ public class User implements Serializable {
     @CreationTimestamp
     private Date createdAt;
 
-    @Column(name = "updated_at", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @OneToMany (mappedBy ="user")
+    @OneToMany (mappedBy ="user", fetch = FetchType.LAZY)
     public Set<Leave> leaves = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     private Employee employee;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Trip> trips = new HashSet<>();
 
-    @OneToMany (mappedBy ="user")
+    @OneToMany (mappedBy ="user", fetch = FetchType.LAZY)
     public Set<Order> orders = new HashSet<>();
+
+
+    public boolean getStatus() {
+        return status;
+    }
 }

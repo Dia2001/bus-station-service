@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class Province implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "province_id", updatable = false , length = 11)
 	private int provinceId;
 
