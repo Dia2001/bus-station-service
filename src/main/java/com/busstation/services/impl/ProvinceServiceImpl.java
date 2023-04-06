@@ -20,14 +20,17 @@ public class ProvinceServiceImpl implements ProvinceService {
     CityRepository cityRepository;
 
     @Override
-    public boolean createProvice(List<Province> provinces) {
-        provinceRepository.saveAll(provinces);
-        return true;
+    public boolean createProvince(List<Province> provinces) {
+        if(provinceRepository.saveAll(provinces) != null)
+            return true;
+        return false;
     }
 
     @Override
-    public boolean createCiy(List<City> cities) {
-        cityRepository.saveAll(cities);
+    public boolean createCity(List<City> cities) {
+        if(cityRepository.saveAll(cities) != null)
+            return true;
         return false;
     }
+
 }

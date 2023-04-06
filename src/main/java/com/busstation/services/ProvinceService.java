@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public interface ProvinceService {
-   boolean  createProvice(List<Province> provinces);
-   boolean  createCiy(List<City> cities);
+   boolean  createProvince(List<Province> provinces);
+   boolean  createCity(List<City> cities);
+
 }

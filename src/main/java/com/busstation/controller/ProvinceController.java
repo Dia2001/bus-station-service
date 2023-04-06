@@ -16,15 +16,18 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/provinces")
 public class ProvinceController {
+
     @Autowired
     ProvinceService provinceService;
+
     @PostMapping(value = "/addProvince")
     public ResponseEntity<?> saveProvince(@RequestBody List<Province> provinceList){
-        return new ResponseEntity<>(provinceService.createProvice(provinceList), HttpStatus.OK);
+        return new ResponseEntity<>(provinceService.createProvince(provinceList), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/addCity")
     public ResponseEntity<?> saves(@RequestBody List<City> cities){
-        return new ResponseEntity<>(provinceService.createCiy(cities), HttpStatus.OK);
+        return new ResponseEntity<>(provinceService.createCity(cities), HttpStatus.OK);
     }
+
 }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 //import jakarta.persistence.JoinColumn;
@@ -23,21 +24,14 @@ import lombok.Setter;
 public class Order  implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
 	@Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "order_id", length = 36, nullable = false)
+    @Column(name = "order_id", length = 11, nullable = false)
     private String orderID;
 
-	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", columnDefinition = "DATE DEFAULT CURRENT_DATE", nullable = false)
-    private Date createdDate;
-
-    protected void onCreate() { createdDate = new Date(); }
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "update_at", nullable = true)
-    private Date updateDate;
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp //Annotation of Hibernate to automatically save the current time when the object is created
+    private Date createAt;
   
     @ManyToOne
     @JoinColumn(name = "user_id")
