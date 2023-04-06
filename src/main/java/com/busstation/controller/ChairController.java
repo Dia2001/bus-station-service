@@ -1,5 +1,6 @@
 package com.busstation.controller;
 
+import com.busstation.payload.request.ChairRequest;
 import com.busstation.payload.response.ChairResponse;
 import com.busstation.services.ChairService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController
+@CrossOrigin(origins = "http://localhost:9999/")
+@RestController(value = "chairAPIofWeb")
 @RequestMapping("/api/v1/chairs")
 public class ChairController {
 

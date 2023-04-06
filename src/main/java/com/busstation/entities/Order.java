@@ -26,11 +26,11 @@ public class Order  implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	@Id
-    @Column(name = "order_id", length = 11, nullable = false)
+    @Column(name = "order_id", length = 15, nullable = false)
     private String orderID;
 
     @Column(name = "created_at", nullable = false)
-    @CreationTimestamp //Annotation of Hibernate to automatically save the current time when the object is created
+    @CreationTimestamp
     private Date createAt;
   
     @ManyToOne

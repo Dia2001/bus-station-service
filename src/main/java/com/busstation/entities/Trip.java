@@ -35,7 +35,7 @@ public class Trip implements Serializable {
     private Date timeStart;
 
     @Column(name = "created_at", nullable = false)
-    @CreationTimestamp //Annotation of Hibernate to automatically save the current time when the object is created
+    @CreationTimestamp
     private Date createAt;
 
     @Column(name = "update_at")

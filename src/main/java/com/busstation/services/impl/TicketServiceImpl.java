@@ -1,21 +1,20 @@
 package com.busstation.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Component;
-
 import com.busstation.entities.Ticket;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.response.TicketResponse;
 import com.busstation.repositories.TicketRepository;
 import com.busstation.services.TicketService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 // NOTE : No exception handling
 
-@Component
+@Service
 public class TicketServiceImpl implements TicketService {
 	@Autowired
 	private TicketRepository ticketRepository;

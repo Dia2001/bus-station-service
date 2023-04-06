@@ -1,6 +1,5 @@
 package com.busstation.repositories;
 
-import com.busstation.entities.Trip;
 import com.busstation.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

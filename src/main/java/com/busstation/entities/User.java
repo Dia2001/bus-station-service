@@ -44,8 +44,7 @@ public class User implements Serializable {
     @CreationTimestamp
     private Date createdAt;
 
-    @Column(name = "updated_at", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
     private Date updatedAt;
 
     @OneToOne(fetch = FetchType.EAGER)

@@ -12,7 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@CrossOrigin(origins = "http://localhost:9999/")
+@RestController(value = "tripAPIofWeb")
 @RequestMapping(value = "/api/v1/trip")
 public class TripController {
 

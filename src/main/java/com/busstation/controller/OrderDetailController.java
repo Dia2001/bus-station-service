@@ -10,8 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController
-@RequestMapping("api/v1/order_detail")
+@CrossOrigin(origins = "http://localhost:9999/")
+@RestController(value = "orderDetailAPIofWeb")
+@RequestMapping("api/v1/orderdetails")
 public class OrderDetailController {
 
     @Autowired

@@ -1,6 +1,5 @@
 package com.busstation.payload.response;
 
-import com.busstation.entities.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
