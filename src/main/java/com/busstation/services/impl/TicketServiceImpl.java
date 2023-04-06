@@ -1,9 +1,10 @@
 package com.busstation.services.impl;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.busstation.entities.Ticket;
@@ -11,6 +12,8 @@ import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.response.TicketResponse;
 import com.busstation.repositories.TicketRepository;
 import com.busstation.services.TicketService;
+
+// NOTE : No exception handling
 
 @Component
 public class TicketServiceImpl implements TicketService {
@@ -43,7 +46,7 @@ public class TicketServiceImpl implements TicketService {
 		ticket.setAddressStart(request.getAddressStart());
 		ticket.setPrice(request.getPrice());
 		ticketRepository.save(ticket);
-		
+
 		return true;
 	}
 
@@ -52,7 +55,7 @@ public class TicketServiceImpl implements TicketService {
 		Ticket ticket = ticketRepository.findById(ticketId)
 				.orElseThrow(() -> new RuntimeException("Ticket does not exist"));
 		ticketRepository.delete(ticket);
-		
+
 		return true;
 	}
 
@@ -60,6 +63,26 @@ public class TicketServiceImpl implements TicketService {
 	public Page<Ticket> getTicketPagination(int pageNumber, int pageSize) {
 		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
 		return ticketRepository.findAll(pageable);
+	}
+
+	@Override
+	public Page<TicketResponse> searchTicket(TicketRequest ticketRequest, int pageNumber, int pageSize) {
+		 Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("price").ascending());
+		 if(ticketRequest.getAddressStart() == null || ticketRequest.getAddressEnd() == null ) {
+			 Page<Ticket> ticket = ticketRepository.findAll(pageable);
+			 Page<TicketResponse> ticketResponse = ticket.map(TicketResponse :: new);
+			 return ticketResponse;
+		 }
+		 
+		 if(ticketRequest.getPrice() == null) {
+			 Page<Ticket> ticket = ticketRepository.findByAddress(ticketRequest.getAddressStart(), ticketRequest.getAddressEnd(), pageable);
+			 Page<TicketResponse> ticketResponse = ticket.map(TicketResponse :: new);
+			 return ticketResponse;
+		 }
+		 
+		 Page<Ticket> ticket = ticketRepository.findByTickets(ticketRequest.getAddressStart(), ticketRequest.getAddressEnd(),ticketRequest.getPrice(), pageable);
+		 Page<TicketResponse> ticketResponse = ticket.map(TicketResponse :: new);
+		 return ticketResponse;
 	}
 
 }

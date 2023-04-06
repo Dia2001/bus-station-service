@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.busstation.entities.Ticket;
@@ -26,10 +27,10 @@ import com.busstation.services.TicketService;
 public class TicketController {
 	@Autowired
 	private TicketService ticketService;
-	
+
 	@Autowired
 	private TicketRepository ticketRepository;
-	
+
 	@PostMapping("/create")
 	public ResponseEntity<?> createTicket(@RequestBody TicketRequest ticketRequest) {
 		TicketResponse ticketResponse = ticketService.addTicket(ticketRequest);
@@ -37,7 +38,8 @@ public class TicketController {
 	}
 
 	@PutMapping("/update/{ticketId}")
-	public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest, @PathVariable("ticketId") String ticketId) {
+	public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest,
+			@PathVariable("ticketId") String ticketId) {
 		ticketService.updateTicket(ticketId, ticketRequest);
 		return new ResponseEntity<>("Updated !!!", HttpStatus.OK);
 	}
@@ -49,16 +51,24 @@ public class TicketController {
 		}
 		return new ResponseEntity<>("Delete failed !!!", HttpStatus.BAD_GATEWAY);
 	}
-	
+
 	@GetMapping
-	public List<Ticket> getAllTicket(){
+	public List<Ticket> getAllTicket() {
 		return ticketRepository.findAll();
 	}
-	
+
 	@GetMapping
-	@RequestMapping("/pagination/{pageNumber}/{pageSize}")
-	public Page<Ticket>ticketPagination(@PathVariable int pageNumber,@PathVariable int pageSize){
+	@RequestMapping("/pagination")
+	public Page<Ticket> ticketPagination(@RequestParam("pageNumber") int pageNumber,
+			@RequestParam("pageSize") int pageSize) {
 		// Page number start : 0
 		return ticketService.getTicketPagination(pageNumber, pageSize);
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<?> searchTicket(@RequestBody TicketRequest ticketRequest,
+			@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize) {
+		Page<TicketResponse> ticketResponse = ticketService.searchTicket(ticketRequest, pageNumber, pageSize);
+		return new ResponseEntity<>(ticketResponse,HttpStatus.OK);
 	}
 }

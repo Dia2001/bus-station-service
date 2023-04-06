@@ -13,4 +13,5 @@ public interface TicketService {
 	boolean updateTicket(String ticketId , TicketRequest request);
 	boolean deleteTicket(String ticketId);
 	Page<Ticket> getTicketPagination(int pageNumber , int pageSize);
+	Page<TicketResponse> searchTicket(TicketRequest ticketRequest , int pageNumber , int pageSize);
 }
