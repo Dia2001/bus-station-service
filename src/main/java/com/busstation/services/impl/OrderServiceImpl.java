@@ -9,6 +9,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Random;
+
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -39,6 +42,10 @@ public class OrderServiceImpl implements OrderService {
 
         User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User does not exist"));
 
+        Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
+
+        Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
+
         UserResponse userResponse = new UserResponse();
         userResponse.setUserId(user.getUserId());
         userResponse.setStatus(user.getStatus());
@@ -49,6 +56,8 @@ public class OrderServiceImpl implements OrderService {
 
         Order order1 = new Order();
         order1.setUser(user);
+        order1.setOrderID(getOrderId(chair.getCar().getTrips().getTripId()));
+
 
         Order newOrder = orderRepository.save(order1);
 
@@ -57,9 +66,6 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setUser(userResponse);
 
 
-        Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
-
-        Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
 
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setStatus(orderDetailRequest.getStatus());
@@ -83,6 +89,35 @@ public class OrderServiceImpl implements OrderService {
 
 
         return orderResponse;
+    }
+
+    public String getOrderId(String tripId){
+
+        final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        final int LENGTH = 11;
+
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+
+        String provinceEnd = Arrays.stream(trip.getProvinceEnd().split(" "))
+                .map(s->s.charAt(0))
+                .collect(StringBuilder::new,
+                        StringBuilder::append,
+                        StringBuilder::append).toString();
+        provinceEnd += "-";
+
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder();
+
+        int length = LENGTH - provinceEnd.length();
+
+        for(int i=0; i<length; i++){
+
+            int index = random.nextInt(CHARACTERS.length());
+            builder.append(CHARACTERS.charAt(index));
+        }
+        provinceEnd += builder;
+
+        return provinceEnd;
     }
 
     public void addUserToTrip(String tripId, String userId) {

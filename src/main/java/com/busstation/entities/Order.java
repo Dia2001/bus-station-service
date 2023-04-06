@@ -26,9 +26,7 @@ public class Order  implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	@Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "order_id", length = 36, nullable = false)
+    @Column(name = "order_id", length = 11, nullable = false)
     private String orderID;
 
     @Column(name = "created_at", nullable = false)
