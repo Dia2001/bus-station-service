@@ -1,5 +1,6 @@
 package com.busstation.services.impl;
 
+import com.busstation.entities.Car;
 import com.busstation.entities.Trip;
 import com.busstation.entities.User;
 import com.busstation.payload.request.SearchTripRequest;
@@ -7,6 +8,7 @@ import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.SearchTripResponse;
 import com.busstation.payload.response.TripResponse;
 import com.busstation.payload.response.UserByTripIdResponse;
+import com.busstation.repositories.CarRepository;
 import com.busstation.repositories.TripRepository;
 import com.busstation.repositories.UserRepository;
 import com.busstation.services.TripService;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -28,6 +31,9 @@ public class TripServiceImpl implements TripService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CarRepository carRepository;
 
 
     @Override
@@ -74,6 +80,13 @@ public class TripServiceImpl implements TripService {
     public Boolean deleteTrip(String id) {
 
         Trip trip = tripRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Trip does not exist"));
+
+        List<Car> cars = carRepository.findByTrips_TripId(id);
+
+        for (Car car : cars) {
+            car.setTrips(null);
+            carRepository.save(car);
+        }
         tripRepository.delete(trip);
         return true;
     }
