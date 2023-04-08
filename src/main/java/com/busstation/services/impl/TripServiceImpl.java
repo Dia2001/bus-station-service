@@ -3,6 +3,8 @@ package com.busstation.services.impl;
 import com.busstation.entities.Car;
 import com.busstation.entities.Trip;
 import com.busstation.entities.User;
+import com.busstation.exception.DataExistException;
+import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.SearchTripResponse;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -85,9 +88,11 @@ public class TripServiceImpl implements TripService {
 
         for (Car car : cars) {
             car.setTrips(null);
+            car.setStatus(false);
             carRepository.save(car);
         }
         tripRepository.delete(trip);
+        deleteUserToTrip(id);
         return true;
     }
 
@@ -150,5 +155,19 @@ public class TripServiceImpl implements TripService {
         return userByTripIdResponsePage;
     }
 
+    public void deleteUserToTrip(String tripId) {
+        List<User> users = userRepository.findAllByTrips_TripId(tripId);
+        if(!users.isEmpty()){
 
+            Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+
+            for(User itemUser : users){
+
+                User user = userRepository.findById(itemUser.getUserId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+                trip.getUsers().remove(user);
+            }
+            tripRepository.save(trip);
+        }
+    }
 }
