@@ -14,6 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class EmployeeDTO {
     private UserDto user;
+
+    private String employeeId;
     private Date dob;
     private int yoe;
 
@@ -27,16 +29,8 @@ public class EmployeeDTO {
         userDto.setStatus(user.getStatus());
         userDto.setCreatedAt(user.getCreatedAt());
         userDto.setUpdatedAt(user.getUpdatedAt());
-
         this.setUser(userDto);
-//        this.user.setUserId(user.getUserId());
-//        this.user.setFullName(user.getFullName());
-//        this.user.setPhoneNumber(user.getPhoneNumber());
-//        this.user.setEmail(user.getEmail());
-//        this.user.setAddress(user.getAddress());
-//        this.user.setStatus(user.getStatus());
-//        this.user.setCreatedAt(user.getCreatedAt());
-//        this.user.setUpdatedAt(user.getUpdatedAt());
+        this.employeeId=user.getEmployee().getEmployeeId();
         this.dob=user.getEmployee().getDob();
         this.yoe=user.getEmployee().getYoe();
     }

@@ -1,4 +1,4 @@
-package com.busstation.services.impl.security;
+package com.busstation.services.securityimpl;
 
 import com.busstation.entities.Account;
 import com.busstation.repositories.AccountRepository;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserDtailServiceImpl implements UserDetailsService {
+public class UserDtailServiceSecurityImpl implements UserDetailsService {
     @Autowired
     private AccountRepository accountRepository;
 

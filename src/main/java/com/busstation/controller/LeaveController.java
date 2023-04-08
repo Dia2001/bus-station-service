@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@RestController
+@CrossOrigin(origins = "http://localhost:9999/")
+@RestController(value = "leaveAPIofWeb")
 @RequestMapping("/api/v1/leaves")
 public class LeaveController {
 

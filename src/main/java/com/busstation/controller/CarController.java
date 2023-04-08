@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 
-@RestController
+@CrossOrigin(origins = "http://localhost:9999/")
+@RestController(value = "carAPIofWeb")
 @RequestMapping("/api/v1/cars")
 public class CarController {
     @Autowired

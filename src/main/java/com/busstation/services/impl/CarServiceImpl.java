@@ -3,13 +3,17 @@ package com.busstation.services.impl;
 import com.busstation.entities.Car;
 import com.busstation.entities.Chair;
 import com.busstation.entities.Trip;
+import com.busstation.exception.DataExistException;
+import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.CarRequest;
+import com.busstation.payload.request.ChairRequest;
 import com.busstation.payload.response.CarResponse;
 import com.busstation.payload.response.ChairResponse;
 import com.busstation.repositories.CarRepository;
 import com.busstation.repositories.ChairRepository;
 import com.busstation.repositories.TripRepository;
 import com.busstation.services.CarService;
+import com.busstation.services.ChairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -30,24 +35,13 @@ public class CarServiceImpl implements CarService {
     @Autowired
     private ChairRepository chairRepository;
 
+    @Autowired
+    private ChairService chairService;
+
     @Override
     public CarResponse updatedCar(String carId, CarRequest request) {
-        Car car = carRepository.findById(carId).orElseThrow(()-> new RuntimeException("Car does not exist"));
-        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(()-> new RuntimeException("Trip does not exist"));
-
-        List<Chair> chair = chairRepository.findAllByCar(car);
-
-
-        List<ChairResponse> listChairResponse = new ArrayList<>();
-
-        for(Chair item : chair){
-            ChairResponse chairResponse = new ChairResponse();
-            chairResponse.setStatus(item.getStatus());
-            chairResponse.setCarId(item.getCar().getCarId());
-            chairResponse.setChairNumber(item.getChairNumber());
-            chairResponse.setChairId(item.getChairId());
-            listChairResponse.add(chairResponse);
-        }
+        Car car = carRepository.findById(carId).orElseThrow(() -> new RuntimeException("Car does not exist"));
+        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(() -> new RuntimeException("Trip does not exist"));
 
         car.setStatus(request.getStatus());
         car.setCarNumber(request.getCarNumber());
@@ -58,7 +52,7 @@ public class CarServiceImpl implements CarService {
         response.setCarId(car.getCarId());
         response.setCarNumber(car.getCarNumber());
         response.setStatus(car.getStatus());
-        response.setChair(listChairResponse);
+        response.setChair(setupChairResponse(car));
         response.setTripId(trip.getTripId());
 
         return response;
@@ -68,19 +62,37 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponse addCar(CarRequest request) {
-        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(()-> new RuntimeException("Trip does not exist"));
+        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(()
+                -> new DataNotFoundException("Trip id does not exist"));
         Car car = new Car();
         car.setStatus(request.getStatus());
-        car.setCarNumber(request.getCarNumber());
-        car.setTrips(trip);
-        carRepository.save(car);
 
+        Optional<Car> existingCar = carRepository.findByCarNumber(request.getCarNumber());
+        if(existingCar.isPresent()){
+            throw new DataExistException("CarNumber Existed");
+        }
+        car.setCarNumber(request.getCarNumber());
+        car.setStatus(true);
+        car.setTrips(trip);
 
         Car newCar = carRepository.save(car);
+
+        for (int i = 0; i < request.getNumberOfChair(); i++) {
+
+            ChairRequest chairRequest = new ChairRequest();
+            chairRequest.setChairNumber(i + 1);
+            chairRequest.setCarId(car.getCarId());
+            chairRequest.setStatus(true);
+            chairService.addChair(chairRequest);
+
+        }
+
+
         CarResponse carResponse = new CarResponse();
         carResponse.setCarId(newCar.getCarId());
         carResponse.setStatus(newCar.getStatus());
         carResponse.setCarNumber(newCar.getCarNumber());
+        carResponse.setChair(setupChairResponse(car));
         carResponse.setTripId(newCar.getTrips().getTripId());
         return carResponse;
     }
@@ -143,5 +155,22 @@ public class CarServiceImpl implements CarService {
 
         Page<Car> cars = carRepository.findAllByCarNumber(carNumber, pageable);
         return cars.map(CarResponse::new);
+    }
+    public List<ChairResponse> setupChairResponse(Car car){
+
+        List<Chair> chair = chairRepository.findAllByCar(car);
+
+
+        List<ChairResponse> listChairResponse = new ArrayList<>();
+
+        for (Chair item : chair) {
+            ChairResponse chairResponse = new ChairResponse();
+            chairResponse.setStatus(item.getStatus());
+            chairResponse.setCarId(item.getCar().getCarId());
+            chairResponse.setChairNumber(item.getChairNumber());
+            chairResponse.setChairId(item.getChairId());
+            listChairResponse.add(chairResponse);
+        }
+        return listChairResponse;
     }
 }

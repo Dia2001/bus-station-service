@@ -1,9 +1,7 @@
 package com.busstation.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 
@@ -12,9 +10,10 @@ import java.math.BigDecimal;
 
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "tbl_ticket")
 public class Ticket implements Serializable {
     private static final long serialVersionUID = 1L;

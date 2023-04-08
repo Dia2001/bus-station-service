@@ -22,7 +22,7 @@ public class Trip implements Serializable {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "trip_id",length = 36)
+    @Column(name = "trip_id",length = 36, nullable = false)
     private String tripId;
 
     @Column(name = "province_start", nullable = false, length = 50)
@@ -34,15 +34,18 @@ public class Trip implements Serializable {
     @Column(name = "time_start", nullable = false)
     private Date timeStart;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @Column(name = "created_at", nullable = false)
-    @CreationTimestamp //Annotation of Hibernate to automatically save the current time when the object is created
+    @CreationTimestamp
     private Date createAt;
 
     @Column(name = "update_at")
     private Date updateAt;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "trip_user",
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "tbl_trip_user",
             joinColumns = @JoinColumn(name = "trip_id", referencedColumnName = "trip_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private Set<User> users = new HashSet<>();

@@ -8,21 +8,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/v1/role")
+@CrossOrigin(origins = "http://localhost:9999/")
+@RestController(value = "roleAPIofWeb")
+@RequestMapping("/api/v1/roles")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<?> createTrip(@RequestBody RoleRequest roleRequest) {
 
         RoleResponse roleResponse = roleService.createRole(roleRequest);
         return new ResponseEntity<>(roleResponse, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateTrip(@RequestBody RoleRequest roleRequest,
                                         @PathVariable("id") String id) {
 
@@ -30,7 +31,7 @@ public class RoleController {
         return new ResponseEntity<>(roleResponse, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTrip(@PathVariable("id") String id) {
 
         if (roleService.deleteRole(id)) {

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -35,9 +36,8 @@ public class Leave implements Serializable {
 
     @Column(name = "reason", nullable = false, length = 500)
     private String reason;
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", columnDefinition = "DATE DEFAULT CURRENT_DATE", nullable = false)
+    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
     private Date createAt;
-    protected void onCreate() { createAt = new Date(); }
 
 }

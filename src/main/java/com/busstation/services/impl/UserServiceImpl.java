@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setEmail(userRequest.getEmail());
         user.setAddress(userRequest.getAddress());
-        user.setStatus(userRequest.getStatus());
         user.setUpdatedAt(new Date());
         userRepository.save(user);
         return new ApiResponse("Updated successfully", HttpStatus.OK);
