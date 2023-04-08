@@ -59,12 +59,6 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public Page<Ticket> getTicketPagination(int pageNumber, int pageSize) {
-		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
-		return ticketRepository.findAll(pageable);
-	}
-
-	@Override
 	public Page<TicketResponse> searchTicket(TicketRequest ticketRequest, int pageNumber, int pageSize) {
 		 Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("price").ascending());
 		 if(ticketRequest.getAddressStart() == null || ticketRequest.getAddressEnd() == null ) {

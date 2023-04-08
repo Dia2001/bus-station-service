@@ -1,5 +1,6 @@
 package com.busstation.services.impl;
 
+import com.busstation.common.Validate;
 import com.busstation.converter.EmployeeConverter;
 import com.busstation.converter.UserConverter;
 import com.busstation.entities.*;
@@ -7,6 +8,7 @@ import com.busstation.enums.NameRoleEnum;
 import com.busstation.enums.TokenEnum;
 import com.busstation.exception.DataExistException;
 import com.busstation.exception.DataNotFoundException;
+import com.busstation.payload.request.EmployeeRequest;
 import com.busstation.payload.request.LoginRequest;
 import com.busstation.payload.request.SignupRequest;
 import com.busstation.payload.response.ApiResponse;
@@ -70,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public ApiResponse signup(SignupRequest signupRequest) {
+    public ApiResponse signUpUser(SignupRequest signupRequest) {
 
             String username = signupRequest.getUsername();
             if(accountRepository.existsByusername(username)){
@@ -79,27 +81,32 @@ public class AuthServiceImpl implements AuthService {
                 Account account=new Account();
                 account.setUsername(signupRequest.getUsername());
                 account.setPassword(SecurityUtils.passwordEncoder().encode(signupRequest.getPassword()));
-                Role role=roleRepository.findByName(signupRequest.getRole());
-                if(Objects.isNull(role)){
-                    throw  new DataNotFoundException("Can't find this role");
-                }
+                Role role=roleRepository.findByName(NameRoleEnum.ROLE_USER.toString());
                 account.setRole(role);
                 accountRepository.save(account);
                 User user=userConverter.converToEntity(signupRequest.getUser());
                 user.setAccount(accountRepository.findById(account.getAccountId()).get());
+                user.setStatus(Boolean.TRUE);
                 userRepository.save(user);
-                if(Objects.nonNull(signupRequest.getEmployee())&&
-                        signupRequest.getRole().equalsIgnoreCase(NameRoleEnum.ROLE_EMPLOYEE.toString())||
-                        signupRequest.getRole().equalsIgnoreCase(NameRoleEnum.ROLE_DRIVER.toString())){
-                    Employee employee=employeeConverter.converToEntity(signupRequest.getEmployee());
-                    employee.setUser(user);
-                    employeeRepository.save(employee);
-                }
             }
 
         return new ApiResponse("Create successfully", HttpStatus.CREATED);
     }
 
+    @Override
+    @Transactional
+    public ApiResponse signUpEmployee(String accountId, EmployeeRequest employeeRequest){
+        Account account=accountRepository.findById(accountId).orElseThrow(() -> new DataNotFoundException("Can't find this account"));
+        Role role=roleRepository.findById(employeeRequest.getRoleId()).orElseThrow(() -> new DataNotFoundException("Can't find this role"));
+        account.setRole(role);
+        accountRepository.save(account);
+        Employee employee=new Employee();
+        employee.setDob(employeeRequest.getDob());
+        employee.setYoe(employeeRequest.getYoe());
+        employee.setUser(account.getUser());
+        employeeRepository.save(employee);
+        return new ApiResponse("Create successfully", HttpStatus.CREATED);
+    }
 
     private void saveUserToken(Account account, String jwtToken) {
         Token token = new Token();

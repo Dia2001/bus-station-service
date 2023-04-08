@@ -31,19 +31,19 @@ public class ChairController {
 
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<?> createChair(@RequestBody ChairRequest chairRequest) {
         ChairResponse chairResponse = chairService.addChair(chairRequest);
         return new ResponseEntity<>(chairResponse, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{chairId}")
+    @PutMapping("/{chairId}")
     public ResponseEntity<?> updateChair(@RequestBody ChairRequest request, @PathVariable("chairId") String chairId) {
         chairService.updateChair(chairId, request);
         return new ResponseEntity<>("Updated !!!", HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{chairId}")
+    @DeleteMapping("/{chairId}")
     public ResponseEntity<?> deleteChiar(@PathVariable("chairId") String chairId) {
         if (chairService.deleteChair(chairId)) {
             return new ResponseEntity<>("Deleted !!!", HttpStatus.OK);

@@ -10,5 +10,6 @@ import lombok.*;
 public class CarRequest {
     private Boolean status;
     private int carNumber;
+    private int numberOfChair;
     private String tripId;
 }

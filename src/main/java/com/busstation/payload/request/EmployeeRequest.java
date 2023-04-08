@@ -10,7 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 public class EmployeeRequest {
+    private String roleId;
     private Date dob;
-
     private int yoe;
 }

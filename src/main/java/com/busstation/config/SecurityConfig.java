@@ -52,10 +52,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeHttpRequests().requestMatchers("/api/v1/auth/signin").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
+        http.csrf().disable().authorizeHttpRequests()
+                .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/api/v1/users/**").permitAll()
+                .requestMatchers("/api/v1/roles/**").permitAll()
                 .requestMatchers("/api/v1/employees/**").permitAll()
+                .requestMatchers("/api/v1/tickets/**").permitAll()
+                .requestMatchers("/seat-booking").permitAll()
+                .requestMatchers("/seat-booking/**").permitAll()
+                .requestMatchers("/api/v1/cars/**").permitAll()
+                .requestMatchers("/api/v1/trips/**").permitAll()
+                .requestMatchers("/api/v1/chairs/**").permitAll()
+                .requestMatchers("/api/v1/orders/**").permitAll()
                 .anyRequest()
                 .authenticated().and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class).logout()

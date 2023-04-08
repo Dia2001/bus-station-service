@@ -1,4 +1,4 @@
-package com.busstation.services.impl.security;
+package com.busstation.services.securityimpl;
 
 import com.busstation.repositories.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LogoutServiceImpl implements LogoutHandler {
+public class LogoutServiceSecurityImpl implements LogoutHandler {
 
     @Autowired
     private TokenRepository tokenRepository;

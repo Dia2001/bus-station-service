@@ -46,6 +46,7 @@ public class SearchTripResponse {
                 chairResponse.setCarId(chair.getCar().getCarId());
                 chairResponse.setChairId(chair.getChairId());
                 chairResponse.setChairNumber(chair.getChairNumber());
+                chairResponse.setStatus(chair.getStatus());
 
                 chairResponseList.add(chairResponse);
             }
