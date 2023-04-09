@@ -6,7 +6,7 @@ import com.busstation.payload.response.OrderResponse;
 
 public interface OrderService {
 
-    OrderResponse createOrder(String userId, OrderDetailRequest orderDetailRequest);
+    OrderResponse createOrder(OrderDetailRequest orderDetailRequest);
 
     OrderDetailResponse searchOrderById(String orderId);
 }

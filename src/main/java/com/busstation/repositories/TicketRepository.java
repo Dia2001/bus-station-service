@@ -3,6 +3,7 @@ package com.busstation.repositories;
 import com.busstation.entities.Ticket;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +20,5 @@ public interface TicketRepository extends JpaRepository<Ticket, String> {
 	@Query(value = "FROM Ticket ticket WHERE ticket.addressStart = :address_start AND ticket.addressEnd = :address_end AND ticket.price = :price")
     Page<Ticket> findByTickets(@Param("address_start") String addressStart, @Param("address_end") String addressEnd, BigDecimal price, Pageable pageable);
 
+    Optional<Ticket> findByAddressStartAndAddressEnd(String addressStart, String addressEnd);
 }

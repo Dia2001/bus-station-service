@@ -1,15 +1,18 @@
 package com.busstation.services.impl;
 
 import com.busstation.entities.*;
+import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.OrderDetailRequest;
 import com.busstation.payload.response.*;
 import com.busstation.repositories.*;
 import com.busstation.services.OrderService;
+import com.busstation.utils.GetUserUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -38,16 +41,23 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ProvinceRepository provinceRepository;
 
-
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
-    public OrderResponse createOrder(String userId, OrderDetailRequest orderDetailRequest) {
+    public OrderResponse createOrder(OrderDetailRequest orderDetailRequest) {
 
-        User user = userRepository.findById(userId).orElseThrow(()->new RuntimeException("User does not exist"));
+        Account account = accountRepository.findByusername(new GetUserUtil().GetUserName());
+
+        User user = userRepository.findById(account.getUser().getUserId()).orElseThrow(()->new RuntimeException("User does not exist"));
 
         Chair chair = chairRepository.findById(orderDetailRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
 
-        Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(()->new EntityNotFoundException("Ticker does not exist"));
+        Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(orderDetailRequest.getAddressStart(), orderDetailRequest.getAddressEnd());
+
+        if(!ticket.isPresent()){
+            throw new DataNotFoundException("Ticket not found");
+        }
 
         UserResponse userResponse = new UserResponse();
         userResponse.setUserId(user.getUserId());
@@ -71,14 +81,14 @@ public class OrderServiceImpl implements OrderService {
 
 
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setStatus(orderDetailRequest.getStatus());
+        orderDetail.setStatus("Not Authenticated");
         orderDetail.setChair(chair);
         orderDetail.setOrder(newOrder);
-        orderDetail.setTicket(ticket);
+        orderDetail.setTicket(ticket.get());
 
         OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
 
-        addUserToTrip(chair.getCar().getTrips().getTripId(),userId);
+        addUserToTrip(chair.getCar().getTrips().getTripId(),user.getUserId());
 
 
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
@@ -86,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         orderDetailResponse.setStatus(newOrderDetail.getStatus());
         orderDetailResponse.setChair(setupChairResponse(chair));
         orderDetailResponse.setOrder(setupOrderResponse(newOrder));
-        orderDetailResponse.setTicket(setupTicketResponse(ticket));
+        orderDetailResponse.setTicket(setupTicketResponse(ticket.get()));
 
         orderResponse.setOrderDetail(orderDetailResponse);
 

@@ -25,10 +25,10 @@ public class OrderController {
         return new ResponseEntity<>(orderDetailPage, HttpStatus.OK);
     }
 
-    @PostMapping("/add/{user_id}")
-    public ResponseEntity<OrderResponse> createOrder(@PathVariable("user_id") String userId, @RequestBody OrderDetailRequest OrderDetailRequest) {
+    @PostMapping()
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderDetailRequest OrderDetailRequest) {
 
-        OrderResponse orderResponse = orderService.createOrder(userId, OrderDetailRequest);
+        OrderResponse orderResponse = orderService.createOrder(OrderDetailRequest);
         return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
     }
 }
