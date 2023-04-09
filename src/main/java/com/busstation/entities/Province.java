@@ -1,13 +1,6 @@
 package com.busstation.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +24,6 @@ public class Province implements Serializable {
 	@Column(name = "name", nullable = false, length = 50)
 	private String name;
 
-	@OneToOne(mappedBy = "province")
+	@OneToOne(mappedBy = "province", cascade = CascadeType.ALL)
 	private City city;
 }
