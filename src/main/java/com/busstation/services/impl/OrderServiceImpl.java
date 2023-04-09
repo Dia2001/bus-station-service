@@ -135,7 +135,7 @@ public class OrderServiceImpl implements OrderService {
 
         Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
 
-        String provinceEnd = Arrays.stream(trip.getProvinceEnd().split(" "))
+        String provinceEnd = provinceEnd = Arrays.stream(trip.getProvinceEnd().split(" "))
                 .map(s->s.charAt(0))
                 .collect(StringBuilder::new,
                         StringBuilder::append,
@@ -143,19 +143,30 @@ public class OrderServiceImpl implements OrderService {
         Province province = provinceRepository.findByName(trip.getProvinceEnd());
         provinceEnd += province.getProvinceId() + "-";
 
-        Random random = new Random();
-        StringBuilder builder = new StringBuilder();
+        boolean doWhile = true;
+        String initial;
 
-        int length = LENGTH - provinceEnd.length();
+        do{
+            initial = provinceEnd;
+            Random random = new Random();
+            StringBuilder builder = new StringBuilder();
 
-        for(int i=0; i<length; i++){
+            int length = LENGTH - provinceEnd.length();
 
-            int index = random.nextInt(CHARACTERS.length());
-            builder.append(CHARACTERS.charAt(index));
-        }
-        provinceEnd += builder;
+            for(int i=0; i<length; i++){
 
-        return provinceEnd;
+                int index = random.nextInt(CHARACTERS.length());
+                builder.append(CHARACTERS.charAt(index));
+            }
+            initial += builder;
+
+            if(!orderRepository.findById(initial).isPresent()){
+                doWhile = false;
+            }
+
+        }while (doWhile);
+
+        return initial;
     }
 
     public void addUserToTrip(String tripId, String userId) {
