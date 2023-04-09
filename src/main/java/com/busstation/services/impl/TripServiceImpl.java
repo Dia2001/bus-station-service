@@ -40,7 +40,7 @@ public class TripServiceImpl implements TripService {
 
 
     @Override
-    public TripResponse createTrip(TripRequest tripRequest){
+    public TripResponse createTrip(TripRequest tripRequest) {
 
         Trip trip = new Trip();
         trip.setProvinceStart(tripRequest.getProvinceStart());
@@ -61,7 +61,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripResponse updateTrip(String id, TripRequest newTripRequest) {
 
-        Trip trip = tripRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Trip does not exist"));
+        Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip does not exist"));
 
         trip.setProvinceStart(newTripRequest.getProvinceStart());
         trip.setProvinceEnd(newTripRequest.getProvinceEnd());
@@ -82,7 +82,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public Boolean deleteTrip(String id) {
 
-        Trip trip = tripRepository.findById(id).orElseThrow(()-> new EntityNotFoundException("Trip does not exist"));
+        Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip does not exist"));
 
         List<Car> cars = carRepository.findByTrips_TripId(id);
 
@@ -100,9 +100,9 @@ public class TripServiceImpl implements TripService {
     public Page<SearchTripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest,
                                                                                      int pageNo, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").ascending());
 
-        if(searchTripRequest.getProvinceStart() == null && searchTripRequest.getProvinceEnd() == null){
+        if (searchTripRequest.getProvinceStart() == null && searchTripRequest.getProvinceEnd() == null) {
 
             Page<Trip> trips = tripRepository.findAllTrips(pageable);
 
@@ -111,7 +111,7 @@ public class TripServiceImpl implements TripService {
             return searchTripResponsePage;
         }
 
-        if(searchTripRequest.getDateTime() == null){
+        if (searchTripRequest.getDateTime() == null) {
 
             Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(),
                     searchTripRequest.getProvinceEnd(), pageable);
@@ -133,7 +133,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public Page<TripResponse> getAllTrips(int pageNo, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by("createAt").ascending());
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").ascending());
 
         Page<Trip> trips = tripRepository.findAll(pageable);
 
@@ -145,11 +145,14 @@ public class TripServiceImpl implements TripService {
     @Override
     public Page<UserByTripIdResponse> getAllUserByTrip(String tripId, int pageNo, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         Page<User> users = userRepository.findByTrips_TripId(tripId, pageable);
 
-        Page<UserByTripIdResponse> userByTripIdResponsePage = users.map(UserByTripIdResponse::new);
+        Page<UserByTripIdResponse> userByTripIdResponsePage = users.map(user ->
+                new UserByTripIdResponse(user, user.getTrips().stream()
+                        .filter(trip -> trip.getTripId().equals(tripId))
+                        .findFirst().orElse(null)));
 
 
         return userByTripIdResponsePage;
@@ -157,11 +160,11 @@ public class TripServiceImpl implements TripService {
 
     public void deleteUserToTrip(String tripId) {
         List<User> users = userRepository.findAllByTrips_TripId(tripId);
-        if(!users.isEmpty()){
+        if (!users.isEmpty()) {
 
             Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
 
-            for(User itemUser : users){
+            for (User itemUser : users) {
 
                 User user = userRepository.findById(itemUser.getUserId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
 
