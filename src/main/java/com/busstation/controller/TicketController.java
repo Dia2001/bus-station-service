@@ -24,30 +24,25 @@ public class TicketController {
 	@Autowired
 	private TicketRepository ticketRepository;
 
-	@PostMapping("/create")
+	@PostMapping()
 	public ResponseEntity<?> createTicket(@RequestBody TicketRequest ticketRequest) {
 		TicketResponse ticketResponse = ticketService.addTicket(ticketRequest);
 		return new ResponseEntity<>(ticketResponse, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/update/{ticketId}")
+	@PutMapping("/{ticketId}")
 	public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest,
 			@PathVariable("ticketId") String ticketId) {
-		ticketService.updateTicket(ticketId, ticketRequest);
-		return new ResponseEntity<>("Updated !!!", HttpStatus.OK);
+		TicketResponse ticketResponse = ticketService.updateTicket(ticketId, ticketRequest);
+		return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/delete/{ticketId}")
+	@DeleteMapping("/{ticketId}")
 	public ResponseEntity<?> deleteTicket(@PathVariable("ticketId") String ticketId) {
 		if (ticketService.deleteTicket(ticketId)) {
 			return new ResponseEntity<>("Deleted !!!", HttpStatus.OK);
 		}
 		return new ResponseEntity<>("Delete failed !!!", HttpStatus.BAD_GATEWAY);
-	}
-
-	@GetMapping
-	public List<Ticket> getAllTicket() {
-		return ticketRepository.findAll();
 	}
 
 	@GetMapping

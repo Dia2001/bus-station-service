@@ -99,7 +99,7 @@ public class TripServiceImpl implements TripService {
                 .findByAddressStartAndAddressEnd(newTripRequest.getProvinceStart(),newTripRequest.getProvinceEnd());
 
         if(checkTrip.isPresent() || checkTicket.isPresent()){
-            if(!checkTrip.get().getTripId().equalsIgnoreCase(id)){
+            if(!checkTrip.get().getTripId().equals(id)){
                 return null;
             }
         }

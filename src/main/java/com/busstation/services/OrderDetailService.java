@@ -10,6 +10,6 @@ public interface OrderDetailService {
 
     Page<OrderDetailResponse> getAllOrderDetail(int pageNo, int pageSize);
 
-    Page<OrderDetailResponse> getAllOrderDetailByUser(String userId, int pageNo, int pageSize);
+    Page<OrderDetailResponse> getAllOrderDetailByUser(int pageNo, int pageSize);
 
 }

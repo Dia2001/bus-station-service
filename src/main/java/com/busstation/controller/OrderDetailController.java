@@ -26,16 +26,15 @@ public class OrderDetailController {
         return new ResponseEntity<>(orderDetailPage, HttpStatus.OK);
     }
 
-    @GetMapping("/user/getAllOrderDetail/{user_id}")
-    public ResponseEntity<?> getAllOrderDetailByUser(@PathVariable("user_id") String userId,
-                                                     @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+    @GetMapping("/user")
+    public ResponseEntity<?> getAllOrderDetailByUser(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
-        Page<OrderDetailResponse> orderDetailByUserPage = orderDetailService.getAllOrderDetailByUser(userId, pageNo, pageSize);
+        Page<OrderDetailResponse> orderDetailByUserPage = orderDetailService.getAllOrderDetailByUser(pageNo, pageSize);
         return new ResponseEntity<>(orderDetailByUserPage, HttpStatus.OK);
     }
 
-    @PutMapping("/update/{id_order_detail}")
+    @PutMapping("/{id_order_detail}")
     public ResponseEntity<?> updateOrderDetail(@RequestBody OrderDetailRequest OrderDetailRequest,
                                         @PathVariable("id_order_detail") String orderDetailId) {
 

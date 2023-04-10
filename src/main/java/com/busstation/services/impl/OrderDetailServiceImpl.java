@@ -6,6 +6,7 @@ import com.busstation.payload.request.OrderDetailRequest;
 import com.busstation.payload.response.*;
 import com.busstation.repositories.*;
 import com.busstation.services.OrderDetailService;
+import com.busstation.utils.GetUserUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public OrderDetailResponse updateOrderDetail(String orderDetailId, OrderDetailRequest orderDetailRequest) {
@@ -82,11 +86,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public Page<OrderDetailResponse> getAllOrderDetailByUser(String userId, int pageNo, int pageSize) {
+    public Page<OrderDetailResponse> getAllOrderDetailByUser(int pageNo, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").descending());
 
-        Page<OrderDetail> orderDetails = orderDetailRepository.findAllByUserId(userId, pageable);
+        Account account = accountRepository.findByusername(new GetUserUtil().GetUserName());
+
+        Page<OrderDetail> orderDetails = orderDetailRepository.findAllByUserId(account.getUser().getUserId(), pageable);
 
         Page<OrderDetailResponse> orderDetailPage = orderDetails.map(OrderDetailResponse::new);
 
