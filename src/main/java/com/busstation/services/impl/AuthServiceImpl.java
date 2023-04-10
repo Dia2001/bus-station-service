@@ -24,6 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -53,9 +54,9 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserConverter userConverter;
 
-    @Autowired
-    private EmployeeConverter employeeConverter;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public JwtResponse signin(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -80,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
             }else{
                 Account account=new Account();
                 account.setUsername(signupRequest.getUsername());
-                account.setPassword(SecurityUtils.passwordEncoder().encode(signupRequest.getPassword()));
+                account.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
                 Role role=roleRepository.findByName(NameRoleEnum.ROLE_USER.toString());
                 account.setRole(role);
                 accountRepository.save(account);
