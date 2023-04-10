@@ -1,5 +1,7 @@
 package com.busstation.services.impl;
 
+import com.busstation.converter.RoleConverter;
+import com.busstation.dto.RoleDto;
 import com.busstation.entities.Role;
 import com.busstation.payload.request.RoleRequest;
 import com.busstation.payload.response.RoleResponse;
@@ -9,11 +11,28 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private RoleConverter roleConverter;
+
+    @Override
+    public List<RoleDto> getAll() {
+        List<Role> roleList=roleRepository.findAll();
+        List<RoleDto> roleDtos=new ArrayList<>();
+        for (Role role: roleList){
+            RoleDto roleDto=roleConverter.converToDto(role);
+            roleDtos.add(roleDto);
+        }
+        return roleDtos;
+    }
 
     @Override
     public RoleResponse createRole(RoleRequest request) {

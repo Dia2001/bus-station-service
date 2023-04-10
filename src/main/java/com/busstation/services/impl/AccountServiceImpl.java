@@ -1,10 +1,13 @@
 package com.busstation.services.impl;
 
 import com.busstation.entities.Account;
+import com.busstation.entities.Role;
 import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.ChangePasswordRequest;
+import com.busstation.payload.request.RoleRequest;
 import com.busstation.payload.response.ApiResponse;
 import com.busstation.repositories.AccountRepository;
+import com.busstation.repositories.RoleRepository;
 import com.busstation.services.AccountService;
 import com.busstation.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository accountRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -39,5 +45,14 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(passwordEncoder.encode(changePasswordRequest.getPasswordNew()));
         accountRepository.save(account);
         return new ApiResponse("Change password successfully.", HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse updateRole(String accountid,RoleRequest roleRequest) {
+        Account account=accountRepository.findById(accountid).orElseThrow(() -> new DataNotFoundException("Can't find this account"));
+        Role role=roleRepository.findById(roleRequest.getRoleId()).orElseThrow(() -> new DataNotFoundException("Can't find this role"));
+        account.setRole(role);
+        accountRepository.save(account);
+        return new ApiResponse("Role update successful",HttpStatus.OK);
     }
 }
