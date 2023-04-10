@@ -3,9 +3,8 @@ package com.busstation.services.impl;
 import com.busstation.entities.Car;
 import com.busstation.entities.Trip;
 import com.busstation.entities.User;
-import com.busstation.exception.DataExistException;
-import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.SearchTripRequest;
+import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.SearchTripResponse;
 import com.busstation.payload.response.TripResponse;
@@ -13,6 +12,7 @@ import com.busstation.payload.response.UserByTripIdResponse;
 import com.busstation.repositories.CarRepository;
 import com.busstation.repositories.TripRepository;
 import com.busstation.repositories.UserRepository;
+import com.busstation.services.TicketService;
 import com.busstation.services.TripService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -38,6 +37,8 @@ public class TripServiceImpl implements TripService {
     @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    private TicketService ticketService;
 
     @Override
     public TripResponse createTrip(TripRequest tripRequest) {
@@ -48,6 +49,11 @@ public class TripServiceImpl implements TripService {
         trip.setTimeStart(tripRequest.getTimeStart());
 
         Trip newTrip = tripRepository.save(trip);
+
+        TicketRequest ticketRequest = new TicketRequest(tripRequest.getProvinceStart(),
+                tripRequest.getProvinceEnd(),
+                tripRequest.getPrice());
+        ticketService.addTicket(ticketRequest);
 
         TripResponse tripResponse = new TripResponse();
         tripResponse.setTripId(newTrip.getTripId());
@@ -106,9 +112,8 @@ public class TripServiceImpl implements TripService {
 
             Page<Trip> trips = tripRepository.findAllTrips(pageable);
 
-            Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
 
-            return searchTripResponsePage;
+            return trips.map(SearchTripResponse::new);
         }
 
         if (searchTripRequest.getDateTime() == null) {
@@ -116,18 +121,14 @@ public class TripServiceImpl implements TripService {
             Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(),
                     searchTripRequest.getProvinceEnd(), pageable);
 
-            Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
-
-            return searchTripResponsePage;
+            return trips.map(SearchTripResponse::new);
         }
 
         Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEndAndDateTime(searchTripRequest.getProvinceStart(),
                 searchTripRequest.getProvinceEnd(),
                 searchTripRequest.getDateTime(), pageable);
 
-        Page<SearchTripResponse> searchTripResponsePage = trips.map(SearchTripResponse::new);
-
-        return searchTripResponsePage;
+        return trips.map(SearchTripResponse::new);
     }
 
     @Override
@@ -137,9 +138,7 @@ public class TripServiceImpl implements TripService {
 
         Page<Trip> trips = tripRepository.findAll(pageable);
 
-        Page<TripResponse> tripResponsePage = trips.map(TripResponse::new);
-
-        return tripResponsePage;
+        return trips.map(TripResponse::new);
     }
 
     @Override
@@ -149,13 +148,9 @@ public class TripServiceImpl implements TripService {
 
         Page<User> users = userRepository.findByTrips_TripId(tripId, pageable);
 
-        Page<UserByTripIdResponse> userByTripIdResponsePage = users.map(user ->
-                new UserByTripIdResponse(user, user.getTrips().stream()
-                        .filter(trip -> trip.getTripId().equals(tripId))
-                        .findFirst().orElse(null)));
-
-
-        return userByTripIdResponsePage;
+        return users.map(user -> new UserByTripIdResponse(user, user.getTrips().stream()
+                .filter(trip -> trip.getTripId().equals(tripId))
+                .findFirst().orElse(null)));
     }
 
     public void deleteUserToTrip(String tripId) {

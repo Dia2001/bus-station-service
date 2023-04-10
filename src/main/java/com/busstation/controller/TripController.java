@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:9999/")
 @RestController(value = "tripAPIofWeb")
-@RequestMapping(value = "/api/v1/trip")
+@RequestMapping(value = "/api/v1/trips")
 public class TripController {
 
     @Autowired
@@ -40,7 +40,7 @@ public class TripController {
         return new ResponseEntity<>(userByTripIdResponsePage, HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping()
     public ResponseEntity<?> getAllTrips(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
@@ -48,14 +48,14 @@ public class TripController {
         return new ResponseEntity<>(tripResponsePage, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
+    @PostMapping()
     public ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
 
         TripResponse tripResponse = tripService.createTrip(tripRequest);
         return new ResponseEntity<>(tripResponse, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TripResponse> updateTrip(@RequestBody TripRequest tripRequest,
                                                    @PathVariable("id") String id) {
 
@@ -63,7 +63,7 @@ public class TripController {
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTrip(@PathVariable("id") String id) {
 
         if (tripService.deleteTrip(id)) {
