@@ -17,7 +17,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/search/order/{order_id}")
+    @GetMapping("/search/{order_id}")
     public ResponseEntity<?> searchOrderById(@PathVariable("order_id") String orderId) {
 
         OrderDetailResponse orderDetailPage = orderService.searchOrderById(orderId);

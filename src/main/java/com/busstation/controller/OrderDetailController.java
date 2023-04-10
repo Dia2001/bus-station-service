@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,6 +20,7 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
 
     @GetMapping("/getAllOrderDetail")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> getAllOrderDetail(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
@@ -26,7 +28,7 @@ public class OrderDetailController {
         return new ResponseEntity<>(orderDetailPage, HttpStatus.OK);
     }
 
-    @GetMapping("/user/getAllOrderDetail/{user_id}")
+    @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getAllOrderDetailByUser(@PathVariable("user_id") String userId,
                                                      @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                                      @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
@@ -35,8 +37,10 @@ public class OrderDetailController {
         return new ResponseEntity<>(orderDetailByUserPage, HttpStatus.OK);
     }
 
+    // Api update may not be needed
     @PutMapping("/update/{id_order_detail}")
-    public ResponseEntity<?> updateTrip(@RequestBody OrderDetailRequest OrderDetailRequest,
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
+    public ResponseEntity<?> updateOrderDetail(@RequestBody OrderDetailRequest OrderDetailRequest,
                                         @PathVariable("id_order_detail") String orderDetailId) {
 
         OrderDetailResponse orderDetail = orderDetailService.updateOrderDetail(orderDetailId, OrderDetailRequest);

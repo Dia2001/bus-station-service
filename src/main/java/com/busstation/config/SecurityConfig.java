@@ -27,13 +27,28 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig {
 
     @Autowired
-    UserDetailsService userService;
+    private UserDetailsService userService;
 
     @Autowired
-    JwtProviderUtils jwtProvider;
+    private JwtProviderUtils jwtProvider;
 
     @Autowired
-    LogoutHandler logoutHandler;
+    private LogoutHandler logoutHandler;
+
+    private static final String[] UN_SECURED_URLs = {
+           "/api/v1/auth/**",
+
+    };
+
+    private static final String[] HTTP_METHOD_GET_UN_SECURED_URLs = {
+            "/api/v1/trips/search/**",
+            "/api/v1/trips/getAll",
+            "/api/v1/chairs/**"
+    };
+
+    private static final String[] HTTP_METHOD_POST_UN_SECURED_URLs = {
+            "urls do not need to authorization with HttpMethod.POST"
+    };
 
     @Bean
     public JwtAuthTokenFilter jwtAuthTokenFilter() {
@@ -53,17 +68,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .requestMatchers("/api/v1/users/**").permitAll()
-                .requestMatchers("/api/v1/roles/**").permitAll()
-                .requestMatchers("/api/v1/employees/**").permitAll()
-                .requestMatchers("/api/v1/tickets/**").permitAll()
-                .requestMatchers("/seat-booking").permitAll()
-                .requestMatchers("/seat-booking/**").permitAll()
-                .requestMatchers("/api/v1/cars/**").permitAll()
-                .requestMatchers("/api/v1/trips/**").permitAll()
-                .requestMatchers("/api/v1/chairs/**").permitAll()
-                .requestMatchers("/api/v1/orders/**").permitAll()
+                .requestMatchers(UN_SECURED_URLs).permitAll()
+                .requestMatchers(HttpMethod.GET,HTTP_METHOD_GET_UN_SECURED_URLs).permitAll()
                 .anyRequest()
                 .authenticated().and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class).logout()

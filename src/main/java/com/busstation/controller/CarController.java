@@ -8,6 +8,7 @@ import com.busstation.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,16 +42,19 @@ public class CarController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> addCar(@RequestBody CarRequest request){
         CarResponse carResponse = carService.addCar(request);
         return new ResponseEntity<>(carResponse, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateCar(@RequestBody CarRequest request, @PathVariable("id") String carId){
         CarResponse car = carService.updatedCar(carId, request);
         return new ResponseEntity<>(car, HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteCar(@PathVariable("id") String id){
          if(carService.deleteCar(id)){
              return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);

@@ -10,6 +10,7 @@ import org.apache.el.parser.BooleanNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -26,6 +27,7 @@ public class LeaveController {
     private LeaveRepository leaveRepository;
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getAllLeave(){
 
 
@@ -35,15 +37,19 @@ public class LeaveController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_DRIVER')")
     public ResponseEntity<?> addLeave(@RequestBody LeaveRequest request){
         return new ResponseEntity<>(leaveService.addLeave(request) ,HttpStatus.OK);
     }
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> updateLeave(@RequestBody LeaveRequest request, @PathVariable("id") String leaveId){
         return new ResponseEntity<>(leaveService.updatedLeave(leaveId, request), HttpStatus.OK);
     }
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteLeave(@PathVariable("id") String id){
         return new ResponseEntity<>(leaveService.deleteLeave(id), HttpStatus.OK);
     }
