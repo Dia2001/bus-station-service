@@ -36,7 +36,7 @@ public class OrderDetailController {
     }
 
     @PutMapping("/update/{id_order_detail}")
-    public ResponseEntity<?> updateTrip(@RequestBody OrderDetailRequest OrderDetailRequest,
+    public ResponseEntity<?> updateOrderDetail(@RequestBody OrderDetailRequest OrderDetailRequest,
                                         @PathVariable("id_order_detail") String orderDetailId) {
 
         OrderDetailResponse orderDetail = orderDetailService.updateOrderDetail(orderDetailId, OrderDetailRequest);

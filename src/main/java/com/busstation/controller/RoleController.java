@@ -17,14 +17,14 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> createTrip(@RequestBody RoleRequest roleRequest) {
+    public ResponseEntity<?> createRole(@RequestBody RoleRequest roleRequest) {
 
         RoleResponse roleResponse = roleService.createRole(roleRequest);
         return new ResponseEntity<>(roleResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateTrip(@RequestBody RoleRequest roleRequest,
+    public ResponseEntity<?> updateRole(@RequestBody RoleRequest roleRequest,
                                         @PathVariable("id") String id) {
 
         RoleResponse roleResponse = roleService.updateRole(id, roleRequest);
@@ -32,7 +32,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteTrip(@PathVariable("id") String id) {
+    public ResponseEntity<?> deleteRole(@PathVariable("id") String id) {
 
         if (roleService.deleteRole(id)) {
             return new ResponseEntity<>("delete Success!", HttpStatus.OK);

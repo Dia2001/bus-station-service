@@ -1,15 +1,18 @@
 package com.busstation.services.impl;
 
 import com.busstation.entities.Car;
+import com.busstation.entities.Ticket;
 import com.busstation.entities.Trip;
 import com.busstation.entities.User;
 import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.request.TripRequest;
 import com.busstation.payload.response.SearchTripResponse;
+import com.busstation.payload.response.TicketResponse;
 import com.busstation.payload.response.TripResponse;
 import com.busstation.payload.response.UserByTripIdResponse;
 import com.busstation.repositories.CarRepository;
+import com.busstation.repositories.TicketRepository;
 import com.busstation.repositories.TripRepository;
 import com.busstation.repositories.UserRepository;
 import com.busstation.services.TicketService;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -40,8 +44,21 @@ public class TripServiceImpl implements TripService {
     @Autowired
     private TicketService ticketService;
 
+    @Autowired
+    private TicketRepository ticketRepository;
+
     @Override
     public TripResponse createTrip(TripRequest tripRequest) {
+
+        Optional<Trip> checkTrip = tripRepository
+                .findByProvinceStartAndProvinceEnd(tripRequest.getProvinceStart(), tripRequest.getProvinceEnd());
+
+        Optional<Ticket> checkTicket = ticketRepository
+                .findByAddressStartAndAddressEnd(tripRequest.getProvinceStart(),tripRequest.getProvinceEnd());
+
+        if(checkTrip.isPresent()){
+            return null;
+        }
 
         Trip trip = new Trip();
         trip.setProvinceStart(tripRequest.getProvinceStart());
@@ -53,13 +70,21 @@ public class TripServiceImpl implements TripService {
         TicketRequest ticketRequest = new TicketRequest(tripRequest.getProvinceStart(),
                 tripRequest.getProvinceEnd(),
                 tripRequest.getPrice());
-        ticketService.addTicket(ticketRequest);
+        TicketResponse ticketResponse;
+        if(checkTicket.isPresent()){
+
+            ticketResponse = ticketService.updateTicket(checkTicket.get().getTicketId(), ticketRequest);
+        }
+        else {
+            ticketResponse = ticketService.addTicket(ticketRequest);
+        }
 
         TripResponse tripResponse = new TripResponse();
         tripResponse.setTripId(newTrip.getTripId());
         tripResponse.setProvinceStart(newTrip.getProvinceStart());
         tripResponse.setProvinceEnd(newTrip.getProvinceEnd());
         tripResponse.setTimeStart(newTrip.getTimeStart());
+        tripResponse.setPrice(ticketResponse.getPrice());
 
         return tripResponse;
     }
@@ -67,7 +92,23 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripResponse updateTrip(String id, TripRequest newTripRequest) {
 
+        Optional<Trip> checkTrip = tripRepository
+                .findByProvinceStartAndProvinceEnd(newTripRequest.getProvinceStart(), newTripRequest.getProvinceEnd());
+
+        Optional<Ticket> checkTicket = ticketRepository
+                .findByAddressStartAndAddressEnd(newTripRequest.getProvinceStart(),newTripRequest.getProvinceEnd());
+
+        if(checkTrip.isPresent() || checkTicket.isPresent()){
+            if(!checkTrip.get().getTripId().equalsIgnoreCase(id)){
+                return null;
+            }
+        }
+
         Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip does not exist"));
+
+        Ticket ticket = ticketRepository
+                .findByAddressStartAndAddressEnd(trip.getProvinceStart(),trip.getProvinceEnd())
+                .orElseThrow(() -> new EntityNotFoundException("Ticket does not exist"));
 
         trip.setProvinceStart(newTripRequest.getProvinceStart());
         trip.setProvinceEnd(newTripRequest.getProvinceEnd());
@@ -76,11 +117,18 @@ public class TripServiceImpl implements TripService {
 
         tripRepository.save(trip);
 
+        TicketRequest ticketRequest = new TicketRequest(newTripRequest.getProvinceStart(),
+                                                        newTripRequest.getProvinceEnd(),
+                                                        newTripRequest.getPrice());
+
+        ticketService.updateTicket(ticket.getTicketId(), ticketRequest);
+
         TripResponse tripResponse = new TripResponse();
         tripResponse.setTripId(trip.getTripId());
         tripResponse.setProvinceStart(trip.getProvinceStart());
         tripResponse.setProvinceEnd(trip.getProvinceEnd());
         tripResponse.setTimeStart(trip.getTimeStart());
+        tripResponse.setPrice(ticket.getPrice());
 
         return tripResponse;
     }

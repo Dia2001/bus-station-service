@@ -38,7 +38,7 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public boolean updateTicket(String ticketId, TicketRequest request) {
+	public TicketResponse updateTicket(String ticketId, TicketRequest request) {
 		Ticket ticket = ticketRepository.findById(ticketId)
 				.orElseThrow(() -> new RuntimeException("Ticket does not exist"));
 		ticket.setAddressEnd(request.getAddressEnd());
@@ -46,7 +46,10 @@ public class TicketServiceImpl implements TicketService {
 		ticket.setPrice(request.getPrice());
 		ticketRepository.save(ticket);
 
-		return true;
+		TicketResponse ticketResponse = new TicketResponse(
+				ticket.getTicketId(),ticket.getAddressStart(),ticket.getAddressEnd(),ticket.getPrice());
+
+		return ticketResponse;
 	}
 
 	@Override

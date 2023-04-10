@@ -31,7 +31,7 @@ public class TripController {
         return new ResponseEntity<>(trips, HttpStatus.OK);
     }
 
-    @GetMapping("/getUsersByTrip/{trip_id}")
+    @GetMapping("/{trip_id}")
     public ResponseEntity<?> getUsersByTrips(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                              @PathVariable("trip_id") String tripId) {
@@ -49,17 +49,24 @@ public class TripController {
     }
 
     @PostMapping()
-    public ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
+    public ResponseEntity<?> createTrip(@RequestBody TripRequest tripRequest) {
 
         TripResponse tripResponse = tripService.createTrip(tripRequest);
+        if(tripResponse == null){
+            return new ResponseEntity<>("trip or ticket already exists", HttpStatus.OK);
+        }
         return new ResponseEntity<>(tripResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TripResponse> updateTrip(@RequestBody TripRequest tripRequest,
+    public ResponseEntity<?> updateTrip(@RequestBody TripRequest tripRequest,
                                                    @PathVariable("id") String id) {
 
         TripResponse trip = tripService.updateTrip(id, tripRequest);
+
+        if(trip == null){
+            return new ResponseEntity<>("trip or ticket already exists", HttpStatus.OK);
+        }
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
