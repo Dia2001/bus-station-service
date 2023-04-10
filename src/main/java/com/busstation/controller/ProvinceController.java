@@ -6,6 +6,7 @@ import com.busstation.services.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +17,15 @@ import java.util.List;
 public class ProvinceController {
     @Autowired
     ProvinceService provinceService;
+
     @PostMapping(value = "/addProvince")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> saveProvince(@RequestBody List<Province> provinceList){
         return new ResponseEntity<>(provinceService.createProvince(provinceList), HttpStatus.OK);
     }
 
     @PostMapping(value = "/addCity")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> saves(@RequestBody List<City> cities){
         return new ResponseEntity<>(provinceService.createCity(cities), HttpStatus.OK);
     }

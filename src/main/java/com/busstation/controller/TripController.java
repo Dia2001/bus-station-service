@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:9999/")
@@ -32,6 +33,7 @@ public class TripController {
     }
 
     @GetMapping("/{trip_id}")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> getUsersByTrips(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                              @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                              @PathVariable("trip_id") String tripId) {
@@ -49,6 +51,7 @@ public class TripController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
 
         TripResponse tripResponse = tripService.createTrip(tripRequest);
@@ -56,6 +59,7 @@ public class TripController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<TripResponse> updateTrip(@RequestBody TripRequest tripRequest,
                                                    @PathVariable("id") String id) {
 
@@ -63,7 +67,9 @@ public class TripController {
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 
+
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> deleteTrip(@PathVariable("id") String id) {
 
         if (tripService.deleteTrip(id)) {

@@ -6,6 +6,7 @@ import com.busstation.services.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:9999/")
@@ -17,14 +18,16 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping()
-    public ResponseEntity<?> createTrip(@RequestBody RoleRequest roleRequest) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> createRole(@RequestBody RoleRequest roleRequest) {
 
         RoleResponse roleResponse = roleService.createRole(roleRequest);
         return new ResponseEntity<>(roleResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateTrip(@RequestBody RoleRequest roleRequest,
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateRole(@RequestBody RoleRequest roleRequest,
                                         @PathVariable("id") String id) {
 
         RoleResponse roleResponse = roleService.updateRole(id, roleRequest);
@@ -32,7 +35,8 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteTrip(@PathVariable("id") String id) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteRole(@PathVariable("id") String id) {
 
         if (roleService.deleteRole(id)) {
             return new ResponseEntity<>("delete Success!", HttpStatus.OK);

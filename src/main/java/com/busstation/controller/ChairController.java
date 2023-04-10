@@ -6,6 +6,7 @@ import com.busstation.services.ChairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -38,12 +39,14 @@ public class ChairController {
     }
 
     @PutMapping("/{chairId}")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> updateChair(@RequestBody ChairRequest request, @PathVariable("chairId") String chairId) {
         chairService.updateChair(chairId, request);
         return new ResponseEntity<>("Updated !!!", HttpStatus.OK);
     }
 
     @DeleteMapping("/{chairId}")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> deleteChiar(@PathVariable("chairId") String chairId) {
         if (chairService.deleteChair(chairId)) {
             return new ResponseEntity<>("Deleted !!!", HttpStatus.OK);
