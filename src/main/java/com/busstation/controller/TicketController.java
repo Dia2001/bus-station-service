@@ -20,8 +20,14 @@ public class TicketController {
 	@GetMapping()
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> searchTicket(@RequestBody TicketRequest ticketRequest,
-										  @RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize) {
+			@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize) {
 		Page<TicketResponse> ticketResponse = ticketService.searchTicket(ticketRequest, pageNumber, pageSize);
+		return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
+	}
+
+	@GetMapping("/{ticketId}")
+	public ResponseEntity<?> getTicketById(@PathVariable("ticketId") String ticketId) {
+		TicketResponse ticketResponse = ticketService.getTicketById(ticketId);
 		return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
 	}
 
@@ -35,7 +41,7 @@ public class TicketController {
 	@PutMapping("/{ticketId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> updateTicket(@RequestBody TicketRequest ticketRequest,
-										  @PathVariable("ticketId") String ticketId) {
+			@PathVariable("ticketId") String ticketId) {
 		ticketService.updateTicket(ticketId, ticketRequest);
 		return new ResponseEntity<>("Updated !!!", HttpStatus.OK);
 	}

@@ -60,22 +60,38 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public Page<TicketResponse> searchTicket(TicketRequest ticketRequest, int pageNumber, int pageSize) {
-		 Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("price").ascending());
-		 if(ticketRequest.getAddressStart() == null || ticketRequest.getAddressEnd() == null ) {
-			 Page<Ticket> ticket = ticketRepository.findAll(pageable);
-			 Page<TicketResponse> ticketResponse = ticket.map(TicketResponse :: new);
-			 return ticketResponse;
-		 }
-		 
-		 if(ticketRequest.getPrice() == null) {
-			 Page<Ticket> ticket = ticketRepository.findByAddress(ticketRequest.getAddressStart(), ticketRequest.getAddressEnd(), pageable);
-			 Page<TicketResponse> ticketResponse = ticket.map(TicketResponse :: new);
-			 return ticketResponse;
-		 }
-		 
-		 Page<Ticket> ticket = ticketRepository.findByTickets(ticketRequest.getAddressStart(), ticketRequest.getAddressEnd(),ticketRequest.getPrice(), pageable);
-		 Page<TicketResponse> ticketResponse = ticket.map(TicketResponse :: new);
-		 return ticketResponse;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("price").ascending());
+		if (ticketRequest.getAddressStart() == null || ticketRequest.getAddressEnd() == null) {
+			Page<Ticket> ticket = ticketRepository.findAll(pageable);
+			Page<TicketResponse> ticketResponse = ticket.map(TicketResponse::new);
+			return ticketResponse;
+		}
+
+		if (ticketRequest.getPrice() == null) {
+			Page<Ticket> ticket = ticketRepository.findByAddress(ticketRequest.getAddressStart(),
+					ticketRequest.getAddressEnd(), pageable);
+			Page<TicketResponse> ticketResponse = ticket.map(TicketResponse::new);
+			return ticketResponse;
+		}
+
+		Page<Ticket> ticket = ticketRepository.findByTickets(ticketRequest.getAddressStart(),
+				ticketRequest.getAddressEnd(), ticketRequest.getPrice(), pageable);
+		Page<TicketResponse> ticketResponse = ticket.map(TicketResponse::new);
+		return ticketResponse;
+	}
+
+	@Override
+	public TicketResponse getTicketById(String ticketId) {
+		ticketRepository.findById(ticketId).orElseThrow(() -> new RuntimeException("Ticket does not exist"));
+		Ticket ticket = new Ticket();
+		ticket = ticketRepository.getReferenceById(ticketId);
+		TicketResponse ticketResponse = new TicketResponse();
+		ticketResponse.setTicketId(ticket.getTicketId());
+		ticketResponse.setAddressStart(ticket.getAddressStart());
+		ticketResponse.setAddressEnd(ticket.getAddressEnd());
+		ticketResponse.setPrice(ticket.getPrice());
+
+		return ticketResponse;
 	}
 
 }
