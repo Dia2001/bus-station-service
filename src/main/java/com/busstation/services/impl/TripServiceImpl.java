@@ -142,6 +142,13 @@ public class TripServiceImpl implements TripService {
         trip.setStatus(false);
         tripRepository.save(trip);
 
+        List<Car> cars = carRepository.findByTrips_TripId(id);
+
+        for (Car car : cars) {
+            car.setStatus(false);
+            carRepository.save(car);
+        }
+
         deleteUserToTrip(id);
 
         return true;
