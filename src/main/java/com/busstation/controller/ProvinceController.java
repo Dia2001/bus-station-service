@@ -2,6 +2,7 @@ package com.busstation.controller;
 
 import com.busstation.entities.City;
 import com.busstation.entities.Province;
+import com.busstation.payload.request.ProvinceRequest;
 import com.busstation.services.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

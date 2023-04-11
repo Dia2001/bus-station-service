@@ -1,7 +1,6 @@
 package com.busstation.payload.response;
 
 import com.busstation.entities.Trip;
-import com.busstation.repositories.TripRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

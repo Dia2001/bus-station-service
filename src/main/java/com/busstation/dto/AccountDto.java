@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -48,11 +49,13 @@ public class AccountDto {
         userDto.setStatus(account.getUser().getStatus());
         userDto.setCreatedAt(account.getUser().getCreatedAt());
         userDto.setUpdatedAt(account.getUser().getUpdatedAt());
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setEmployeeId(account.getUser().getEmployee().getEmployeeId());
-        employeeDTO.setDob(account.getUser().getEmployee().getDob());
-        employeeDTO.setYoe(account.getUser().getEmployee().getYoe());
-        userDto.setEmployeeDTO(employeeDTO);
+        if(Objects.nonNull(account.getUser().getEmployee())){
+            EmployeeDTO employeeDTO = new EmployeeDTO();
+            employeeDTO.setEmployeeId(account.getUser().getEmployee().getEmployeeId());
+            employeeDTO.setDob(account.getUser().getEmployee().getDob());
+            employeeDTO.setYoe(account.getUser().getEmployee().getYoe());
+            userDto.setEmployeeDTO(employeeDTO);
+        }
         this.setUser(userDto);
     }
 
