@@ -64,15 +64,17 @@ public class TripServiceImpl implements TripService {
         trip.setProvinceStart(tripRequest.getProvinceStart());
         trip.setProvinceEnd(tripRequest.getProvinceEnd());
         trip.setTimeStart(tripRequest.getTimeStart());
+        trip.setStatus(true);
 
         Trip newTrip = tripRepository.save(trip);
 
         TicketRequest ticketRequest = new TicketRequest(tripRequest.getProvinceStart(),
                 tripRequest.getProvinceEnd(),
                 tripRequest.getPrice());
-        TicketResponse ticketResponse;
-        if(checkTicket.isPresent()){
 
+        TicketResponse ticketResponse;
+
+        if(checkTicket.isPresent()){
             ticketResponse = ticketService.updateTicket(checkTicket.get().getTicketId(), ticketRequest);
         }
         else {
@@ -112,7 +114,6 @@ public class TripServiceImpl implements TripService {
 
         trip.setProvinceStart(newTripRequest.getProvinceStart());
         trip.setProvinceEnd(newTripRequest.getProvinceEnd());
-        trip.setTimeStart(newTripRequest.getTimeStart());
         trip.setUpdateAt(new Date());
 
         tripRepository.save(trip);
@@ -138,15 +139,11 @@ public class TripServiceImpl implements TripService {
 
         Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip does not exist"));
 
-        List<Car> cars = carRepository.findByTrips_TripId(id);
+        trip.setStatus(false);
+        tripRepository.save(trip);
 
-        for (Car car : cars) {
-            car.setTrips(null);
-            car.setStatus(false);
-            carRepository.save(car);
-        }
-        tripRepository.delete(trip);
         deleteUserToTrip(id);
+
         return true;
     }
 
