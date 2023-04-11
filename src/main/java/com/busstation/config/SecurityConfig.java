@@ -36,7 +36,7 @@ public class SecurityConfig {
     private LogoutHandler logoutHandler;
 
     private static final String[] UN_SECURED_URLs = {
-           "/api/v1/auth/**",
+            "/api/v1/auth/**",
 
     };
 
@@ -81,7 +81,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
+    //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration configuration = new CorsConfiguration();
 //        configuration.setAllowedOrigins(Arrays.asList("https://example.com"));

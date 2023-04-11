@@ -11,14 +11,18 @@ import com.busstation.repositories.ProvinceRepository;
 import com.busstation.services.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
-
     @Autowired
     ProvinceRepository provinceRepository;
 
@@ -129,4 +133,87 @@ public class ProvinceServiceImpl implements ProvinceService {
         }
         return false;
     }
+    @Override
+    public Boolean exportProvinces() {
+
+        try (Workbook workbook = new XSSFWorkbook()) {
+            File dataDir = new File("Excel File");
+            if (!dataDir.exists()) {
+                dataDir.mkdir();
+            }
+
+
+
+            List<Province> provinces = provinceRepository.findAll();
+            Sheet sheet = workbook.createSheet("Provinces");
+
+            Row header = sheet.createRow(0);
+            header.createCell(0).setCellValue("ID Province");
+            header.createCell(1).setCellValue("Provinces Name");
+            header.createCell(2).setCellValue("ID City");
+            header.createCell(3).setCellValue("City Name");
+
+            for (int i = 0; i < provinces.size(); i++) {
+                Province province = provinces.get(i);
+                Row row = sheet.createRow(i + 1);
+                row.createCell(0).setCellValue(province.getProvinceId());
+                row.createCell(1).setCellValue(province.getName());
+                row.createCell(2).setCellValue(province.getCity().getCityId());
+                row.createCell(3).setCellValue(province.getCity().getName());
+            }
+
+            try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH)) {
+                workbook.write(fileOutputStream);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public List<ProvinceResponse> importProvinces(MultipartFile file) throws IOException {
+        List<ProvinceResponse> provinceResponses = new ArrayList<>();
+
+        try (Workbook workbook = new XSSFWorkbook(file.getInputStream())){
+            Sheet sheet = workbook.getSheetAt(0);
+            Iterator<Row> rows = sheet.iterator();
+
+            if(rows.hasNext()){
+                rows.next();
+            }
+
+            while(rows.hasNext()){
+                Row row = rows.next();
+
+                int idProvince = (int) row.getCell(0).getNumericCellValue();
+                String provinceName = row.getCell(1).getStringCellValue();
+                int idCity = (int) row.getCell(2).getNumericCellValue();
+                String cityName = row.getCell(3).getStringCellValue();
+
+                Province province = new Province(idProvince, provinceName, null);
+                City city = new City(idCity, cityName,province);
+                province.setCity(city);
+
+                provinceRepository.save(province);
+                cityRepository.save(city);
+
+                CityResponse cityResponse = new CityResponse(idCity, cityName);
+                ProvinceResponse provinceResponse = new ProvinceResponse(idProvince, provinceName, cityResponse);
+                provinceResponses.add(provinceResponse);
+
+            }
+
+        }catch (IOException e){
+            e.printStackTrace();
+            throw e;
+        }
+
+        return provinceResponses;
+    }
+
 }

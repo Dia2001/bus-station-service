@@ -1,7 +1,7 @@
 package com.busstation.payload.request;
 
 
-import lombok.*;
+        import lombok.*;
 
 @Getter
 @Setter
@@ -12,4 +12,5 @@ public class CarRequest {
     private int carNumber;
     private int numberOfChair;
     private String tripId;
+    private int numberOfChair;
 }

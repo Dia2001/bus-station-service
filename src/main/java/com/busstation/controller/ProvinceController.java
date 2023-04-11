@@ -3,13 +3,16 @@ package com.busstation.controller;
 import com.busstation.entities.City;
 import com.busstation.entities.Province;
 import com.busstation.payload.request.ProvinceRequest;
+import com.busstation.payload.response.ProvinceResponse;
 import com.busstation.services.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:9999/")
@@ -49,4 +52,24 @@ public class ProvinceController {
         Boolean deleted = provinceService.deleteProvince(provinceId);
         return new ResponseEntity<>(deleted,HttpStatus.OK);
     }
+
+    @PostMapping("/exportExcel")
+    public ResponseEntity<?> exportProvinces(){
+        if(provinceService.exportProvinces()){
+            return new ResponseEntity<>("Export file excel successfully !", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Export file excel failed", HttpStatus.OK);
+    }
+
+    @PostMapping("/importExcel")
+    public ResponseEntity<?> importProvinces(@RequestParam("file") MultipartFile file){
+        try {
+            List<ProvinceResponse> provinceResponses = provinceService.importProvinces(file);
+            return new ResponseEntity<>(provinceResponses, HttpStatus.OK);
+        }catch (IOException e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Import file excel failed", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

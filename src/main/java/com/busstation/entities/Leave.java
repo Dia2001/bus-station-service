@@ -40,4 +40,6 @@ public class Leave implements Serializable {
     @CreationTimestamp
     private Date createAt;
 
+    @Column(name = "approved", nullable = false)
+    private boolean approved = false;
 }

@@ -4,7 +4,9 @@ import com.busstation.entities.City;
 import com.busstation.entities.Province;
 import com.busstation.payload.request.ProvinceRequest;
 import com.busstation.payload.response.ProvinceResponse;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProvinceService {
@@ -19,4 +21,9 @@ public interface ProvinceService {
     ProvinceResponse updateProvince(ProvinceRequest request, int provinceId);
 
     Boolean deleteProvince(int provinceId);
+
+
+    Boolean exportProvinces();
+
+    List<ProvinceResponse> importProvinces(MultipartFile file) throws IOException;
 }

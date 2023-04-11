@@ -10,8 +10,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LeaveRequest {
-    private String userId;
     private Date dateStart;
     private Date dateEnd;
     private String reason;
+    private boolean approved;
 }

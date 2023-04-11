@@ -27,7 +27,7 @@ public class Car  implements Serializable {
     private String carId;
     @Column(name = "status", nullable = false)
     private Boolean status;
-    @Column(name = "car_number",unique = true, nullable = false, length = 11)
+    @Column(name = "car_number", unique = true, nullable = false, length = 11)
     private int carNumber;
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
@@ -40,7 +40,7 @@ public class Car  implements Serializable {
     private List<Chair> chairs;
 
     @ManyToOne
-    @JoinColumn(name = "trip_id")
+    @JoinColumn(name = "trip_id", nullable = false)
     private Trip trips;
 
 }
