@@ -16,6 +16,7 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
     @GetMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getAll() {

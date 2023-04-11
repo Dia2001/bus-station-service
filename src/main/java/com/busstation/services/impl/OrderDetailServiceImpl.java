@@ -1,10 +1,12 @@
 package com.busstation.services.impl;
 
 import com.busstation.entities.*;
+import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.OrderDetailRequest;
 import com.busstation.payload.response.*;
 import com.busstation.repositories.*;
 import com.busstation.services.OrderDetailService;
+import com.busstation.utils.GetUserUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class OrderDetailServiceImpl implements OrderDetailService {
@@ -33,6 +36,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     @Override
     public OrderDetailResponse updateOrderDetail(String orderDetailId, OrderDetailRequest orderDetailRequest) {
 
@@ -42,12 +48,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
         Order order = orderRepository.findById(orderDetail.getOrder().getOrderID()).orElseThrow(() -> new EntityNotFoundException("Order does not exist"));
 
-        Ticket ticket = ticketRepository.findById(orderDetailRequest.getTicketId()).orElseThrow(() -> new EntityNotFoundException("Ticker does not exist"));
+        Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(orderDetailRequest.getAddressStart(), orderDetailRequest.getAddressEnd());
+
+        if (!ticket.isPresent()) {
+            throw new DataNotFoundException("Ticket not found");
+        }
 
         orderDetail.setStatus(orderDetailRequest.getStatus());
         orderDetail.setChair(chair);
         orderDetail.setOrder(order);
-        orderDetail.setTicket(ticket);
+        orderDetail.setTicket(ticket.get());
         orderDetail.setUpdatedAt(new Date());
 
         orderDetailRepository.save(orderDetail);
@@ -57,7 +67,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetailResponse.setStatus(orderDetail.getStatus());
         orderDetailResponse.setChair(setupChairResponse(chair));
         orderDetailResponse.setOrder(setupOrderResponse(order));
-        orderDetailResponse.setTicket(setupTicketResponse(ticket));
+        orderDetailResponse.setTicket(setupTicketResponse(ticket.get()));
 
 
         return orderDetailResponse;
@@ -76,11 +86,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public Page<OrderDetailResponse> getAllOrderDetailByUser(String userId, int pageNo, int pageSize) {
+    public Page<OrderDetailResponse> getAllOrderDetailByUser(int pageNo, int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").descending());
 
-        Page<OrderDetail> orderDetails = orderDetailRepository.findAllByUserId(userId,pageable);
+        Account account = accountRepository.findByusername(new GetUserUtil().GetUserName());
+
+        Page<OrderDetail> orderDetails = orderDetailRepository.findAllByUserId(account.getUser().getUserId(), pageable);
 
         Page<OrderDetailResponse> orderDetailPage = orderDetails.map(OrderDetailResponse::new);
 

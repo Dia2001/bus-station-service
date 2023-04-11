@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/trips")
 public class TripController {
 
+
     @Autowired
     private TripService tripService;
 
@@ -52,18 +53,25 @@ public class TripController {
 
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<TripResponse> createTrip(@RequestBody TripRequest tripRequest) {
+    public ResponseEntity<?> createTrip(@RequestBody TripRequest tripRequest) {
 
         TripResponse tripResponse = tripService.createTrip(tripRequest);
+        if(tripResponse == null){
+            return new ResponseEntity<>("trip or ticket already exists", HttpStatus.OK);
+        }
         return new ResponseEntity<>(tripResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<TripResponse> updateTrip(@RequestBody TripRequest tripRequest,
-                                                   @PathVariable("id") String id) {
+    public ResponseEntity<?> updateTrip(@RequestBody TripRequest tripRequest,
+                                        @PathVariable("id") String id) {
 
         TripResponse trip = tripService.updateTrip(id, tripRequest);
+
+        if(trip == null){
+            return new ResponseEntity<>("trip or ticket already exists", HttpStatus.OK);
+        }
         return new ResponseEntity<>(trip, HttpStatus.CREATED);
     }
 

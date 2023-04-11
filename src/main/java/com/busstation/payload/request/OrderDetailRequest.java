@@ -9,5 +9,7 @@ public class OrderDetailRequest {
 
     private String chairId;
 
-    private String ticketId;
+    private String addressStart;
+
+    private String addressEnd;
 }

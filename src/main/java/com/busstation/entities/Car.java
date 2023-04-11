@@ -40,7 +40,7 @@ public class Car  implements Serializable {
     private List<Chair> chairs;
 
     @ManyToOne
-    @JoinColumn(name = "trip_id", nullable = false)
+    @JoinColumn(name = "trip_id")
     private Trip trips;
 
 }
