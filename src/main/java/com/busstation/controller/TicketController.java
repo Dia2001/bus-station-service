@@ -3,12 +3,17 @@ package com.busstation.controller;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.response.TicketResponse;
 import com.busstation.services.TicketService;
+
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin(origins = "http://localhost:9999/")
 @RestController(value = "ticketAPIofWeb")
@@ -25,10 +30,29 @@ public class TicketController {
 		return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
 	}
 
+	@GetMapping("/export")
+	public ResponseEntity<?> exportTicket() {
+		if (ticketService.exportTicket()) {
+			return new ResponseEntity<>("Export file excel successfully !", HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Export file excel failed", HttpStatus.OK);
+	}
+
 	@GetMapping("/{ticketId}")
 	public ResponseEntity<?> getTicketById(@PathVariable("ticketId") String ticketId) {
 		TicketResponse ticketResponse = ticketService.getTicketById(ticketId);
 		return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
+	}
+
+	@PostMapping("/import")
+	public ResponseEntity<?> importTicket(@RequestParam("file") MultipartFile file) {
+		try {
+			List<TicketResponse> ticketResponses = ticketService.importTicket(file);
+			return new ResponseEntity<>(ticketResponses, HttpStatus.OK);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Import file excel failed", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PostMapping()
