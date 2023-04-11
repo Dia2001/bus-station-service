@@ -24,11 +24,9 @@ public class CarController {
 
     @GetMapping("/{carNumber}")
     public ResponseEntity<?> searchCarByCarNumber(
-            @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "2") int pageSize,
             @PathVariable("carNumber") int carNumber
     ){
-        return new ResponseEntity<>(carService.showCarNumber(pageNumber,pageSize, carNumber), HttpStatus.OK);
+        return new ResponseEntity<>(carService.showCarNumber(carNumber), HttpStatus.OK);
 
     }
     @GetMapping

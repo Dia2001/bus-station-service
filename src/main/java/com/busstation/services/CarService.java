@@ -16,5 +16,5 @@ public interface CarService {
 
     Page<CarResponse> showAllCar(int pageNumber, int pageSize);
 
-    Page<CarResponse> showCarNumber(int pageNumber, int pageSize, int carNumber);
+    CarResponse showCarNumber(int carNumber);
 }

@@ -56,6 +56,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/signup").permitAll()
                 .requestMatchers("/api/v1/users/**").permitAll()
                 .requestMatchers("/api/v1/employees/**").permitAll()
+                .requestMatchers("/api/v1/provinces/**").permitAll()
+                .requestMatchers("/api/v1/cars/**").permitAll()
                 .anyRequest()
                 .authenticated().and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class).logout()
