@@ -15,6 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
     @Autowired
     private AccountService accountService;
+
+    @GetMapping ("/information")
+    public ResponseEntity<?> getInfor() {
+        return new ResponseEntity<>(accountService.accountInformation(), HttpStatus.OK);
+    }
+
+    @GetMapping ("/information/{accountid}")
+    public ResponseEntity<?> getInforId(@PathVariable("accountid") String accountId) {
+        return new ResponseEntity<>(accountService.accountInformation(accountId), HttpStatus.OK);
+    }
     @PostMapping("/changepassword")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         return new ResponseEntity<>( accountService.changePassword(changePasswordRequest), HttpStatus.OK);
