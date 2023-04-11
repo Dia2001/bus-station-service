@@ -1,5 +1,10 @@
 package com.busstation.services.impl;
 
+import com.busstation.converter.AccountConverter;
+import com.busstation.converter.EmployeeConverter;
+import com.busstation.converter.UserConverter;
+import com.busstation.dto.AccountDto;
+import com.busstation.dto.UserDto;
 import com.busstation.entities.Account;
 import com.busstation.entities.Role;
 import com.busstation.exception.DataNotFoundException;
@@ -18,6 +23,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -34,6 +41,15 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private AccountConverter accountConverter;
+
+    @Autowired
+    private EmployeeConverter employeeConverter;
+
+    @Autowired
+    private UserConverter userConverter;
+
     @Override
     public ApiResponse changePassword(ChangePasswordRequest changePasswordRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -49,10 +65,32 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ApiResponse updateRole(String accountid,RoleRequest roleRequest) {
-        Account account=accountRepository.findById(accountid).orElseThrow(() -> new DataNotFoundException("Can't find this account"));
-        Role role=roleRepository.findById(roleRequest.getRoleId()).orElseThrow(() -> new DataNotFoundException("Can't find this role"));
+        Account account=accountRepository.findById(accountid).
+                orElseThrow(() -> new DataNotFoundException("Can't find this account"));
+        Role role=roleRepository.findById(roleRequest.getRoleId()).
+                orElseThrow(() -> new DataNotFoundException("Can't find this role"));
         account.setRole(role);
         accountRepository.save(account);
         return new ApiResponse("Role update successful",HttpStatus.OK);
+    }
+
+    @Override
+    public AccountDto accountInformation() {
+        Account account=accountRepository.findByusername(SecurityUtils.getUserName());
+        if(Objects.isNull(account)){
+            throw  new DataNotFoundException("Can't find this account");
+        }
+        AccountDto accountDto=new AccountDto(account);
+
+        return accountDto;
+    }
+
+    @Override
+    public AccountDto accountInformation(String accountId) {
+        Account account=accountRepository.findById(accountId).
+                orElseThrow(() -> new DataNotFoundException("Can't find this account"));
+        AccountDto accountDto=new AccountDto(account);
+
+        return accountDto;
     }
 }

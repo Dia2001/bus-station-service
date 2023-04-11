@@ -29,6 +29,8 @@ public class UserDto {
 
     private Date updatedAt;
 
+    private EmployeeDTO employeeDTO;
+
     public UserDto(User user) {
         this.userId = user.getUserId();
         this.fullName =user.getFullName();
