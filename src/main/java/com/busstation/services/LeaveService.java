@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface LeaveService {
     Page<LeaveResponse> showAllLeave(int pageNumber, int pageSize);
+    Page<LeaveResponse> showAllLeaveActive(int pageNumber, int pageSize);
 
 //    LeaveResponse updatedLeave(String leaveId, LeaveRequest request);
 

@@ -12,10 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 @CrossOrigin(origins = "http://localhost:9999/")
 @RestController(value = "leaveAPIofWeb")
 @RequestMapping("/api/v1/leaves")
@@ -30,6 +26,14 @@ public class LeaveController {
             @RequestParam(value = "pageSize", defaultValue = "5") int pageSize
     ){
         return new ResponseEntity<>(leaveService.showAllLeave(pageNumber,pageSize), HttpStatus.OK);
+
+    }
+    @GetMapping("/allActive")
+    public ResponseEntity<?> getAllLeaveActive(
+            @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5") int pageSize
+    ){
+        return new ResponseEntity<>(leaveService.showAllLeaveActive(pageNumber,pageSize), HttpStatus.OK);
 
     }
 

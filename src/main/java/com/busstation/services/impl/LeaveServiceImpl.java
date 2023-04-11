@@ -57,6 +57,15 @@ public class LeaveServiceImpl implements LeaveService {
     }
 
     @Override
+    public Page<LeaveResponse> showAllLeaveActive(int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("createAt").ascending());
+
+        Page<Leave> leaves = leaveRepository.findAllLeaves(pageable);
+
+        return leaves.map(LeaveResponse::new);
+    }
+
+    @Override
     public LeaveResponse addLeave(LeaveRequest request) {
         Account account = accountRepository.findByusername(new GetUserUtil().GetUserName());
 
