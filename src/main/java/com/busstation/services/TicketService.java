@@ -14,7 +14,7 @@ public interface TicketService {
 
 	TicketResponse addTicket(TicketRequest request);
 
-	boolean updateTicket(String ticketId, TicketRequest request);
+	TicketResponse updateTicket(String ticketId, TicketRequest request);
 
 	boolean deleteTicket(String ticketId);
 
