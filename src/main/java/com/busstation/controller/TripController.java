@@ -29,7 +29,9 @@ public class TripController {
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
         Page<SearchTripResponse> trips = tripService.getAllTripsByProvinceStartAndProvinceEndDateTime(searchTripRequest, pageNo, pageSize);
-
+        if(trips == null){
+            return new ResponseEntity<>("Temporarily no trips", HttpStatus.OK);
+        }
         return new ResponseEntity<>(trips, HttpStatus.OK);
     }
 
@@ -40,6 +42,9 @@ public class TripController {
                                              @PathVariable("trip_id") String tripId) {
 
         Page<UserByTripIdResponse> userByTripIdResponsePage = tripService.getAllUserByTrip(tripId, pageNo, pageSize);
+        if(userByTripIdResponsePage == null){
+            return new ResponseEntity<>("Temporarily no users on this trip", HttpStatus.OK);
+        }
         return new ResponseEntity<>(userByTripIdResponsePage, HttpStatus.OK);
     }
 

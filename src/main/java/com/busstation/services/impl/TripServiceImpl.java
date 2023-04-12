@@ -18,6 +18,7 @@ import com.busstation.repositories.UserRepository;
 import com.busstation.services.TicketService;
 import com.busstation.services.TripService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,8 +26,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -48,6 +51,7 @@ public class TripServiceImpl implements TripService {
     private TicketRepository ticketRepository;
 
     @Override
+    @Transactional
     public TripResponse createTrip(TripRequest tripRequest) {
 
         Optional<Trip> checkTrip = tripRepository
@@ -92,25 +96,22 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
+    @Transactional
     public TripResponse updateTrip(String id, TripRequest newTripRequest) {
 
         Optional<Trip> checkTrip = tripRepository
-                .findByProvinceStartAndProvinceEnd(newTripRequest.getProvinceStart(), newTripRequest.getProvinceEnd(),newTripRequest.getTimeStart());
+                .findByProvinceStartAndProvinceEnd(newTripRequest.getProvinceStart(), newTripRequest.getProvinceEnd(), newTripRequest.getTimeStart());
 
         Optional<Ticket> checkTicket = ticketRepository
                 .findByAddressStartAndAddressEnd(newTripRequest.getProvinceStart(),newTripRequest.getProvinceEnd());
 
-        if(checkTrip.isPresent() || checkTicket.isPresent()){
+        if(checkTrip.isPresent()){
             if(!checkTrip.get().getTripId().equals(id)){
                 return null;
             }
         }
 
         Trip trip = tripRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Trip does not exist"));
-
-        Ticket ticket = ticketRepository
-                .findByAddressStartAndAddressEnd(trip.getProvinceStart(),trip.getProvinceEnd())
-                .orElseThrow(() -> new EntityNotFoundException("Ticket does not exist"));
 
         trip.setProvinceStart(newTripRequest.getProvinceStart());
         trip.setProvinceEnd(newTripRequest.getProvinceEnd());
@@ -119,17 +120,24 @@ public class TripServiceImpl implements TripService {
         tripRepository.save(trip);
 
         TicketRequest ticketRequest = new TicketRequest(newTripRequest.getProvinceStart(),
-                                                        newTripRequest.getProvinceEnd(),
-                                                        newTripRequest.getPrice());
+                newTripRequest.getProvinceEnd(),
+                newTripRequest.getPrice());
 
-        ticketService.updateTicket(ticket.getTicketId(), ticketRequest);
+        TicketResponse ticketResponse;
+
+        if(checkTicket.isPresent()){
+            ticketResponse = ticketService.updateTicket(checkTicket.get().getTicketId(), ticketRequest);
+        }
+        else {
+            ticketResponse = ticketService.addTicket(ticketRequest);
+        }
 
         TripResponse tripResponse = new TripResponse();
         tripResponse.setTripId(trip.getTripId());
         tripResponse.setProvinceStart(trip.getProvinceStart());
         tripResponse.setProvinceEnd(trip.getProvinceEnd());
         tripResponse.setTimeStart(trip.getTimeStart());
-        tripResponse.setPrice(ticket.getPrice());
+        tripResponse.setPrice(ticketResponse.getPrice());
 
         return tripResponse;
     }
@@ -164,8 +172,15 @@ public class TripServiceImpl implements TripService {
 
             Page<Trip> trips = tripRepository.findAllTrips(pageable);
 
-
-            return trips.map(SearchTripResponse::new);
+            return trips.map(trip -> {
+                Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(trip.getProvinceStart(), trip.getProvinceEnd());
+                if (ticket.isPresent()) {
+                    Ticket getTicket = ticket.get();
+                    BigDecimal price = getTicket.getPrice();
+                    return new SearchTripResponse(trip, price);
+                }
+                return null;
+            });
         }
 
         if (searchTripRequest.getDateTime() == null) {
@@ -173,14 +188,30 @@ public class TripServiceImpl implements TripService {
             Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEnd(searchTripRequest.getProvinceStart(),
                     searchTripRequest.getProvinceEnd(), pageable);
 
-            return trips.map(SearchTripResponse::new);
+            return trips.map(trip -> {
+                Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(trip.getProvinceStart(), trip.getProvinceEnd());
+                if (ticket.isPresent()) {
+                    Ticket getTicket = ticket.get();
+                    BigDecimal price = getTicket.getPrice();
+                    return new SearchTripResponse(trip, price);
+                }
+                return null;
+            });
         }
 
         Page<Trip> trips = tripRepository.findByProvinceStartAndProvinceEndAndDateTime(searchTripRequest.getProvinceStart(),
                 searchTripRequest.getProvinceEnd(),
                 searchTripRequest.getDateTime(), pageable);
 
-        return trips.map(SearchTripResponse::new);
+        return trips.map(trip -> {
+            Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(trip.getProvinceStart(), trip.getProvinceEnd());
+            if (ticket.isPresent()) {
+                Ticket getTicket = ticket.get();
+                BigDecimal price = getTicket.getPrice();
+                return new SearchTripResponse(trip, price);
+            }
+            return null;
+        });
     }
 
     @Override
@@ -190,7 +221,15 @@ public class TripServiceImpl implements TripService {
 
         Page<Trip> trips = tripRepository.findAll(pageable);
 
-        return trips.map(TripResponse::new);
+        return trips.map(trip -> {
+            Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(trip.getProvinceStart(), trip.getProvinceEnd());
+            if (ticket.isPresent()) {
+                Ticket getTicket = ticket.get();
+                BigDecimal price = getTicket.getPrice();
+                return new TripResponse(trip, price);
+            }
+            return null;
+        });
     }
 
     @Override
@@ -200,9 +239,24 @@ public class TripServiceImpl implements TripService {
 
         Page<User> users = userRepository.findByTrips_TripId(tripId, pageable);
 
-        return users.map(user -> new UserByTripIdResponse(user, user.getTrips().stream()
-                .filter(trip -> trip.getTripId().equals(tripId))
-                .findFirst().orElse(null)));
+        Optional<Trip> checkTrip = tripRepository.findById(tripId);
+
+        if (checkTrip.isPresent()) {
+
+            Trip getTrip = checkTrip.get();
+
+            Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(getTrip.getProvinceStart(), getTrip.getProvinceEnd());
+            BigDecimal price;
+
+            if (ticket.isPresent()) {
+                Ticket getTicket = ticket.get();
+                price = getTicket.getPrice();
+            } else {
+                price = null;
+            }
+            return users.map(user -> new UserByTripIdResponse(user, getTrip, price));
+        }
+        return null;
     }
 
     public void deleteUserToTrip(String tripId) {

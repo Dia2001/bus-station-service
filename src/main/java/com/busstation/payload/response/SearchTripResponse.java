@@ -3,15 +3,12 @@ package com.busstation.payload.response;
 import com.busstation.entities.Car;
 import com.busstation.entities.Chair;
 import com.busstation.entities.Trip;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,30 +23,20 @@ public class SearchTripResponse {
     private String provinceStart;
 
     private String provinceEnd;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+
     private Date timeStart;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime dateTime;
-
-    private String startDate;
-
-    private String startTime;
 
     private List<CarResponse> car;
 
-    public SearchTripResponse(Trip trip){
+    private BigDecimal price;
+
+    public SearchTripResponse(Trip trip, BigDecimal price){
 
         this.tripId = trip.getTripId();
         this.provinceStart = trip.getProvinceStart();
         this.provinceEnd = trip.getProvinceEnd();
         this.timeStart = trip.getTimeStart();
-
-        this.dateTime = LocalDateTime.ofInstant(this.timeStart.toInstant(), ZoneId.systemDefault());
-
-        this.startDate = dateTime.getYear() + "-" + dateTime.getMonthValue() + "-" + dateTime.getDayOfMonth();
-
-        this.startTime = dateTime.getHour()+ ":" + dateTime.getMinute();
+        this.price = price;
 
         List<CarResponse> carResponseList = new ArrayList<>();
 
@@ -63,7 +50,6 @@ public class SearchTripResponse {
                 chairResponse.setCarId(chair.getCar().getCarId());
                 chairResponse.setChairId(chair.getChairId());
                 chairResponse.setChairNumber(chair.getChairNumber());
-                chairResponse.setStatus(chair.getStatus());
 
                 chairResponseList.add(chairResponse);
             }
