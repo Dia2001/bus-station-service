@@ -1,5 +1,6 @@
 package com.busstation.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,6 +11,6 @@ public class SearchTripRequest {
     String provinceStart;
 
     String provinceEnd;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     Date dateTime;
 }
