@@ -4,6 +4,7 @@ import com.busstation.entities.Ticket;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.response.TicketResponse;
 import com.busstation.repositories.TicketRepository;
+import com.busstation.repositories.custom.TicketRepositoryCustom;
 import com.busstation.services.TicketService;
 
 import java.io.File;
@@ -34,6 +35,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class TicketServiceImpl implements TicketService {
 	@Autowired
 	private TicketRepository ticketRepository;
+	
+	@Autowired
+	private TicketRepositoryCustom ticketRepositoryCustom;
 
 	private static final String FILE_PATH = "Excel File/Tickets.xlsx";
 
@@ -192,6 +196,14 @@ public class TicketServiceImpl implements TicketService {
 		}
 
 		return ticketResponses;
+	}
+
+	@Override
+	public Page<TicketResponse> searchTickets(String start, String end, int pageNumber, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("addressStart").ascending());
+        Page<Ticket> tickets =ticketRepositoryCustom.searchTickets(start, end, pageable);
+        Page<TicketResponse> ticketResponse = tickets.map(TicketResponse::new);
+        return ticketResponse;
 	}
 
 }

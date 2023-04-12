@@ -29,6 +29,14 @@ public class TicketController {
 		Page<TicketResponse> ticketResponse = ticketService.searchTicket(ticketRequest, pageNumber, pageSize);
 		return new ResponseEntity<>(ticketResponse, HttpStatus.OK);
 	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<?> searchTickets(@RequestParam(value = "start", defaultValue = "") String start,
+			@RequestParam(value = "end", defaultValue = "") String end,
+			@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+		return new ResponseEntity<>(ticketService.searchTickets(start,end , pageNumber, pageSize), HttpStatus.OK);
+	}
 
 	@GetMapping("/export")
 	public ResponseEntity<?> exportTicket() {
