@@ -1,5 +1,6 @@
 package com.busstation.services.impl;
 
+import com.busstation.common.Constant;
 import com.busstation.entities.Ticket;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.response.TicketResponse;
@@ -39,7 +40,7 @@ public class TicketServiceImpl implements TicketService {
 	@Autowired
 	private TicketRepositoryCustom ticketRepositoryCustom;
 
-	private static final String FILE_PATH = "Excel File/Tickets.xlsx";
+	private static final String FILE_PATH = Constant.EXCEL_PARH+"/tickets.xlsx";
 
 	@Override
 	public TicketResponse addTicket(TicketRequest request) {
@@ -123,7 +124,7 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public boolean exportTicket() {
 		try (Workbook workbook = new XSSFWorkbook()) {
-			File dataDir = new File("Excel File");
+			File dataDir = new File(Constant.EXCEL_PARH);
 			if (!dataDir.exists()) {
 				dataDir.mkdir();
 			}

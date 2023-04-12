@@ -1,5 +1,6 @@
 package com.busstation.services.impl;
 
+import com.busstation.common.Constant;
 import com.busstation.entities.City;
 import com.busstation.entities.Province;
 import com.busstation.exception.DataNotFoundException;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
 
-    private static final String FILE_PATH = "excel/provinces.xlsx";
+    private static final String FILE_PATH = Constant.EXCEL_PARH +"/provinces.xlsx";
     @Autowired
     ProvinceRepository provinceRepository;
 
@@ -143,7 +144,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     public Boolean exportProvinces() {
 
         try (Workbook workbook = new XSSFWorkbook()) {
-            File dataDir = new File("excel");
+            File dataDir = new File(Constant.EXCEL_PARH);
             if (!dataDir.exists()) {
                 dataDir.mkdir();
             }
