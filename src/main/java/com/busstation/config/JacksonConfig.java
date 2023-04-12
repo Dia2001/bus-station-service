@@ -1,25 +1,32 @@
 package com.busstation.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class JacksonConfig {
 
-    /*
-    * register a custom date conversion
-    * Set the format for the Date object
-    * convert JSON string to Java object
-    * */
+
     @Bean
     public ObjectMapper objectMapper() {
+        JavaTimeModule module = new JavaTimeModule();
+        LocalDateTimeDeserializer localDateTimeDeserializer =
+                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        module.addDeserializer(LocalDateTime.class, localDateTimeDeserializer);
+
         ObjectMapper objectMapper = new ObjectMapper();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        objectMapper.setDateFormat(dateFormat);
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        objectMapper.registerModule(module);
+
         return objectMapper;
     }
 }

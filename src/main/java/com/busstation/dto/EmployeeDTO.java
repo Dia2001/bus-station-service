@@ -1,6 +1,7 @@
 package com.busstation.dto;
 
 import com.busstation.entities.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class EmployeeDTO {
     private UserDto user;
 
     private String employeeId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dob;
     private int yoe;
 

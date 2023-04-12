@@ -1,5 +1,6 @@
 package com.busstation.payload.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ public class TripRequest {
 
     private String provinceEnd;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date timeStart;
 
     private Date updateAt;
