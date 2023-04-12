@@ -16,12 +16,20 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    @GetMapping()
+    @GetMapping("/getemployee")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> getAll(@RequestParam(value = "keyword", defaultValue ="") String keyword,
+    public ResponseEntity<?> getAllEmployee(@RequestParam(value = "keyword", defaultValue ="") String keyword,
                                     @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        return new ResponseEntity<>(employeeService.getAlL(keyword,pageNumber,pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getAlLEmployee(keyword,pageNumber,pageSize), HttpStatus.OK);
+    }
+
+    @GetMapping("/getdriver")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> getAllDriver(@RequestParam(value = "keyword", defaultValue ="") String keyword,
+                                    @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        return new ResponseEntity<>(employeeService.getAlLDriver(keyword,pageNumber,pageSize), HttpStatus.OK);
     }
     @PutMapping("/{employeeId}")
     public ResponseEntity<ApiResponse> update(@PathVariable("employeeId") String employeeId, @RequestBody EmployeeRequest employeeRequest) {

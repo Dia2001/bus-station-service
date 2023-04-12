@@ -26,9 +26,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private UserRepositoryCustom userRepositoryCustom;
     @Override
-    public Page<EmployeeDTO> getAlL(String keyword, int pageNumber, int pageSize) {
+    public Page<EmployeeDTO> getAlLEmployee(String keyword, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
         Page<User> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_EMPLOYEE.toString(), pageable);
+        Page<EmployeeDTO> employeeDtoList = users.map(EmployeeDTO::new);
+        return employeeDtoList;
+    }
+
+    public Page<EmployeeDTO> getAlLDriver(String keyword, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<User> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_DRIVER.toString(), pageable);
         Page<EmployeeDTO> employeeDtoList = users.map(EmployeeDTO::new);
         return employeeDtoList;
     }
