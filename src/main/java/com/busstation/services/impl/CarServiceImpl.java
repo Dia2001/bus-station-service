@@ -37,8 +37,6 @@ public class CarServiceImpl implements CarService {
     @Autowired
     private ChairService chairService;
 
-    @Autowired
-    private ChairService chairService;
 
     @Override
     public CarResponse updatedCar(String carId, CarRequest request) {
@@ -156,9 +154,7 @@ public class CarServiceImpl implements CarService {
 
         return new CarResponse(cars);
     }
-
     public List<ChairResponse> setupChairResponse(Car car){
-
         List<Chair> chair = chairRepository.findAllByCar(car);
 
 
@@ -174,21 +170,5 @@ public class CarServiceImpl implements CarService {
         }
         return listChairResponse;
     }
-    public List<ChairResponse> setupChairResponse(Car car){
 
-        List<Chair> chair = chairRepository.findAllByCar(car);
-
-
-        List<ChairResponse> listChairResponse = new ArrayList<>();
-
-        for (Chair item : chair) {
-            ChairResponse chairResponse = new ChairResponse();
-            chairResponse.setStatus(item.getStatus());
-            chairResponse.setCarId(item.getCar().getCarId());
-            chairResponse.setChairNumber(item.getChairNumber());
-            chairResponse.setChairId(item.getChairId());
-            listChairResponse.add(chairResponse);
-        }
-        return listChairResponse;
-    }
 }

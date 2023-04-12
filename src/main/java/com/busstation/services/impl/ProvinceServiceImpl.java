@@ -9,6 +9,10 @@ import com.busstation.payload.response.ProvinceResponse;
 import com.busstation.repositories.CityRepository;
 import com.busstation.repositories.ProvinceRepository;
 import com.busstation.services.ProvinceService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +27,8 @@ import java.util.Optional;
 
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
+
+    private static final String FILE_PATH = "excel/provinces.xlsx";
     @Autowired
     ProvinceRepository provinceRepository;
 
@@ -137,7 +143,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     public Boolean exportProvinces() {
 
         try (Workbook workbook = new XSSFWorkbook()) {
-            File dataDir = new File("Excel File");
+            File dataDir = new File("excel");
             if (!dataDir.exists()) {
                 dataDir.mkdir();
             }

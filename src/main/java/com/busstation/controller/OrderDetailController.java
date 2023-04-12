@@ -19,7 +19,7 @@ public class OrderDetailController {
     @Autowired
     private OrderDetailService orderDetailService;
 
-    @GetMapping("/getAllOrderDetail")
+    @GetMapping("/g")
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> getAllOrderDetail(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {

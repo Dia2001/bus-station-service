@@ -18,8 +18,10 @@ public interface TripRepository extends JpaRepository<Trip,String> {
     @Query(value = "FROM Trip trip WHERE date(trip.timeStart) >= date(CURRENT_TIMESTAMP) AND trip.status = true")
     Page<Trip> findAllTrips(Pageable pageable);
 
-    @Query(value = "FROM Trip trip WHERE trip.provinceStart = :province_start AND trip.provinceEnd = :province_end AND trip.status = true")
-    Optional<Trip> findByProvinceStartAndProvinceEnd(@Param("province_start") String provinceStart, @Param("province_end") String provinceEnd);
+    @Query(value = "FROM Trip trip WHERE trip.provinceStart = :province_start " +
+            "AND trip.provinceEnd = :province_end AND trip.status = true AND trip.timeStart = :dateTime")
+    Optional<Trip> findByProvinceStartAndProvinceEnd(@Param("province_start") String provinceStart, @Param("province_end") String provinceEnd,
+                                                     @Param("dateTime") Date dateTime);
 
     @Query(value = "FROM Trip trip WHERE date(trip.timeStart) >= date(CURRENT_TIMESTAMP)" +
             " AND trip.provinceStart = :province_start AND trip.provinceEnd = :province_end AND trip.status = true")

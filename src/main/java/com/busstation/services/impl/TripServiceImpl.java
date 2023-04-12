@@ -51,7 +51,7 @@ public class TripServiceImpl implements TripService {
     public TripResponse createTrip(TripRequest tripRequest) {
 
         Optional<Trip> checkTrip = tripRepository
-                .findByProvinceStartAndProvinceEnd(tripRequest.getProvinceStart(), tripRequest.getProvinceEnd());
+                .findByProvinceStartAndProvinceEnd(tripRequest.getProvinceStart(), tripRequest.getProvinceEnd(), tripRequest.getTimeStart());
 
         Optional<Ticket> checkTicket = ticketRepository
                 .findByAddressStartAndAddressEnd(tripRequest.getProvinceStart(),tripRequest.getProvinceEnd());
@@ -95,7 +95,7 @@ public class TripServiceImpl implements TripService {
     public TripResponse updateTrip(String id, TripRequest newTripRequest) {
 
         Optional<Trip> checkTrip = tripRepository
-                .findByProvinceStartAndProvinceEnd(newTripRequest.getProvinceStart(), newTripRequest.getProvinceEnd());
+                .findByProvinceStartAndProvinceEnd(newTripRequest.getProvinceStart(), newTripRequest.getProvinceEnd(),newTripRequest.getTimeStart());
 
         Optional<Ticket> checkTicket = ticketRepository
                 .findByAddressStartAndAddressEnd(newTripRequest.getProvinceStart(),newTripRequest.getProvinceEnd());

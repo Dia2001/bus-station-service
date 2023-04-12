@@ -2,6 +2,7 @@ package com.busstation.controller;
 
 
 import com.busstation.entities.Leave;
+import com.busstation.payload.request.ApproveLeaveRequest;
 import com.busstation.payload.request.LeaveRequest;
 import com.busstation.payload.response.LeaveResponse;
 import com.busstation.services.LeaveService;
