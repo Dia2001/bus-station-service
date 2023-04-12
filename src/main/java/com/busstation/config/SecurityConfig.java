@@ -71,6 +71,7 @@ public class SecurityConfig {
         http.csrf().disable().authorizeHttpRequests()
                 .requestMatchers(UN_SECURED_URLs).permitAll()
                 .requestMatchers( "/chair-booking").permitAll()
+                .requestMatchers( "/chair-booking/**").permitAll()
                 .requestMatchers(HttpMethod.GET,HTTP_METHOD_GET_UN_SECURED_URLs).permitAll()
                 .anyRequest()
                 .authenticated().and().authenticationProvider(authenticationProvider())
