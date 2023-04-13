@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,6 +41,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private TripRepository tripRepository;
+
+    @Autowired
+    private TripUserRepository tripUserRepository;
+
+
     @Override
     public OrderDetailResponse updateOrderDetail(String orderDetailId, OrderDetailRequest orderDetailRequest) {
 
@@ -60,7 +69,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetail.setTicket(ticket.get());
         orderDetail.setUpdatedAt(new Date());
 
-        orderDetailRepository.save(orderDetail);
+        OrderDetail updateOrderDetail = orderDetailRepository.save(orderDetail);
+
+        if(updateOrderDetail.getStatus() == false){
+            deleteUserToTrip(updateOrderDetail);
+        }else {
+            TripUser tripUser = tripUserRepository.findTripUserByUserId(orderDetail.getOrder().getUser().getUserId());
+            if(Objects.isNull(tripUser)){
+                addUserToTrip(orderDetail.getChair().getCar().getTrips().getTripId(),orderDetail.getOrder().getUser().getUserId());
+            }
+        }
 
         OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
         orderDetailResponse.setOrderDetailId(orderDetail.getOrderDetailId());
@@ -143,5 +161,25 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         ticket.setDropOffLocation(ticket.getDropOffLocation());
 
         return ticketResponse;
+    }
+
+    public void addUserToTrip(String tripId, String userId) {
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        trip.getUsers().add(user);
+        tripRepository.save(trip);
+    }
+
+    public void deleteUserToTrip(OrderDetail orderDetail) {
+
+        User user = userRepository.findUserByOrders(orderDetail.getOrder());
+
+        if(Objects.nonNull(user)){
+            Trip trip = tripRepository.findById(orderDetail.getChair().getCar().getTrips().getTripId())
+                    .orElseThrow(() -> new EntityNotFoundException("Trip not found"));
+
+            trip.getUsers().remove(user);
+            tripRepository.save(trip);
+        }
     }
 }

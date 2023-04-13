@@ -1,5 +1,6 @@
 package com.busstation.repositories;
 
+import com.busstation.entities.Order;
 import com.busstation.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, String> {
     Page<User> findByTrips_TripId(String tripId, Pageable pageable);
 
     List<User> findAllByTrips_TripId(String tripId);
+
+    User findUserByOrders(Order order);
 }
