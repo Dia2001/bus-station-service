@@ -1,9 +1,6 @@
 package com.busstation.payload.request;
 
 import lombok.*;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Date;
 
 @NoArgsConstructor
 @Getter

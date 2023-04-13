@@ -1,8 +1,5 @@
 package com.busstation.services.impl;
 
-import com.busstation.converter.AccountConverter;
-import com.busstation.converter.EmployeeConverter;
-import com.busstation.converter.UserConverter;
 import com.busstation.dto.AccountDto;
 import com.busstation.entities.Account;
 import com.busstation.entities.Role;
@@ -38,14 +35,6 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AccountConverter accountConverter;
-
-    @Autowired
-    private EmployeeConverter employeeConverter;
-
-    @Autowired
-    private UserConverter userConverter;
 
     @Override
     public ApiResponse changePassword(ChangePasswordRequest changePasswordRequest) {
