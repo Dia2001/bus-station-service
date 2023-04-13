@@ -18,7 +18,7 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping()
-	//@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
 	public ResponseEntity<?> getAll(@RequestParam(value = "keyword", defaultValue = "") String keyword,
 			@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
@@ -34,6 +34,11 @@ public class UserController {
 
 	@PutMapping("/status/{userId}")
 	public ResponseEntity<ApiResponse> setStatus(@PathVariable("userId") String userId) {
+		return new ResponseEntity<>(userService.setStatus(userId), HttpStatus.OK);
+	}
+
+	@PutMapping("/auth/status/{userId}")
+	public ResponseEntity<ApiResponse> setStatusUser(@PathVariable("userId") String userId) {
 		return new ResponseEntity<>(userService.setStatus(userId), HttpStatus.OK);
 	}
 }
