@@ -36,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class TicketServiceImpl implements TicketService {
 	@Autowired
 	private TicketRepository ticketRepository;
-	
+
 	@Autowired
 	private TicketRepositoryCustom ticketRepositoryCustom;
 
@@ -44,10 +44,13 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public TicketResponse addTicket(TicketRequest request) {
+
 		Ticket ticket = new Ticket();
 		ticket.setAddressEnd(request.getAddressEnd());
 		ticket.setAddressStart(request.getAddressStart());
 		ticket.setPrice(request.getPrice());
+		ticket.setPickupLocation(request.getPickupLocation());
+		ticket.setDropOffLocation(request.getDropOffLocation());
 		ticketRepository.save(ticket);
 
 		Ticket newTicket = ticketRepository.save(ticket);
@@ -62,15 +65,22 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public TicketResponse updateTicket(String ticketId, TicketRequest request) {
+
 		Ticket ticket = ticketRepository.findById(ticketId)
 				.orElseThrow(() -> new RuntimeException("Ticket does not exist"));
+
 		ticket.setAddressEnd(request.getAddressEnd());
 		ticket.setAddressStart(request.getAddressStart());
 		ticket.setPrice(request.getPrice());
+		ticket.setPickupLocation(request.getPickupLocation());
+		ticket.setDropOffLocation(request.getDropOffLocation());
+
 		ticketRepository.save(ticket);
 
 		TicketResponse ticketResponse = new TicketResponse(
-				ticket.getTicketId(),ticket.getAddressStart(),ticket.getAddressEnd(),ticket.getPrice());
+				ticket.getTicketId(),ticket.getAddressStart(),
+				ticket.getAddressEnd(),ticket.getPrice(),
+				ticket.getPickupLocation(),ticket.getDropOffLocation());
 
 		return ticketResponse;
 	}
@@ -110,13 +120,15 @@ public class TicketServiceImpl implements TicketService {
 	@Override
 	public TicketResponse getTicketById(String ticketId) {
 		ticketRepository.findById(ticketId).orElseThrow(() -> new RuntimeException("Ticket does not exist"));
-		Ticket ticket = new Ticket();
-		ticket = ticketRepository.getReferenceById(ticketId);
+
+		Ticket ticket = ticketRepository.getReferenceById(ticketId);
 		TicketResponse ticketResponse = new TicketResponse();
 		ticketResponse.setTicketId(ticket.getTicketId());
 		ticketResponse.setAddressStart(ticket.getAddressStart());
 		ticketResponse.setAddressEnd(ticket.getAddressEnd());
 		ticketResponse.setPrice(ticket.getPrice());
+		ticketResponse.setPickupLocation(ticket.getPickupLocation());
+		ticketResponse.setDropOffLocation(ticket.getDropOffLocation());
 
 		return ticketResponse;
 	}
@@ -182,16 +194,10 @@ public class TicketServiceImpl implements TicketService {
 				Cell cell = row.getCell(3);
 				BigDecimal price = null;
 				if (cell.getCellType() == CellType.NUMERIC) {
-				    price = new BigDecimal(cell.getNumericCellValue());
+					price = new BigDecimal(cell.getNumericCellValue());
 				} else if (cell.getCellType() == CellType.STRING) {
-				    price = new BigDecimal(cell.getStringCellValue());
+					price = new BigDecimal(cell.getStringCellValue());
 				}
-
-				Ticket ticket = new Ticket(ticketId, addressStart, addressEnd, price);
-				ticketRepository.save(ticket);
-
-				TicketResponse ticketResponse = new TicketResponse(ticketId, addressStart, addressEnd, price);
-				ticketResponses.add(ticketResponse);
 
 			}
 

@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CityResponse {
+public class LocationResponse {
 
-    private int cityId;
+    private int locationId;
 
     private String name;
 }

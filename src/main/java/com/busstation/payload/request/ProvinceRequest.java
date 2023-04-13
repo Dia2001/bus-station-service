@@ -7,5 +7,5 @@ public class ProvinceRequest {
 
     private String nameProvince;
 
-    private String nameCity;
+    private String nameLocation;
 }

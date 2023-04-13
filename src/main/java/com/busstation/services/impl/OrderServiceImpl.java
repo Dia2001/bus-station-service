@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
@@ -31,7 +32,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ChairRepository chairRepository;
 
-
     @Autowired
     private TicketRepository ticketRepository;
 
@@ -40,6 +40,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private ProvinceRepository provinceRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -81,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
 
 
         OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setStatus("Not Authenticated");
+        orderDetail.setStatus(true);
         orderDetail.setChair(chair);
         orderDetail.setOrder(newOrder);
         orderDetail.setTicket(ticket.get());
@@ -135,13 +138,20 @@ public class OrderServiceImpl implements OrderService {
 
         Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new EntityNotFoundException("Trip not found"));
 
-        String provinceEnd = provinceEnd = Arrays.stream(trip.getProvinceEnd().split(" "))
+        String provinceEnd = Arrays.stream(trip.getProvinceEnd().split(" "))
                 .map(s->s.charAt(0))
                 .collect(StringBuilder::new,
                         StringBuilder::append,
                         StringBuilder::append).toString();
         Province province = provinceRepository.findByName(trip.getProvinceEnd());
-        provinceEnd += province.getProvinceId() + "-";
+        if(Objects.isNull(province)){
+            Location location = locationRepository.findByName(trip.getProvinceEnd());
+            provinceEnd += location.getLocationId() + "-";
+        }
+        else{
+
+            provinceEnd += province.getProvinceId() + "-";
+        }
 
         boolean doWhile = true;
         String initial;
@@ -216,6 +226,8 @@ public class OrderServiceImpl implements OrderService {
         ticketResponse.setAddressStart(ticket.getAddressStart());
         ticketResponse.setAddressEnd(ticket.getAddressEnd());
         ticketResponse.setPrice(ticket.getPrice());
+        ticket.setPickupLocation(ticket.getPickupLocation());
+        ticket.setDropOffLocation(ticket.getDropOffLocation());
 
         return ticketResponse;
     }
