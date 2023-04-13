@@ -24,8 +24,8 @@ public class OrderDetail  implements Serializable {
     @Column(name = "order_detail_id", length = 36)
     private String orderDetailId;
 
-    @Column(name = "status", length = 20, nullable = false)
-    private String status;
+    @Column(name = "status", nullable = false)
+    private Boolean status;
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp

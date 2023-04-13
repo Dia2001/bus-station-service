@@ -4,7 +4,6 @@ import com.busstation.converter.AccountConverter;
 import com.busstation.converter.EmployeeConverter;
 import com.busstation.converter.UserConverter;
 import com.busstation.dto.AccountDto;
-import com.busstation.dto.UserDto;
 import com.busstation.entities.Account;
 import com.busstation.entities.Role;
 import com.busstation.exception.DataNotFoundException;
@@ -23,8 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Service

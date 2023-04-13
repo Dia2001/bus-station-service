@@ -74,7 +74,9 @@ public class TripServiceImpl implements TripService {
 
         TicketRequest ticketRequest = new TicketRequest(tripRequest.getProvinceStart(),
                 tripRequest.getProvinceEnd(),
-                tripRequest.getPrice());
+                tripRequest.getPrice(),
+                tripRequest.getPickupLocation(),
+                tripRequest.getDropOffLocation());
 
         TicketResponse ticketResponse;
 
@@ -121,7 +123,9 @@ public class TripServiceImpl implements TripService {
 
         TicketRequest ticketRequest = new TicketRequest(newTripRequest.getProvinceStart(),
                 newTripRequest.getProvinceEnd(),
-                newTripRequest.getPrice());
+                newTripRequest.getPrice(),
+                newTripRequest.getPickupLocation(),
+                newTripRequest.getDropOffLocation());
 
         TicketResponse ticketResponse;
 

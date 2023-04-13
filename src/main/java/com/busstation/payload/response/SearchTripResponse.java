@@ -3,6 +3,7 @@ package com.busstation.payload.response;
 import com.busstation.entities.Car;
 import com.busstation.entities.Chair;
 import com.busstation.entities.Trip;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class SearchTripResponse {
 
     private String provinceEnd;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date timeStart;
 
     private List<CarResponse> car;

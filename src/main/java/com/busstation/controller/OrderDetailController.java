@@ -10,16 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
-@CrossOrigin(origins = "http://localhost:9999/")
+@CrossOrigin(origins = "http://localhost:9999")
 @RestController(value = "orderDetailAPIofWeb")
-@RequestMapping("api/v1/orderdetails")
+@RequestMapping("/api/v1/orderdetails")
 public class OrderDetailController {
 
     @Autowired
     private OrderDetailService orderDetailService;
 
-    @GetMapping("/g")
+    @GetMapping()
     @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
     public ResponseEntity<?> getAllOrderDetail(@RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
                                                @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {

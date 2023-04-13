@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_province")
@@ -24,6 +25,6 @@ public class Province implements Serializable {
 	@Column(name = "name", nullable = false, length = 50)
 	private String name;
 
-	@OneToOne(mappedBy = "province", cascade = CascadeType.ALL)
-	private City city;
+	@OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
+	private Set<Location> locations;
 }

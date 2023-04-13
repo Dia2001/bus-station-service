@@ -12,13 +12,21 @@ public class OrderDetailResponse {
 
     private String orderDetailId;
 
-    private String status;
+    private Boolean status;
 
     private OrderResponse order;
 
     private ChairResponse chair;
 
     private TicketResponse ticket;
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public Boolean setStatus(Boolean status){
+        return this.status = status;
+    }
 
     public OrderDetailResponse(OrderDetail orderDetail){
 

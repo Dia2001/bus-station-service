@@ -1,15 +1,16 @@
 package com.busstation.services.impl;
 
 import com.busstation.common.Constant;
-import com.busstation.entities.City;
+import com.busstation.entities.Location;
 import com.busstation.entities.Province;
 import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.ProvinceRequest;
-import com.busstation.payload.response.CityResponse;
+import com.busstation.payload.response.LocationResponse;
 import com.busstation.payload.response.ProvinceResponse;
-import com.busstation.repositories.CityRepository;
+import com.busstation.repositories.LocationRepository;
 import com.busstation.repositories.ProvinceRepository;
 import com.busstation.services.ProvinceService;
+import jakarta.transaction.Transactional;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -21,10 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProvinceServiceImpl implements ProvinceService {
@@ -34,7 +32,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     ProvinceRepository provinceRepository;
 
     @Autowired
-    CityRepository cityRepository;
+    LocationRepository locationRepository;
 
     @Override
     public boolean createProvince(List<Province> provinces) {
@@ -44,8 +42,8 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public boolean createCity(List<City> cities) {
-        if(cityRepository.saveAll(cities) != null)
+    public boolean createLocation(List<Location> locations) {
+        if(locationRepository.saveAll(locations) != null)
             return true;
         return false;
     }
@@ -61,42 +59,103 @@ public class ProvinceServiceImpl implements ProvinceService {
             ProvinceResponse provinceResponse = new ProvinceResponse();
             provinceResponse.setProvinceId(province.getProvinceId());
             provinceResponse.setName(province.getName());
-
-            CityResponse cityResponse = new CityResponse();
-            cityResponse.setCityId(province.getCity().getCityId());
-            cityResponse.setName(province.getCity().getName());
-
-            provinceResponse.setCity(cityResponse);
-
+            provinceResponse.setLocation(setupResponsesLocation(province));
             provinceResponseList.add(provinceResponse);
         }
-
         return provinceResponseList;
     }
 
     @Override
+    public List<ProvinceResponse> getAllProvince() {
+        List<Province> provinces = provinceRepository.findAll();
+
+        List<ProvinceResponse> provinceResponseList = new ArrayList<>();
+        for (Province province : provinces){
+
+            ProvinceResponse provinceResponse = new ProvinceResponse();
+            provinceResponse.setProvinceId(province.getProvinceId());
+            provinceResponse.setName(province.getName());
+            provinceResponseList.add(provinceResponse);
+        }
+        return provinceResponseList;
+    }
+
+    @Override
+    public List<LocationResponse> getAllLocation() {
+
+        List<Location> locations = locationRepository.findAll();
+
+        List<LocationResponse> locationResponses = new ArrayList<>();
+
+        for(Location location : locations){
+            LocationResponse locationResponse = new LocationResponse();
+            locationResponse.setLocationId(location.getLocationId());
+            locationResponse.setName(location.getName());
+
+            locationResponses.add(locationResponse);
+        }
+
+        return locationResponses;
+    }
+
+    @Override
+    public List<LocationResponse> getAllLocationByProvince(int provinceId) {
+
+        Optional<Province> checkProvince = provinceRepository.findById(provinceId);
+
+        if(checkProvince.isPresent()){
+            return setupResponsesLocation(checkProvince.get());
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional
     public ProvinceResponse createProvince(ProvinceRequest request) {
 
-        Province province = new Province();
-        province.setName(request.getNameProvince());
+        Location checkLocation = locationRepository.findByName(request.getNameLocation());
 
-        Province newProvince = provinceRepository.save(province);
+        if(Objects.nonNull(checkLocation)){
+            return null;
+        }
 
-        City city = new City();
-        city.setProvince(newProvince);
-        city.setName(request.getNameCity());
+        Province checkProvince = provinceRepository.findByName(request.getNameProvince());
 
-        City newCity = cityRepository.save(city);
+        Province newProvince;
 
         ProvinceResponse response = new ProvinceResponse();
-        response.setProvinceId(newProvince.getProvinceId());
-        response.setName(newProvince.getName());
 
-        CityResponse cityResponse = new CityResponse();
-        cityResponse.setCityId(newCity.getCityId());
-        cityResponse.setName(newCity.getName());
+        Province province = new Province();
 
-        response.setCity(cityResponse);
+        Location location = new Location();
+
+        if(Objects.isNull(checkProvince)){
+
+            province.setName(request.getNameProvince());
+            newProvince = provinceRepository.save(province);
+
+            location.setProvince(newProvince);
+            location.setName(request.getNameLocation());
+
+            locationRepository.save(location);
+
+            response.setProvinceId(newProvince.getProvinceId());
+            response.setName(newProvince.getName());
+
+            response.setLocation(setupResponsesLocation(newProvince));
+        }
+        else {
+            location.setProvince(checkProvince);
+            location.setName(request.getNameLocation());
+
+            locationRepository.save(location);
+
+            response.setProvinceId(checkProvince.getProvinceId());
+            response.setName(checkProvince.getName());
+
+            response.setLocation(setupResponsesLocation(checkProvince));
+        }
 
         return response;
     }
@@ -106,25 +165,37 @@ public class ProvinceServiceImpl implements ProvinceService {
 
         Province province = provinceRepository.findById(provinceId).orElseThrow(()->new DataNotFoundException("Province not found"));
 
-        City city = cityRepository.findById(provinceId).orElseThrow(()->new DataNotFoundException("City not found"));
+        if(province.getName().equals(request.getNameProvince()))
+            return null;
 
         province.setName(request.getNameProvince());
-        province.getCity().setName(request.getNameCity());
-
-        city.setName(request.getNameCity());
-        cityRepository.save(city);
-
         Province updateProvince = provinceRepository.save(province);
 
         ProvinceResponse response = new ProvinceResponse();
         response.setProvinceId(updateProvince.getProvinceId());
         response.setName(updateProvince.getName());
 
-        CityResponse cityResponse = new CityResponse();
-        cityResponse.setCityId(updateProvince.getCity().getCityId());
-        cityResponse.setName(updateProvince.getCity().getName());
+        response.setLocation(setupResponsesLocation(updateProvince));
 
-        response.setCity(cityResponse);
+        return response;
+    }
+
+    @Override
+    public ProvinceResponse updateLocation(ProvinceRequest request, int locationId) {
+
+        Location location = locationRepository.findById(locationId).orElseThrow(()->new DataNotFoundException("Location not found"));
+
+        if(location.getName().equals(request.getNameLocation()))
+            return null;
+
+        location.setName(request.getNameLocation());
+        locationRepository.save(location);
+
+        ProvinceResponse response = new ProvinceResponse();
+        response.setProvinceId(location.getProvince().getProvinceId());
+        response.setName(location.getProvince().getName());
+
+        response.setLocation(setupResponsesLocation(location.getProvince()));
 
         return response;
     }
@@ -140,6 +211,8 @@ public class ProvinceServiceImpl implements ProvinceService {
         }
         return false;
     }
+
+    //fix code I/O Provinces
     @Override
     public Boolean exportProvinces() {
 
@@ -165,8 +238,6 @@ public class ProvinceServiceImpl implements ProvinceService {
                 Row row = sheet.createRow(i + 1);
                 row.createCell(0).setCellValue(province.getProvinceId());
                 row.createCell(1).setCellValue(province.getName());
-                row.createCell(2).setCellValue(province.getCity().getCityId());
-                row.createCell(3).setCellValue(province.getCity().getName());
             }
 
             try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH)) {
@@ -203,15 +274,10 @@ public class ProvinceServiceImpl implements ProvinceService {
                 String cityName = row.getCell(3).getStringCellValue();
 
                 Province province = new Province(idProvince, provinceName, null);
-                City city = new City(idCity, cityName,province);
-                province.setCity(city);
 
                 provinceRepository.save(province);
-                cityRepository.save(city);
 
-                CityResponse cityResponse = new CityResponse(idCity, cityName);
-                ProvinceResponse provinceResponse = new ProvinceResponse(idProvince, provinceName, cityResponse);
-                provinceResponses.add(provinceResponse);
+                LocationResponse locationResponse = new LocationResponse(idCity, cityName);
 
             }
 
@@ -221,6 +287,24 @@ public class ProvinceServiceImpl implements ProvinceService {
         }
 
         return provinceResponses;
+    }
+
+    private List<LocationResponse> setupResponsesLocation(Province province){
+
+        List<Location> locations = locationRepository.findAllByProvince_ProvinceId(province.getProvinceId());
+
+        List<LocationResponse> locationResponses = new ArrayList<>();
+
+        for(Location location : locations){
+
+            LocationResponse locationResponse = new LocationResponse();
+            locationResponse.setLocationId(location.getLocationId());
+            locationResponse.setName(location.getName());
+
+            locationResponses.add(locationResponse);
+        }
+
+        return locationResponses;
     }
 
 }
