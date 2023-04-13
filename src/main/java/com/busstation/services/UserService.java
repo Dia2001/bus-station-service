@@ -10,4 +10,6 @@ public interface UserService {
     Page<UserDto> getAlL(String keyword, int pageNumber, int pageSize);
 
     ApiResponse edit(String id, UserRequest userRequest);
+    
+    ApiResponse setStatus(String id);
 }

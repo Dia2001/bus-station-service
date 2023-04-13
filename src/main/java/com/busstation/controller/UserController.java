@@ -13,21 +13,31 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    @GetMapping()
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
-    public ResponseEntity<?> getAll(@RequestParam(value = "keyword", defaultValue ="") String keyword,
-                                     @RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
-                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        return new ResponseEntity<>(userService.getAlL(keyword,pageNumber,pageSize), HttpStatus.OK);
-    }
+	@GetMapping()
+	@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
+	public ResponseEntity<?> getAll(@RequestParam(value = "keyword", defaultValue = "") String keyword,
+			@RequestParam(value = "pageNumber", defaultValue = "0") int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+		return new ResponseEntity<>(userService.getAlL(keyword, pageNumber, pageSize), HttpStatus.OK);
+	}
 
-    @PutMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
-    public ResponseEntity<ApiResponse> update(@PathVariable("userId") String userId, @RequestBody UserRequest userRequest) {
-        return new ResponseEntity<>(userService.edit(userId, userRequest),HttpStatus.OK);
-    }
+	@PutMapping("/{userId}")
+	@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
+	public ResponseEntity<ApiResponse> update(@PathVariable("userId") String userId,
+			@RequestBody UserRequest userRequest) {
+		return new ResponseEntity<>(userService.edit(userId, userRequest), HttpStatus.OK);
+	}
 
+	@PutMapping("/status/{userId}")
+	public ResponseEntity<ApiResponse> setStatus(@PathVariable("userId") String userId) {
+		return new ResponseEntity<>(userService.setStatus(userId), HttpStatus.OK);
+	}
+
+	@PutMapping("/auth/status/{userId}")
+	public ResponseEntity<ApiResponse> setStatusUser(@PathVariable("userId") String userId) {
+		return new ResponseEntity<>(userService.setStatus(userId), HttpStatus.OK);
+	}
 }
