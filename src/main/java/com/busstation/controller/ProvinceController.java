@@ -1,6 +1,6 @@
 package com.busstation.controller;
 
-import com.busstation.entities.City;
+import com.busstation.entities.Location;
 import com.busstation.entities.Province;
 import com.busstation.payload.request.ProvinceRequest;
 import com.busstation.payload.response.ProvinceResponse;
@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-
-@CrossOrigin(origins = "http://localhost:9999/")
+import java.util.Objects;
+@CrossOrigin(origins = "http://localhost:9999")
 @RestController(value = "provinceAPIofWeb")
 @RequestMapping(value = "/api/v1/provinces")
 public class ProvinceController {
@@ -27,9 +27,10 @@ public class ProvinceController {
         return new ResponseEntity<>(provinceService.createProvince(provinceList), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/addListCity")
-    public ResponseEntity<?> saves(@RequestBody List<City> cities){
-        return new ResponseEntity<>(provinceService.createCity(cities), HttpStatus.OK);
+    @PostMapping(value = "/addListLocation")
+    @PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
+    public ResponseEntity<?> saves(@RequestBody List<Location> locations){
+        return new ResponseEntity<>(provinceService.createLocation(locations), HttpStatus.OK);
     }
 
     @GetMapping
@@ -37,17 +38,52 @@ public class ProvinceController {
         return new ResponseEntity<>(provinceService.getAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/getAllProvinces")
+    public ResponseEntity<?> getAllProvince(){
+        return new ResponseEntity<>(provinceService.getAllProvince(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllLocations")
+    public ResponseEntity<?> getAllLocation(){
+        return new ResponseEntity<>(provinceService.getAllLocation(), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllLocations/{province_id}")
+    public ResponseEntity<?> getAllLocationByProvince(@PathVariable("province_id") int provinceId){
+        return new ResponseEntity<>(provinceService.getAllLocationByProvince(provinceId), HttpStatus.OK);
+    }
+
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> create(@RequestBody ProvinceRequest request){
-        return new ResponseEntity<>(provinceService.createProvince(request), HttpStatus.CREATED);
+        ProvinceResponse provinceResponse = provinceService.createProvince(request);
+        if(Objects.isNull(provinceResponse))
+            return new ResponseEntity<>("Location already exists ", HttpStatus.OK);
+        return new ResponseEntity<>(provinceResponse, HttpStatus.CREATED);
     }
 
     @PutMapping("/{province_id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> update(@RequestBody ProvinceRequest request, @PathVariable("province_id") int provinceId){
-        return new ResponseEntity<>(provinceService.updateProvince(request,provinceId), HttpStatus.CREATED);
+
+        ProvinceResponse provinceResponse = provinceService.updateProvince(request,provinceId);
+        if(Objects.isNull(provinceResponse))
+            return new ResponseEntity<>("Province already exists ", HttpStatus.OK);
+        return new ResponseEntity<>(provinceResponse, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/locations/{location_id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> updateLocation(@RequestBody ProvinceRequest request, @PathVariable("location_id") int locationId){
+
+        ProvinceResponse provinceResponse = provinceService.updateLocation(request,locationId);
+        if(Objects.isNull(provinceResponse))
+            return new ResponseEntity<>("Location already exists ", HttpStatus.OK);
+        return new ResponseEntity<>(provinceResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{province_id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> delete(@PathVariable("province_id") int provinceId){
         Boolean deleted = provinceService.deleteProvince(provinceId);
         return new ResponseEntity<>(deleted,HttpStatus.OK);

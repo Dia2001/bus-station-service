@@ -30,4 +30,11 @@ public class Ticket implements Serializable {
 
     @Column(name = "price", nullable = false, length = 18)
     private BigDecimal price;
+
+    @Column(name = "pickup_location")
+    private String pickupLocation;
+
+    @Column(name = "drop_off_location ")
+    private String dropOffLocation ;
+
 }

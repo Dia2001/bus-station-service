@@ -155,8 +155,8 @@ public class CarServiceImpl implements CarService {
         return new CarResponse(cars);
     }
     public List<ChairResponse> setupChairResponse(Car car){
-        List<Chair> chair = chairRepository.findAllByCar(car);
 
+        List<Chair> chair = chairRepository.findAllByCar(car);
 
         List<ChairResponse> listChairResponse = new ArrayList<>();
 
