@@ -1,6 +1,8 @@
 package com.busstation.services.impl;
 
+import com.busstation.dto.AccountDto;
 import com.busstation.dto.EmployeeDTO;
+import com.busstation.entities.Account;
 import com.busstation.entities.Employee;
 import com.busstation.entities.User;
 import com.busstation.enums.NameRoleEnum;
@@ -26,18 +28,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private UserRepositoryCustom userRepositoryCustom;
     @Override
-    public Page<EmployeeDTO> getAlLEmployee(String keyword, int pageNumber, int pageSize) {
+    public Page<AccountDto> getAlLEmployee(String keyword, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
-        Page<User> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_EMPLOYEE.toString(), pageable);
-        Page<EmployeeDTO> employeeDtoList = users.map(EmployeeDTO::new);
-        return employeeDtoList;
+        Page<Account> accounts =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_EMPLOYEE.toString(), pageable);
+        Page<AccountDto> accountDtos = accounts.map(AccountDto::new);
+        return accountDtos;
     }
 
-    public Page<EmployeeDTO> getAlLDriver(String keyword, int pageNumber, int pageSize) {
+    public Page<AccountDto> getAlLDriver(String keyword, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize);
-        Page<User> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_DRIVER.toString(), pageable);
-        Page<EmployeeDTO> employeeDtoList = users.map(EmployeeDTO::new);
-        return employeeDtoList;
+        Page<Account> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_DRIVER.toString(), pageable);
+        Page<AccountDto> accountDtos = users.map(AccountDto::new);
+        return accountDtos;
     }
 
     @Override

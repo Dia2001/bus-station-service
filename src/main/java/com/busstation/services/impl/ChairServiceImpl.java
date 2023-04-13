@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ChairServiceImpl implements ChairService {
 	@Autowired
@@ -33,6 +36,14 @@ public class ChairServiceImpl implements ChairService {
 
 
 		return chairs.map(ChairResponse::new);
+	}
+
+	@Override
+	public List<ChairResponse> showAllChair(String carId) {
+		System.out.println(carId+"nnnguyen");
+		Car car = carRepository.findById(carId).orElseThrow(() -> new EntityNotFoundException("Car does not exist"));
+		List<Chair> chairs= chairRepository.findAllByCar(car);
+		return  chairs.stream().map(item->new ChairResponse((Chair) item)).collect(Collectors.toList());
 	}
 
 	@Override

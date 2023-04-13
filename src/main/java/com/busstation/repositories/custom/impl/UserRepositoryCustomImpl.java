@@ -23,16 +23,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Page<User> getFilter(String keyword, String role, Pageable pageable) {
+    public Page<Account> getFilter(String keyword, String role, Pageable pageable) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> query = cb.createQuery(User.class);
-        Root<User> root = query.from(User.class);
+        CriteriaQuery<Account> query = cb.createQuery(Account.class);
+        Root<Account> root = query.from(Account.class);
         List<Predicate> predList = new ArrayList<>();
+        Join<Account,User> join = root.join("user", JoinType.LEFT);
+        Join<Account, Role> roleJoin = root.join("role", JoinType.LEFT);
         if (Validate.checkStringNotEmptyOrNull(keyword)) {
-            predList.add(cb.or((cb.like(root.get("email"), "%" + keyword + "%")), cb.like(root.get("phoneNumber"), "%" + keyword + "%")));
+            predList.add(cb.or((cb.like(join.get("email"), "%" + keyword + "%")), cb.like(join.get("phoneNumber"), "%" + keyword + "%")));
         }
-        Join<User, Account> join = root.join("account", JoinType.INNER);
-        Join<Account, Role> roleJoin = join.join("role", JoinType.INNER);
         if (role.equalsIgnoreCase(NameRoleEnum.ROLE_USER.toString())) {
             predList.add(cb.equal(roleJoin.get("name"), NameRoleEnum.ROLE_USER.toString()));
         } else if (role.equalsIgnoreCase(NameRoleEnum.ROLE_DRIVER.toString())) {
@@ -45,10 +45,10 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         query.where(predArray);
         query.select(root);
 
-        List<User> typedQuery = entityManager.createQuery(query).setFirstResult((int) pageable.getOffset())
+        List<Account> typedQuery = entityManager.createQuery(query).setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
-        Page<User> users = new PageImpl<>(typedQuery, pageable, typedQuery.size());
-        return users;
+        Page<Account> accounts = new PageImpl<>(typedQuery, pageable, typedQuery.size());
+        return accounts;
     }
 }

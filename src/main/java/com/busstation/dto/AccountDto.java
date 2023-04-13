@@ -41,23 +41,26 @@ public class AccountDto {
         roleDto.setRoleId(account.getRole().getRoleId());
         roleDto.setName(account.getRole().getName());
         this.setRole(roleDto);
-        UserDto userDto = new UserDto();
-        userDto.setUserId(account.getUser().getUserId());
-        userDto.setFullName(account.getUser().getFullName());
-        userDto.setPhoneNumber(account.getUser().getPhoneNumber());
-        userDto.setEmail(account.getUser().getEmail());
-        userDto.setAddress(account.getUser().getAddress());
-        userDto.setStatus(account.getUser().getStatus());
-        userDto.setCreatedAt(account.getUser().getCreatedAt());
-        userDto.setUpdatedAt(account.getUser().getUpdatedAt());
-        if(Objects.nonNull(account.getUser().getEmployee())){
-            EmployeeDTO employeeDTO = new EmployeeDTO();
-            employeeDTO.setEmployeeId(account.getUser().getEmployee().getEmployeeId());
-            employeeDTO.setDob(account.getUser().getEmployee().getDob());
-            employeeDTO.setYoe(account.getUser().getEmployee().getYoe());
-            userDto.setEmployeeDTO(employeeDTO);
+        if(Objects.nonNull(account.getUser())){
+            UserDto userDto = new UserDto();
+            userDto.setUserId(account.getUser().getUserId());
+            userDto.setFullName(account.getUser().getFullName());
+            userDto.setPhoneNumber(account.getUser().getPhoneNumber());
+            userDto.setEmail(account.getUser().getEmail());
+            userDto.setAddress(account.getUser().getAddress());
+            userDto.setStatus(account.getUser().getStatus());
+            userDto.setCreatedAt(account.getUser().getCreatedAt());
+            userDto.setUpdatedAt(account.getUser().getUpdatedAt());
+            if(Objects.nonNull(account.getUser().getEmployee())){
+                EmployeeDTO employeeDTO = new EmployeeDTO();
+                employeeDTO.setEmployeeId(account.getUser().getEmployee().getEmployeeId());
+                employeeDTO.setDob(account.getUser().getEmployee().getDob());
+                employeeDTO.setYoe(account.getUser().getEmployee().getYoe());
+                userDto.setEmployeeDTO(employeeDTO);
+            }
+            this.setUser(userDto);
         }
-        this.setUser(userDto);
+
     }
 
 }
