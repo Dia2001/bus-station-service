@@ -40,7 +40,7 @@ public class TicketServiceImpl implements TicketService {
 	@Autowired
 	private TicketRepositoryCustom ticketRepositoryCustom;
 
-	private static final String FILE_PATH = Constant.EXCEL_PARH+"/tickets.xlsx";
+	private static final String FILE_PATH = Constant.EXCEL_PARH + "/tickets.xlsx";
 
 	@Override
 	public TicketResponse addTicket(TicketRequest request) {
@@ -59,6 +59,8 @@ public class TicketServiceImpl implements TicketService {
 		ticketResponse.setAddressStart(newTicket.getAddressStart());
 		ticketResponse.setAddressEnd(newTicket.getAddressEnd());
 		ticketResponse.setPrice(newTicket.getPrice());
+		ticketResponse.setPickupLocation(newTicket.getPickupLocation());
+		ticketResponse.setDropOffLocation(newTicket.getDropOffLocation());
 
 		return ticketResponse;
 	}
@@ -77,10 +79,8 @@ public class TicketServiceImpl implements TicketService {
 
 		ticketRepository.save(ticket);
 
-		TicketResponse ticketResponse = new TicketResponse(
-				ticket.getTicketId(),ticket.getAddressStart(),
-				ticket.getAddressEnd(),ticket.getPrice(),
-				ticket.getPickupLocation(),ticket.getDropOffLocation());
+		TicketResponse ticketResponse = new TicketResponse(ticket.getTicketId(), ticket.getAddressStart(),
+				ticket.getAddressEnd(), ticket.getPrice(), ticket.getPickupLocation(), ticket.getDropOffLocation());
 
 		return ticketResponse;
 	}
@@ -93,7 +93,6 @@ public class TicketServiceImpl implements TicketService {
 
 		return true;
 	}
-
 
 	@Override
 	public Page<TicketResponse> searchTicket(TicketRequest ticketRequest, int pageNumber, int pageSize) {
@@ -149,6 +148,8 @@ public class TicketServiceImpl implements TicketService {
 			header.createCell(1).setCellValue("Address Start");
 			header.createCell(2).setCellValue("Address End");
 			header.createCell(3).setCellValue("Price");
+			header.createCell(4).setCellValue("Pickup Location");
+			header.createCell(5).setCellValue("Drop Off Location");
 
 			for (int i = 0; i < tickets.size(); i++) {
 				Ticket ticket = tickets.get(i);
@@ -157,6 +158,8 @@ public class TicketServiceImpl implements TicketService {
 				row.createCell(1).setCellValue(ticket.getAddressStart());
 				row.createCell(2).setCellValue(ticket.getAddressEnd());
 				row.createCell(3).setCellValue(ticket.getPrice().toString());
+				row.createCell(4).setCellValue(ticket.getPickupLocation());
+				row.createCell(5).setCellValue(ticket.getDropOffLocation());
 			}
 
 			try (FileOutputStream fileOutputStream = new FileOutputStream(FILE_PATH)) {
@@ -190,6 +193,7 @@ public class TicketServiceImpl implements TicketService {
 				String ticketId = row.getCell(0).getStringCellValue();
 				String addressStart = row.getCell(1).getStringCellValue();
 				String addressEnd = row.getCell(2).getStringCellValue();
+
 // Exception :	BigDecimal price = (BigDecimal) row.getCell(3).getNumericCellValue();
 				Cell cell = row.getCell(3);
 				BigDecimal price = null;
@@ -198,8 +202,17 @@ public class TicketServiceImpl implements TicketService {
 				} else if (cell.getCellType() == CellType.STRING) {
 					price = new BigDecimal(cell.getStringCellValue());
 				}
-
+				
+				String pickupLocation = row.getCell(4).getStringCellValue();
+				String dropOffLocation = row.getCell(5).getStringCellValue();
+				
+				Ticket ticket = new Ticket(ticketId ,addressStart, addressEnd, price, pickupLocation , dropOffLocation);
+				ticketRepository.save(ticket);
+				TicketResponse ticketResponse = new TicketResponse(ticketId, addressStart, addressEnd, price ,  pickupLocation , dropOffLocation);
+				ticketResponses.add(ticketResponse);
 			}
+			
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -211,10 +224,10 @@ public class TicketServiceImpl implements TicketService {
 
 	@Override
 	public Page<TicketResponse> searchTickets(String start, String end, int pageNumber, int pageSize) {
-		Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("addressStart").ascending());
-        Page<Ticket> tickets =ticketRepositoryCustom.searchTickets(start, end, pageable);
-        Page<TicketResponse> ticketResponse = tickets.map(TicketResponse::new);
-        return ticketResponse;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("addressStart").ascending());
+		Page<Ticket> tickets = ticketRepositoryCustom.searchTickets(start, end, pageable);
+		Page<TicketResponse> ticketResponse = tickets.map(TicketResponse::new);
+		return ticketResponse;
 	}
 
 }
