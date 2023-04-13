@@ -1,7 +1,9 @@
 package com.busstation.services.impl;
 
 import com.busstation.converter.UserConverter;
+import com.busstation.dto.AccountDto;
 import com.busstation.dto.UserDto;
+import com.busstation.entities.Account;
 import com.busstation.entities.User;
 import com.busstation.enums.NameRoleEnum;
 import com.busstation.exception.DataNotFoundException;
@@ -36,10 +38,10 @@ public class UserServiceImpl implements UserService {
     private UserConverter userConverter;
 
     @Override
-    public Page<UserDto> getAlL(String keyword,int pageNumber, int pageSize) {
+    public Page<AccountDto> getAlL(String keyword, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by("fullName").ascending());
-        Page<User> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_USER.toString(), pageable);
-        Page<UserDto> userDtoList = users.map(UserDto::new);
+        Page<Account> users =userRepositoryCustom.getFilter(keyword, NameRoleEnum.ROLE_USER.toString(), pageable);
+        Page<AccountDto> userDtoList = users.map(AccountDto::new);
         return userDtoList;
     }
 
