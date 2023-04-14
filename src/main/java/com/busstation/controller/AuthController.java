@@ -29,4 +29,8 @@ public class AuthController {
     public ResponseEntity<?> signUpEmployee(@PathVariable("accountid") String accountId,@RequestBody EmployeeRequest employeeRequest) {
         return new ResponseEntity<>(  authService.signUpEmployee(accountId,employeeRequest),HttpStatus.CREATED);
     }
+    @PostMapping("/signupforemployee")
+    public ResponseEntity<?> signUpForEmployees(@RequestBody SignupRequest signupRequest) {
+        return new ResponseEntity<>(  authService.signUpForEmployees(signupRequest),HttpStatus.CREATED);
+    }
 }

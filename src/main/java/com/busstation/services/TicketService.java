@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface TicketService {
+
 	TicketResponse getTicketById(String ticketId);
 
 	TicketResponse addTicket(TicketRequest request);
