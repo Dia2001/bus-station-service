@@ -99,6 +99,25 @@ public class ChairServiceImpl implements ChairService {
 	}
 
 	@Override
+	public ChairResponse updateStatus(String chairId) {
+		Chair chair = chairRepository.findById(chairId)
+				.orElseThrow(() -> new RuntimeException("Chair does not exist"));
+		chair.setStatus(Boolean.FALSE);
+
+		Chair newChair = chairRepository.save(chair);
+
+		ChairResponse chairResponse = new ChairResponse();
+		chairResponse.setChairId(newChair.getChairId());
+		chairResponse.setChairNumber(newChair.getChairNumber());
+		chairResponse.setCarId(newChair.getCar().getCarId());
+		chairResponse.setStatus(newChair.getStatus());
+
+
+		return chairResponse;
+
+	}
+
+	@Override
 	public boolean deleteChair(String chairId) {
 		Chair chair = chairRepository.findById(chairId)
 				.orElseThrow(()-> new RuntimeException("Id does not exist"));

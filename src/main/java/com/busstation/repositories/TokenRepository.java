@@ -18,4 +18,6 @@ public interface TokenRepository extends JpaRepository<Token, String> {
     List<Token> findAllValidTokenByUser(String id);
 
     Optional<Token> findByToken(String token);
+
+	List<Token> findAllByExpired(Boolean exprired);
 }

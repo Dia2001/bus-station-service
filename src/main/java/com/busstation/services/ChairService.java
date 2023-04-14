@@ -18,5 +18,7 @@ public interface ChairService {
 
     boolean updateChair(String chairId, ChairRequest request);
 
+    ChairResponse updateStatus(String chairId);
+
     boolean deleteChair(String chairId);
 }

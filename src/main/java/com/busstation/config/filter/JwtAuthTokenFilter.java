@@ -1,4 +1,4 @@
-package com.busstation.config.jwt;
+package com.busstation.config.filter;
 
 import java.io.IOException;
 

@@ -22,44 +22,18 @@ public class ChairControllerSocket {
 
 
 
-//    private List<Seat> seats = Arrays.asList(
-//            new Seat(1, true),
-//            new Seat(2, true),
-//            new Seat(3, true),
-//            new Seat(4, true),
-//            new Seat(5, true),
-//            new Seat(6, true),
-//            new Seat(7, true),
-//            new Seat(8, true),
-//            new Seat(9, true),
-//            new Seat(10, true)
-//    );
-
     @MessageMapping("/chairs")
     @SendTo("/topic/chairs")
     public List<ChairResponse> handleChairsUpdate(@Payload String carId){
         return chairService.showAllChair(carId);
     }
-//    @MessageMapping("/seat")
-//    @SendTo("/topic/seat")
-//    public Seat handleSeatUpdate(@Payload  Seat seat) throws Exception {
-//        for (Seat s : seats) {
-//            if (s.getId() == seat.getId()) {
-//                s.setAvailable(seat.isAvailable());
-//                if (!seat.isAvailable()) {
-//                    // disable the seat for all other clients
-//                    simpMessagingTemplate.convertAndSend("/topic/disableSeat", seat);
-//                }
-//                break;
-//            }
-//        }
-//        return seat;
-//    }
-//
-//    @MessageMapping("/seats")
-//    @SendTo("/topic/seats")
-//    public List<Seat> handleSeatsUpdate() {
-//        return seats;
-//    }
+
+    @MessageMapping("/chair")
+    @SendTo("/topic/chair")
+    public ChairResponse handleSeatUpdate(@Payload  String chairId) throws Exception {
+        ChairResponse chairResponse=chairService.updateStatus(chairId);
+        simpMessagingTemplate.convertAndSend("/topic/disableSeat",chairResponse);
+        return  chairResponse;
+    }
 }
 

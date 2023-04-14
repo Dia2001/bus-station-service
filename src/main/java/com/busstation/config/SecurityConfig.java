@@ -1,6 +1,6 @@
 package com.busstation.config;
 
-import com.busstation.config.jwt.JwtAuthTokenFilter;
+import com.busstation.config.filter.JwtAuthTokenFilter;
 import com.busstation.utils.JwtProviderUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -83,15 +83,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    //    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("https://example.com"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();

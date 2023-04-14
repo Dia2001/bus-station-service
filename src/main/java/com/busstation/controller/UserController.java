@@ -25,7 +25,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{userId}")
-	@PreAuthorize("hasAnyRole('ROLE_EMPLOYEE','ROLE_ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_EMPLOYEE','ROLE_ADMIN')")
 	public ResponseEntity<ApiResponse> update(@PathVariable("userId") String userId,
 			@RequestBody UserRequest userRequest) {
 		return new ResponseEntity<>(userService.edit(userId, userRequest), HttpStatus.OK);
