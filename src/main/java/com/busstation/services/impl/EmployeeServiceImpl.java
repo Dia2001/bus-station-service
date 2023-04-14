@@ -46,7 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public ApiResponse edit(String id, EmployeeRequest employeeRequest) {
         Employee employee=employeeRepository.findById(id).orElseThrow(()->new DataNotFoundException("Can't find this employee"));
-        System.out.println("aaa");
         employee.setDob(employeeRequest.getDob());
         employee.setYoe(employeeRequest.getYoe());
         employeeRepository.save(employee);
