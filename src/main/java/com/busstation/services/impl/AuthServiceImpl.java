@@ -157,7 +157,7 @@ public class AuthServiceImpl implements AuthService {
 			Employee employee = new Employee();
 			employee.setDob(signupRequest.getEmployee().getDob());
 			employee.setYoe(signupRequest.getEmployee().getYoe());
-			employee.setUser(account.getUser());
+			employee.setUser(user);
 			employeeRepository.save(employee);
 		}
 

@@ -24,7 +24,7 @@ public class Employee implements Serializable {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "employee_id",length = 36)
     private String employeeId;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 

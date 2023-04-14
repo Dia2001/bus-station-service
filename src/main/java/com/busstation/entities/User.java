@@ -54,7 +54,7 @@ public class User implements Serializable {
     @OneToMany (mappedBy ="user", fetch = FetchType.LAZY)
     public Set<Leave> leaves = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
     private Employee employee;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)

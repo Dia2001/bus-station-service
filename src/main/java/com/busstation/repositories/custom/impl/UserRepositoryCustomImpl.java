@@ -33,6 +33,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         if (Validate.checkStringNotEmptyOrNull(keyword)) {
             predList.add(cb.or((cb.like(join.get("email"), "%" + keyword + "%")), cb.like(join.get("phoneNumber"), "%" + keyword + "%")));
         }
+        predList.add(cb.equal(join.get("status"),Boolean.TRUE));
         if (role.equalsIgnoreCase(NameRoleEnum.ROLE_USER.toString())) {
             predList.add(cb.equal(roleJoin.get("name"), NameRoleEnum.ROLE_USER.toString()));
         } else if (role.equalsIgnoreCase(NameRoleEnum.ROLE_DRIVER.toString())) {
