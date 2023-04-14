@@ -16,5 +16,5 @@ public class TripUserIdMtm implements Serializable {
 
     private String tripId;
 
-    private int userId;
+    private String userId;
 }
