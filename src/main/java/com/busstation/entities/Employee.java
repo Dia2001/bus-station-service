@@ -27,7 +27,6 @@ public class Employee implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
     @Column(name = "dob", nullable = false)
     private Date dob;
     @Column(name = "yoe", nullable = false, length = 11)
@@ -39,4 +38,7 @@ public class Employee implements Serializable {
     @Column(name = "update_at")
     private Date updateAt;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_id", referencedColumnName = "car_id")
+    private Car car;
 }

@@ -1,6 +1,6 @@
 package com.busstation.entities;
 
-import com.busstation.repositories.mtm.TripUserIdMtm;
+import com.busstation.repositories.mtm.TripCarIdMtm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,13 +10,13 @@ import lombok.Setter;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tbl_trip_user")
+@Table(name = "tbl_trip_car")
 @NoArgsConstructor
 @Getter
 @Setter
 @AllArgsConstructor
-@IdClass(TripUserIdMtm.class)
-public class TripUser implements Serializable {
+@IdClass(TripCarIdMtm.class)
+public class TripCar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +25,7 @@ public class TripUser implements Serializable {
     private String tripId;
 
     @Id
-    @Column(name = "user_id", length = 36, nullable = false)
-    private String userId;
+    @Column(name = "car_id", length = 36, nullable = false)
+    private String carId;
+
 }

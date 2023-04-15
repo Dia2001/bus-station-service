@@ -64,7 +64,11 @@ public class User implements Serializable {
     public Set<Order> orders = new HashSet<>();
 
 
-    public boolean getStatus() {
+    public Boolean getStatus() {
         return status;
+    }
+
+    public Boolean setStatus(Boolean status){
+        return this.status = status;
     }
 }

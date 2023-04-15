@@ -48,5 +48,4 @@ public class Account  implements Serializable {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Token> tokens;
-
 }
