@@ -1,4 +1,3 @@
-# bus-station-service
  📚 RULES CHUNG KHI SỬ DỤNG GIT
 
 ## Quy tắc đặt tên nhánh khi thi công chức năng:
