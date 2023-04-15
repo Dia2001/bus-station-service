@@ -29,6 +29,4 @@ public class Role implements Serializable {
 
     @OneToMany (mappedBy ="role")
     public Set<Account> users = new HashSet<>();
-
-
 }

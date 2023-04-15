@@ -34,8 +34,8 @@ public class OrderDetail  implements Serializable {
     @Column(name = "update_at")
     private Date updatedAt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
     private Order order;
 
     @OneToOne(fetch = FetchType.LAZY)

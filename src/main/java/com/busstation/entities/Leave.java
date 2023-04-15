@@ -18,7 +18,6 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 public class Leave implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(generator = "uuid")

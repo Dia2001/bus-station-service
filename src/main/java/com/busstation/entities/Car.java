@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_car")
@@ -39,8 +40,7 @@ public class Car  implements Serializable {
     @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chair> chairs;
 
-    @ManyToOne
-    @JoinColumn(name = "trip_id", nullable = false)
-    private Trip trips;
+    @ManyToMany(mappedBy = "cars", fetch = FetchType.LAZY)
+    private Set<Trip> trips;
 
 }
