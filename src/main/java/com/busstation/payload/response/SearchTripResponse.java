@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -26,13 +28,13 @@ public class SearchTripResponse {
     private String provinceEnd;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date timeStart;
+    private LocalDateTime timeStart;
 
     private List<CarResponse> car;
 
     private BigDecimal price;
 
-    public SearchTripResponse(Trip trip, BigDecimal price){
+    public SearchTripResponse(Trip trip, BigDecimal price, List<String> chairExistInOrderDetails){
 
         this.tripId = trip.getTripId();
         this.provinceStart = trip.getProvinceStart();
@@ -49,9 +51,12 @@ public class SearchTripResponse {
 
             for (Chair chair : item.getChairs()){
                 ChairResponse chairResponse = new ChairResponse();
-                chairResponse.setCarId(chair.getCar().getCarId());
                 chairResponse.setChairId(chair.getChairId());
                 chairResponse.setChairNumber(chair.getChairNumber());
+                    if(chairExistInOrderDetails.contains(chair.getChairId()))
+                        chairResponse.setChairExistInOrderDetail(true);
+                    else
+                        chairResponse.setChairExistInOrderDetail(false);
 
                 chairResponseList.add(chairResponse);
             }
@@ -61,8 +66,6 @@ public class SearchTripResponse {
             carResponse.setCarNumber(item.getCarNumber());
             carResponse.setChair(chairResponseList);
             carResponse.setStatus(item.getStatus());
-            carResponse.setTripId(item.getTrips().getTripId());
-
             carResponseList.add(carResponse);
         }
 

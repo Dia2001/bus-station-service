@@ -10,9 +10,9 @@ public interface CarService {
 
     CarResponse addCar(CarRequest request);
 
-    List<CarResponse> getAllCar();
-
     Boolean deleteCar(String id);
+
+    List<CarResponse> getAllCar();
 
     Page<CarResponse> showAllCar(int pageNumber, int pageSize);
 

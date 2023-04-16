@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Trip implements Serializable {
     private String provinceEnd;
 
     @Column(name = "time_start", nullable = false)
-    private Date timeStart;
+    private LocalDateTime timeStart;
 
     @Column(name = "status")
     private Boolean status;
@@ -50,6 +51,12 @@ public class Trip implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "trips", fetch = FetchType.LAZY)
-    private List<Car> cars;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "tbl_trip_car",
+            joinColumns = @JoinColumn(name = "trip_id", referencedColumnName = "trip_id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "car_id"))
+    private Set<Car> cars = new HashSet<>();
+
+    @OneToMany(mappedBy = "trip")
+    private Set<Order> orders = new HashSet<>();
 }

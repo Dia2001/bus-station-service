@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -23,17 +24,23 @@ public class TripResponse {
     private String provinceEnd;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date timeStart;
+    private LocalDateTime timeStart;
 
     private BigDecimal price;
 
-    public TripResponse(Trip trip, BigDecimal price){
+    private String pickupLocation;
+
+    private String dropOffLocation;
+
+    public TripResponse(Trip trip, BigDecimal price, String pickupLocation, String dropOffLocation){
 
         this.tripId = trip.getTripId();
         this.provinceStart = trip.getProvinceStart();
         this.provinceEnd = trip.getProvinceEnd();
         this.timeStart = trip.getTimeStart();
         this.price = price;
+        this.pickupLocation = pickupLocation;
+        this.dropOffLocation = dropOffLocation;
     }
 }
 
