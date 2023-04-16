@@ -27,4 +27,5 @@ public class Province implements Serializable {
 
 	@OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
 	private Set<Location> locations;
+
 }

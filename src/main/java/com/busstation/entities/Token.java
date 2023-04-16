@@ -39,5 +39,4 @@ public class Token implements Serializable {
     @ManyToOne
     @JoinColumn(name = "account_id")
     public Account account;
-
 }

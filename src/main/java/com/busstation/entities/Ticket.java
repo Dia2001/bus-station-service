@@ -36,5 +36,4 @@ public class Ticket implements Serializable {
 
     @Column(name = "drop_off_location " , length = 50)
     private String dropOffLocation ;
-
 }

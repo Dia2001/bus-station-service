@@ -1,6 +1,7 @@
 package com.busstation.payload.response;
 
 import com.busstation.entities.OrderDetail;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDetailResponse {
 
     private String orderDetailId;
@@ -34,7 +36,8 @@ public class OrderDetailResponse {
         this.status = orderDetail.getStatus();
 
         OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setOrderID(orderDetail.getOrder().getOrderID());
+        orderResponse.setOrderId(orderDetail.getOrder().getOrderID());
+        orderResponse.setTripId(orderDetail.getOrder().getTrip().getTripId());
 
         UserResponse userResponse = new UserResponse();
         userResponse.setUserId(orderDetail.getOrder().getUser().getUserId());

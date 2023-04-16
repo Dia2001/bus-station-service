@@ -81,8 +81,12 @@ public class AuthServiceImpl implements AuthService {
 			Role role = roleRepository.findByName(NameRoleEnum.ROLE_USER.toString());
 			account.setRole(role);
 			accountRepository.save(account);
-			User user = userConverter.converToEntity(signupRequest.getUser());
+			User user =new User();
 			user.setAccount(accountRepository.findById(account.getAccountId()).get());
+			user.setFullName(signupRequest.getUser().getFullName());
+			user.setPhoneNumber(signupRequest.getUser().getPhoneNumber());
+			user.setEmail(signupRequest.getUser().getEmail());
+			user.setAddress(signupRequest.getUser().getAddress());
 			user.setStatus(Boolean.TRUE);
 			userRepository.save(user);
 		}

@@ -1,8 +1,11 @@
 package com.busstation.controller.socket;
 
 import com.busstation.dto.ChairDto;
+import com.busstation.payload.request.OrderRequest;
 import com.busstation.payload.response.ChairResponse;
+import com.busstation.payload.response.OrderResponse;
 import com.busstation.services.ChairService;
+import com.busstation.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,6 +20,7 @@ import java.util.List;
 public class ChairControllerSocket {
     @Autowired
     private ChairService chairService;
+    OrderService orderService;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
@@ -30,10 +34,10 @@ public class ChairControllerSocket {
 
     @MessageMapping("/chair")
     @SendTo("/topic/chair")
-    public ChairResponse handleSeatUpdate(@Payload  String chairId) throws Exception {
-        ChairResponse chairResponse=chairService.updateStatus(chairId);
-        simpMessagingTemplate.convertAndSend("/topic/disableSeat",chairResponse);
-        return  chairResponse;
+    public OrderResponse handleSeatUpdate(@Payload OrderRequest orderRequest) throws Exception {
+        OrderResponse orderResponse=orderService.createOrder(orderRequest);
+        simpMessagingTemplate.convertAndSend("/topic/disableSeat",orderResponse);
+        return  orderResponse;
     }
 }
 

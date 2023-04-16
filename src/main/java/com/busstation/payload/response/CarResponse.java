@@ -2,6 +2,7 @@ package com.busstation.payload.response;
 
 import com.busstation.entities.Car;
 import com.busstation.entities.Chair;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -11,16 +12,18 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarResponse {
     private String carId;
     private Boolean status;
     private int carNumber;
     private List<ChairResponse> chair;
-    private String tripId;
+    private List<String> tripId;
 
-    public CarResponse(Car car){
+
+    public CarResponse(Car car, List<String> tripId){
         this.carId = car.getCarId();
-        this.tripId = car.getTrips().getTripId();
+        this.tripId = tripId;
         this.status = car.getStatus();
         this.carNumber = car.getCarNumber();
 

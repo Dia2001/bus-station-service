@@ -21,9 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -45,7 +43,7 @@ public class CarServiceImpl implements CarService {
 
         car.setStatus(request.getStatus());
         car.setCarNumber(request.getCarNumber());
-        car.setTrips(trip);
+        car.setTrips(Collections.singleton(trip));
         carRepository.save(car);
 
         CarResponse response = new CarResponse();
@@ -53,7 +51,7 @@ public class CarServiceImpl implements CarService {
         response.setCarNumber(car.getCarNumber());
         response.setStatus(car.getStatus());
         response.setChair(setupChairResponse(car));
-        response.setTripId(trip.getTripId());
+        response.setTripId(Collections.singletonList(trip.getTripId()));
 
         return response;
     }
@@ -67,12 +65,12 @@ public class CarServiceImpl implements CarService {
         car.setStatus(request.getStatus());
 
         Optional<Car> existingCar = carRepository.findByCarNumber(request.getCarNumber());
-        if(existingCar.isPresent()){
+        if (existingCar.isPresent()) {
             throw new DataExistException("CarNumber Existed");
         }
         car.setCarNumber(request.getCarNumber());
         car.setStatus(true);
-        car.setTrips(trip);
+        car.setTrips(Collections.singleton(trip));
 
         Car newCar = carRepository.save(car);
 
@@ -92,7 +90,7 @@ public class CarServiceImpl implements CarService {
         carResponse.setStatus(newCar.getStatus());
         carResponse.setCarNumber(newCar.getCarNumber());
         carResponse.setChair(setupChairResponse(car));
-        carResponse.setTripId(newCar.getTrips().getTripId());
+        carResponse.setTripId(Collections.singletonList(trip.getTripId()));
         return carResponse;
     }
 
@@ -101,13 +99,18 @@ public class CarServiceImpl implements CarService {
         List<Car> cars = carRepository.findAll();
 
         List<CarResponse> carResponses = new ArrayList<>();
+        List<String> tripId = new ArrayList<>();
 
 
         for (Car car : cars) {
             CarResponse carResponse = new CarResponse();
             carResponse.setCarId(car.getCarId());
             carResponse.setCarNumber(car.getCarNumber());
-            carResponse.setTripId(car.getTrips().getTripId());
+            List<Trip> trip = tripRepository.findAllByCars(car);
+            for (Trip itemTrip : trip){
+                tripId.add(itemTrip.getTripId());
+            }
+            carResponse.setTripId(tripId);
             carResponse.setStatus(car.getStatus());
             List<ChairResponse> chairResponses = new ArrayList<>();
             for (Chair chair : car.getChairs()) {
@@ -138,12 +141,17 @@ public class CarServiceImpl implements CarService {
     @Override
     public Page<CarResponse> showAllCar(int pageNumber, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("carNumber").ascending());
+        Pageable pageable = PageRequest.of(pageNumber -1, pageSize, Sort.by("carNumber").ascending());
 
         Page<Car> cars = carRepository.findAll(pageable);
 
-        return cars.map(CarResponse::new);
-
+        return cars.map(car -> {
+            Trip trip = tripRepository.findByCars(car);
+            if (Objects.nonNull(trip)) {
+                return new CarResponse(car, Collections.singletonList(trip.getTripId()));
+            }
+            return new CarResponse(car,null);
+        });
 
     }
 
@@ -152,9 +160,12 @@ public class CarServiceImpl implements CarService {
 
         Car cars = carRepository.findAllByCarNumber(carNumber);
 
-        return new CarResponse(cars);
+        Trip trip = tripRepository.findByCars(cars);
+
+        return new CarResponse(cars, Collections.singletonList(trip.getTripId()));
     }
-    public List<ChairResponse> setupChairResponse(Car car){
+
+    public List<ChairResponse> setupChairResponse(Car car) {
 
         List<Chair> chair = chairRepository.findAllByCar(car);
 

@@ -3,6 +3,7 @@ package com.busstation.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,4 +37,11 @@ public class Order  implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails;
+
+    @ManyToOne
+    @JoinColumn(name = "trip_id")
+    private Trip trip;
 }
