@@ -1,10 +1,10 @@
 package com.busstation.controller;
 
 import com.busstation.payload.request.SearchTripRequest;
-import com.busstation.payload.response.TripResponse;
-import com.busstation.payload.response.SearchTripResponse;
-import com.busstation.payload.response.UserByTripIdResponse;
 import com.busstation.payload.request.TripRequest;
+import com.busstation.payload.response.SearchTripResponse;
+import com.busstation.payload.response.TripResponse;
+import com.busstation.payload.response.UserByTripIdResponse;
 import com.busstation.services.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

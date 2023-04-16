@@ -21,4 +21,3 @@ public interface EmployeeService {
     Page<DriverResponse> getAllTripAlreadyCar(int pageNo, int pageSize);
 
 }
-

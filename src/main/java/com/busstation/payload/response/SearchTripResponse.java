@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 
@@ -53,10 +51,10 @@ public class SearchTripResponse {
                 ChairResponse chairResponse = new ChairResponse();
                 chairResponse.setChairId(chair.getChairId());
                 chairResponse.setChairNumber(chair.getChairNumber());
-                    if(chairExistInOrderDetails.contains(chair.getChairId()))
-                        chairResponse.setChairExistInOrderDetail(true);
-                    else
-                        chairResponse.setChairExistInOrderDetail(false);
+                if(chairExistInOrderDetails.contains(chair.getChairId()))
+                    chairResponse.setChairExistInOrderDetail(true);
+                else
+                    chairResponse.setChairExistInOrderDetail(false);
 
                 chairResponseList.add(chairResponse);
             }

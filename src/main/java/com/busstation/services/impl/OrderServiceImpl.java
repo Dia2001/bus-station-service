@@ -2,7 +2,7 @@ package com.busstation.services.impl;
 
 import com.busstation.entities.*;
 import com.busstation.exception.DataNotFoundException;
-import com.busstation.payload.request.OrderDetailRequest;
+import com.busstation.payload.request.OrderRequest;
 import com.busstation.payload.response.*;
 import com.busstation.repositories.*;
 import com.busstation.services.OrderService;
@@ -48,45 +48,36 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponse createOrder(OrderDetailRequest orderDetailRequest) {
+    public OrderResponse createOrder(OrderRequest orderRequest) {
 
         User user = getUser();
 
-        Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(orderDetailRequest.getAddressStart(), orderDetailRequest.getAddressEnd());
+        Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(orderRequest.getAddressStart(), orderRequest.getAddressEnd());
 
         if(!ticket.isPresent()){
             throw new DataNotFoundException("Ticket not found");
         }
 
         Order newOrder;
-        if(Objects.isNull(orderDetailRequest.getOrderId())){
+        if(orderRequest.getOrderId().equalsIgnoreCase("")){
 
-            Trip trip = tripRepository.findById(orderDetailRequest.getTripId()).orElseThrow(()-> new DataNotFoundException("Trip not found"));
+            Trip trip = tripRepository.findById(orderRequest.getTripId()).orElseThrow(()-> new DataNotFoundException("Trip not found"));
 
-            Order order1 = new Order();
-            order1.setUser(user);
-            order1.setOrderID(getOrderId(orderDetailRequest.getTripId()));
-            order1.setTrip(trip);
-            newOrder = orderRepository.save(order1);
+            Order order = new Order();
+            order.setUser(user);
+            order.setOrderID(getOrderId(orderRequest.getTripId()));
+            order.setTrip(trip);
+            newOrder = orderRepository.save(order);
         }
         else {
-            newOrder = orderRepository.findById(orderDetailRequest.getOrderId()).orElseThrow(()-> new DataNotFoundException("Order not found"));
+            newOrder = orderRepository.findById(orderRequest.getOrderId()).orElseThrow(()-> new DataNotFoundException("Order not found"));
         }
-        List<OrderDetail> orderDetails = createOrderDetail(orderDetailRequest, newOrder, ticket.get());
+        OrderDetail orderDetail = createOrderDetail(orderRequest, newOrder, ticket.get());
 
-        List<OrderDetailResponse> orderDetailResponses = new ArrayList<>();
-        for (OrderDetail itemOrderDetail : orderDetails) {
-
-            OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
-            orderDetailResponse.setChair(setupChairResponse(itemOrderDetail.getChair()));
-            orderDetailResponses.add(orderDetailResponse);
-        }
-
-        OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setOrderID(newOrder.getOrderID());
+        OrderResponse orderResponse=new OrderResponse();
+        orderResponse.setOrderId(newOrder.getOrderID());
+        orderResponse.setChairId(orderDetail.getChair().getChairId());
         orderResponse.setTripId(newOrder.getTrip().getTripId());
-        orderResponse.setOrderDetail(orderDetailResponses);
-
         return orderResponse;
     }
 
@@ -216,13 +207,9 @@ public class OrderServiceImpl implements OrderService {
         return initial;
     }
 
-    public List<OrderDetail> createOrderDetail(OrderDetailRequest orderDetailRequest, Order newOrder, Ticket ticket){
+    public OrderDetail createOrderDetail(OrderRequest orderRequest, Order newOrder, Ticket ticket){
 
-        List<OrderDetail> newOrderDetails = new ArrayList<>();
-
-        for(String itemChair : orderDetailRequest.getChairId()){
-
-            Chair chair = chairRepository.findById(itemChair).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
+            Chair chair = chairRepository.findById(orderRequest.getChairId()).orElseThrow(()->new EntityNotFoundException("chair does not exist"));
 
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setStatus(false);
@@ -231,9 +218,7 @@ public class OrderServiceImpl implements OrderService {
             orderDetail.setTicket(ticket);
 
             OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
-            newOrderDetails.add(newOrderDetail);
-        }
-        return newOrderDetails;
+            return  newOrderDetail;
     }
 
     public void addUserToTrip(String tripId, String userId) {
@@ -271,7 +256,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse  setupOrderResponse(Order order){
 
         OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setOrderID(order.getOrderID());
+        orderResponse.setOrderId(order.getOrderID());
         orderResponse.setUser(setupUserResponse(order));
         orderResponse.setTripId(order.getTrip().getTripId());
 

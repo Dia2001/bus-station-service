@@ -144,7 +144,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public OrderResponse setupOrderResponse(Order order) {
 
         OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setOrderID(order.getOrderID());
+        orderResponse.setOrderId(order.getOrderID());
         orderResponse.setUser(setupUserResponse(order));
 
         return orderResponse;

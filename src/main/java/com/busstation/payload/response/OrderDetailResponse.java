@@ -36,7 +36,7 @@ public class OrderDetailResponse {
         this.status = orderDetail.getStatus();
 
         OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setOrderID(orderDetail.getOrder().getOrderID());
+        orderResponse.setOrderId(orderDetail.getOrder().getOrderID());
         orderResponse.setTripId(orderDetail.getOrder().getTrip().getTripId());
 
         UserResponse userResponse = new UserResponse();

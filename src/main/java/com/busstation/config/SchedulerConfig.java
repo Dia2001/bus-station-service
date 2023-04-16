@@ -15,13 +15,8 @@ public class SchedulerConfig {
     @Autowired
     private TokenService tokenService;
 
-//    @Scheduled(fixedDelay =300000)
-//    public void cancelUnpaidChair(){
-//        System.out.println("after 5 minutes if not reserved seats will be restored");
-//    }
 
-    //Will test later
-    @Scheduled(fixedDelay =3600000)
+    @Scheduled(fixedDelay =360000000)
     public void  checkTokenExpired(){
         tokenService.heckTokenExpired();
     }

@@ -1,6 +1,7 @@
 package com.busstation.controller;
 
 import com.busstation.payload.request.OrderDetailRequest;
+import com.busstation.payload.request.OrderRequest;
 import com.busstation.payload.response.OrderDetailResponse;
 import com.busstation.payload.response.OrderResponse;
 import com.busstation.services.OrderService;
@@ -29,9 +30,9 @@ public class OrderController {
     }
 
     @PostMapping()
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderDetailRequest orderDetailRequest) {
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
 
-        OrderResponse orderResponse = orderService.createOrder(orderDetailRequest);
+        OrderResponse orderResponse = orderService.createOrder(orderRequest);
         return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
     }
 
@@ -45,4 +46,15 @@ public class OrderController {
 
         return new ResponseEntity<>("failed", HttpStatus.OK);
     }
+
+    @PostMapping("/cancellingInvoice/{orderId}")
+    public ResponseEntity<?> cancellingInvoice(@PathVariable("orderId") String orderId) {
+
+        Boolean orderResponse =orderService.deleteOrder(orderId);
+        if(orderResponse)
+            return new ResponseEntity<>("successfully", HttpStatus.OK);
+
+        return new ResponseEntity<>("failed", HttpStatus.OK);
+    }
+
 }
