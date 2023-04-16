@@ -15,7 +15,10 @@ public class ChairResponse {
     private int chairNumber;
 
     private Boolean status;
+
     private String carId;
+
+    private  Boolean chairExistInOrderDetail;
 
     public ChairResponse(Chair chair) {
         this.chairId = chair.getChairId();

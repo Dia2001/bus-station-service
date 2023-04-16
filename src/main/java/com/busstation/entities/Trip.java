@@ -55,5 +55,8 @@ public class Trip implements Serializable {
     @JoinTable(name = "tbl_trip_car",
             joinColumns = @JoinColumn(name = "trip_id", referencedColumnName = "trip_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "car_id"))
-    private Set<Car> cars;
+    private Set<Car> cars = new HashSet<>();
+
+    @OneToMany(mappedBy = "trip")
+    private Set<Order> orders = new HashSet<>();
 }

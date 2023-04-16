@@ -1,9 +1,6 @@
 package com.busstation.services.impl;
 
-import com.busstation.entities.Car;
-import com.busstation.entities.Ticket;
-import com.busstation.entities.Trip;
-import com.busstation.entities.User;
+import com.busstation.entities.*;
 import com.busstation.payload.request.SearchTripRequest;
 import com.busstation.payload.request.TicketRequest;
 import com.busstation.payload.request.TripRequest;
@@ -11,10 +8,7 @@ import com.busstation.payload.response.SearchTripResponse;
 import com.busstation.payload.response.TicketResponse;
 import com.busstation.payload.response.TripResponse;
 import com.busstation.payload.response.UserByTripIdResponse;
-import com.busstation.repositories.CarRepository;
-import com.busstation.repositories.TicketRepository;
-import com.busstation.repositories.TripRepository;
-import com.busstation.repositories.UserRepository;
+import com.busstation.repositories.*;
 import com.busstation.services.TicketService;
 import com.busstation.services.TripService;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,10 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class TripServiceImpl implements TripService {
@@ -49,6 +42,12 @@ public class TripServiceImpl implements TripService {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     @Override
     @Transactional
@@ -117,6 +116,7 @@ public class TripServiceImpl implements TripService {
 
         trip.setProvinceStart(newTripRequest.getProvinceStart());
         trip.setProvinceEnd(newTripRequest.getProvinceEnd());
+        trip.setTimeStart(newTripRequest.getTimeStart());
         trip.setUpdateAt(new Date());
 
         tripRepository.save(trip);
@@ -143,6 +143,7 @@ public class TripServiceImpl implements TripService {
         tripResponse.setTimeStart(trip.getTimeStart());
         tripResponse.setPrice(ticketResponse.getPrice());
 
+
         return tripResponse;
     }
 
@@ -157,7 +158,11 @@ public class TripServiceImpl implements TripService {
         List<Car> cars = carRepository.findByTrips_TripId(id);
 
         for (Car car : cars) {
-            car.setStatus(false);
+
+            if(Objects.isNull(car.getTrips())){
+
+                car.setStatus(false);
+            }
             carRepository.save(car);
         }
 
@@ -181,7 +186,15 @@ public class TripServiceImpl implements TripService {
                 if (ticket.isPresent()) {
                     Ticket getTicket = ticket.get();
                     BigDecimal price = getTicket.getPrice();
-                    return new SearchTripResponse(trip, price);
+                    List<Order> orders = orderRepository.findAllByTrip_TripId(trip.getTripId());
+                    List<String> chairId = new ArrayList<>();
+                    for(Order itemOrder : orders){
+                        List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderID(itemOrder.getOrderID());
+                        for(OrderDetail orderDetail : orderDetails){
+                            chairId.add(orderDetail.getChair().getChairId());
+                        }
+                    }
+                    return new SearchTripResponse(trip, price, chairId);
                 }
                 return null;
             });
@@ -197,7 +210,15 @@ public class TripServiceImpl implements TripService {
                 if (ticket.isPresent()) {
                     Ticket getTicket = ticket.get();
                     BigDecimal price = getTicket.getPrice();
-                    return new SearchTripResponse(trip, price);
+                    List<Order> orders = orderRepository.findAllByTrip_TripId(trip.getTripId());
+                    List<String> chairId = new ArrayList<>();
+                    for(Order itemOrder : orders){
+                        List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderID(itemOrder.getOrderID());
+                        for(OrderDetail orderDetail : orderDetails){
+                            chairId.add(orderDetail.getChair().getChairId());
+                        }
+                    }
+                    return new SearchTripResponse(trip, price, chairId);
                 }
                 return null;
             });
@@ -212,7 +233,15 @@ public class TripServiceImpl implements TripService {
             if (ticket.isPresent()) {
                 Ticket getTicket = ticket.get();
                 BigDecimal price = getTicket.getPrice();
-                return new SearchTripResponse(trip, price);
+                List<Order> orders = orderRepository.findAllByTrip_TripId(trip.getTripId());
+                List<String> chairId = new ArrayList<>();
+                for(Order itemOrder : orders){
+                    List<OrderDetail> orderDetails = orderDetailRepository.findByOrder_OrderID(itemOrder.getOrderID());
+                    for(OrderDetail orderDetail : orderDetails){
+                        chairId.add(orderDetail.getChair().getChairId());
+                    }
+                }
+                return new SearchTripResponse(trip, price, chairId);
             }
             return null;
         });
@@ -230,7 +259,9 @@ public class TripServiceImpl implements TripService {
             if (ticket.isPresent()) {
                 Ticket getTicket = ticket.get();
                 BigDecimal price = getTicket.getPrice();
-                return new TripResponse(trip, price);
+                String pickupLocation = getTicket.getPickupLocation();
+                String dropOffLocation = getTicket.getDropOffLocation();
+                return new TripResponse(trip, price, pickupLocation, dropOffLocation);
             }
             return null;
         });
