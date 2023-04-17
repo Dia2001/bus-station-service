@@ -35,7 +35,7 @@ public interface TripRepository extends JpaRepository<Trip,String> {
             " AND date(trip.timeStart) = date(:dateTime) AND trip.status = true")
     Page<Trip> findByProvinceStartAndProvinceEndAndDateTime(@Param("provinceStart") String provinceStart, @Param("provinceEnd") String provinceEnd,
                                                             @Param("dateTime") LocalDateTime dateTime, Pageable pageable);
-    Trip findByCars(Car car);
+    List<Trip> findByCars(Car car);
 
     List<Trip> findAllByCars(Car car);
 }

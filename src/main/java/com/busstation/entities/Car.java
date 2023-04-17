@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,6 +42,6 @@ public class Car  implements Serializable {
     private List<Chair> chairs;
 
     @ManyToMany(mappedBy = "cars", fetch = FetchType.LAZY)
-    private Set<Trip> trips;
+    private Set<Trip> trips = new HashSet<>();
 
 }

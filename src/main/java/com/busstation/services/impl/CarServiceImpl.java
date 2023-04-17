@@ -2,15 +2,19 @@ package com.busstation.services.impl;
 
 import com.busstation.entities.Car;
 import com.busstation.entities.Chair;
+import com.busstation.entities.Employee;
 import com.busstation.entities.Trip;
+import com.busstation.enums.RoleEnum;
 import com.busstation.exception.DataExistException;
 import com.busstation.exception.DataNotFoundException;
 import com.busstation.payload.request.CarRequest;
 import com.busstation.payload.request.ChairRequest;
+import com.busstation.payload.response.ApiResponse;
 import com.busstation.payload.response.CarResponse;
 import com.busstation.payload.response.ChairResponse;
 import com.busstation.repositories.CarRepository;
 import com.busstation.repositories.ChairRepository;
+import com.busstation.repositories.EmployeeRepository;
 import com.busstation.repositories.TripRepository;
 import com.busstation.services.CarService;
 import com.busstation.services.ChairService;
@@ -19,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -34,6 +39,8 @@ public class CarServiceImpl implements CarService {
     private ChairRepository chairRepository;
     @Autowired
     private ChairService chairService;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
 
     @Override
@@ -59,8 +66,6 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponse addCar(CarRequest request) {
-        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(()
-                -> new DataNotFoundException("Trip id does not exist"));
         Car car = new Car();
         car.setStatus(request.getStatus());
 
@@ -70,7 +75,6 @@ public class CarServiceImpl implements CarService {
         }
         car.setCarNumber(request.getCarNumber());
         car.setStatus(true);
-        car.setTrips(Collections.singleton(trip));
 
         Car newCar = carRepository.save(car);
 
@@ -90,8 +94,40 @@ public class CarServiceImpl implements CarService {
         carResponse.setStatus(newCar.getStatus());
         carResponse.setCarNumber(newCar.getCarNumber());
         carResponse.setChair(setupChairResponse(car));
-        carResponse.setTripId(Collections.singletonList(trip.getTripId()));
         return carResponse;
+    }
+
+    @Override
+    public ApiResponse addDriverForCar(String employeeId, String carId) {
+
+        Optional<Employee> employee = employeeRepository.findById(employeeId);
+        Optional<Car> car = carRepository.findById(carId);
+
+        if(employee.isEmpty() || car.isEmpty())
+            return new ApiResponse("Employee, car does not exist", HttpStatus.OK);
+        if(!employee.get().getUser().getAccount().getRole().getRoleId().equals(RoleEnum.DRIVER.toString()))
+            return new ApiResponse("employee is not a driver", HttpStatus.OK);
+        if(employee.get().getCar() != null)
+            return new ApiResponse("Driver has a car", HttpStatus.OK);
+        employee.get().setCar(car.get());
+        employeeRepository.save(employee.get());
+
+        return new ApiResponse("Add Successfully", HttpStatus.OK);
+    }
+
+    @Override
+    public ApiResponse addTripForCar(String tripId, String carId) {
+
+        Optional<Trip> trip = tripRepository.findById(tripId);
+        Optional<Car> car = carRepository.findById(carId);
+
+        if(trip.isEmpty() || car.isEmpty())
+            return new ApiResponse("Trip, car does not exist", HttpStatus.OK);
+        trip.get().getCars();
+        car.get();
+        trip.get().getCars().add(car.get());
+        tripRepository.save(trip.get());
+        return new ApiResponse("Add Successfully", HttpStatus.OK);
     }
 
     @Override
@@ -141,14 +177,23 @@ public class CarServiceImpl implements CarService {
     @Override
     public Page<CarResponse> showAllCar(int pageNumber, int pageSize) {
 
-        Pageable pageable = PageRequest.of(pageNumber -1, pageSize, Sort.by("carNumber").ascending());
+        int pageNo = pageNumber - 1;
+        if(pageNo < 0)
+            pageNo = 0;
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("carNumber").ascending());
 
         Page<Car> cars = carRepository.findAll(pageable);
 
         return cars.map(car -> {
-            Trip trip = tripRepository.findByCars(car);
-            if (Objects.nonNull(trip)) {
-                return new CarResponse(car, Collections.singletonList(trip.getTripId()));
+            List<Trip> trips = tripRepository.findByCars(car);
+            List<String> tripIds = new ArrayList<>();
+            for(Trip itemTrip : trips){
+                tripIds.add(itemTrip.getTripId());
+            }
+
+            if (Objects.nonNull(trips)) {
+                return new CarResponse(car, tripIds);
             }
             return new CarResponse(car,null);
         });
@@ -160,9 +205,13 @@ public class CarServiceImpl implements CarService {
 
         Car cars = carRepository.findAllByCarNumber(carNumber);
 
-        Trip trip = tripRepository.findByCars(cars);
+        List<Trip> trips = tripRepository.findByCars(cars);
+        List<String> tripIds = new ArrayList<>();
+        for(Trip itemTrip : trips){
+            tripIds.add(itemTrip.getTripId());
+        }
 
-        return new CarResponse(cars, Collections.singletonList(trip.getTripId()));
+        return new CarResponse(cars, tripIds);
     }
 
     public List<ChairResponse> setupChairResponse(Car car) {
