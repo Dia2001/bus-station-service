@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-@CrossOrigin(origins = "http://localhost:9999")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController(value = "userAPIofWeb")
 @RequestMapping("/api/v1/users")
 public class UserController {

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:9999")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController(value = "chairAPIofWeb")
 @RequestMapping("/api/v1/chairs")
 public class ChairController {

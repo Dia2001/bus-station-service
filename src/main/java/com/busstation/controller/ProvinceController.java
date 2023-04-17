@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-@CrossOrigin(origins = "http://localhost:9999")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController(value = "provinceAPIofWeb")
 @RequestMapping(value = "/api/v1/provinces")
 public class ProvinceController {
