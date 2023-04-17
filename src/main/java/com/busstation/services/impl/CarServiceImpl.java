@@ -59,8 +59,8 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public CarResponse addCar(CarRequest request) {
-        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(()
-                -> new DataNotFoundException("Trip id does not exist"));
+//        //Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(()
+//                -> new DataNotFoundException("Trip id does not exist"));
         Car car = new Car();
         car.setStatus(request.getStatus());
 
@@ -70,7 +70,7 @@ public class CarServiceImpl implements CarService {
         }
         car.setCarNumber(request.getCarNumber());
         car.setStatus(true);
-        car.setTrips(Collections.singleton(trip));
+//     // car.setTrips(Collections.singleton(trip));
 
         Car newCar = carRepository.save(car);
 
@@ -90,7 +90,7 @@ public class CarServiceImpl implements CarService {
         carResponse.setStatus(newCar.getStatus());
         carResponse.setCarNumber(newCar.getCarNumber());
         carResponse.setChair(setupChairResponse(car));
-        carResponse.setTripId(Collections.singletonList(trip.getTripId()));
+        //carResponse.setTripId(Collections.singletonList(trip.getTripId()));
         return carResponse;
     }
 

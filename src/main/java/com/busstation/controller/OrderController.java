@@ -47,7 +47,7 @@ public class OrderController {
         return new ResponseEntity<>("failed", HttpStatus.OK);
     }
 
-    @PostMapping("/cancellingInvoice/{orderId}")
+    @DeleteMapping("/cancellingInvoice/{orderId}")
     public ResponseEntity<?> cancellingInvoice(@PathVariable("orderId") String orderId) {
 
         Boolean orderResponse =orderService.deleteOrder(orderId);

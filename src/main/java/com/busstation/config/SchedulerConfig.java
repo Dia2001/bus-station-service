@@ -16,8 +16,8 @@ public class SchedulerConfig {
     private TokenService tokenService;
 
 
-    @Scheduled(fixedDelay =360000000)
-    public void  checkTokenExpired(){
-        tokenService.heckTokenExpired();
-    }
+//    @Scheduled(fixedDelay =360000000)
+//    public void  checkTokenExpired(){
+//        tokenService.heckTokenExpired();
+//    }
 }

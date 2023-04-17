@@ -45,6 +45,7 @@ public class SecurityConfig {
     private static final String[] HTTP_METHOD_GET_UN_SECURED_URLs = {
             "/api/v1/trips/search/**",
             "/api/v1/trips/getAll",
+            "/api/v1/provinces/**",
             "/api/v1/chairs/**"
     };
 
