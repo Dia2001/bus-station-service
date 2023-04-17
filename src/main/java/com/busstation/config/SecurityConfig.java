@@ -50,7 +50,7 @@ public class SecurityConfig {
     };
 
     private static final String[] HTTP_METHOD_POST_UN_SECURED_URLs = {
-            "urls do not need to authorization with HttpMethod.POST"
+            "/api/v1/trips/search/**"
     };
 
     @Bean
@@ -74,6 +74,7 @@ public class SecurityConfig {
         http.csrf().disable().authorizeHttpRequests()
                 .requestMatchers(UN_SECURED_URLs).permitAll()
                 .requestMatchers(HttpMethod.GET,HTTP_METHOD_GET_UN_SECURED_URLs).permitAll()
+                .requestMatchers(HttpMethod.POST,HTTP_METHOD_POST_UN_SECURED_URLs).permitAll()
                 .anyRequest()
                 .authenticated().and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class).logout()

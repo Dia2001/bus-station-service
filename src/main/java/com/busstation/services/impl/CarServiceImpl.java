@@ -42,7 +42,6 @@ public class CarServiceImpl implements CarService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
     @Override
     public CarResponse updatedCar(String carId, CarRequest request) {
         Car car = carRepository.findById(carId).orElseThrow(() -> new RuntimeException("Car does not exist"));

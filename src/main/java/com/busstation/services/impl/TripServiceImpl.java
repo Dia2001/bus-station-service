@@ -172,7 +172,6 @@ public class TripServiceImpl implements TripService {
     @Override
     public Page<SearchTripResponse> getAllTripsByProvinceStartAndProvinceEndDateTime(SearchTripRequest searchTripRequest,
                                                                                      int pageNo, int pageSize) {
-
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("createAt").ascending());
 
         if (searchTripRequest.getProvinceStart() == null && searchTripRequest.getProvinceEnd() == null) {

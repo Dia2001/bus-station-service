@@ -21,7 +21,7 @@ public class TripController {
     @Autowired
     private TripService tripService;
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<?> getAllTripsByProvinceStartAndProvinceEndDateTime(
             @RequestBody SearchTripRequest searchTripRequest,
             @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
