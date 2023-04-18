@@ -20,7 +20,9 @@ import java.util.List;
 public class ChairControllerSocket {
     @Autowired
     private ChairService chairService;
-    OrderService orderService;
+
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
