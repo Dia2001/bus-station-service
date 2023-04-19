@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -49,6 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse createOrder(OrderRequest orderRequest) {
+
 
         User user = getUser();
 
@@ -155,6 +157,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public User getUser(){
+//        SimpMessageHeaderAccessor accessor = SimpMessageHeaderAccessor.getAccessor(SimpMessageContextHolder.getMessageContext().getMessage(), SimpMessageHeaderAccessor.class);
+//        String token = (String) accessor.getSessionAttributes().get("token");
         Account account = accountRepository.findByusername(new GetUserUtil().GetUserName());
         User user = userRepository.findById(account.getUser().getUserId()).orElseThrow(()->new RuntimeException("User does not exist"));
         return user;
