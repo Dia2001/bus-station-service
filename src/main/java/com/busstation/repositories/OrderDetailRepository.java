@@ -8,18 +8,32 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, String> {
 
-    Page<OrderDetail> findAll(Pageable pageable);
+	Page<OrderDetail> findAll(Pageable pageable);
 
-    List<OrderDetail> findByOrder_OrderID(String orderId);
+	List<OrderDetail> findByOrder_OrderID(String orderId);
 
-    Page<OrderDetail> findByOrder_OrderID(String orderId, Pageable pageable);
+	Page<OrderDetail> findByOrder_OrderID(String orderId, Pageable pageable);
 
-    @Query(value = "FROM OrderDetail od JOIN od.order o JOIN o.user u WHERE u.userId = :userId")
-    Page<OrderDetail> findAllByUserId(@Param("userId") String userId, Pageable pageable);
+	@Query(value = "FROM OrderDetail od JOIN od.order o JOIN o.user u WHERE u.userId = :userId")
+	Page<OrderDetail> findAllByUserId(@Param("userId") String userId, Pageable pageable);
 
+	@Query("SELECT SUM(tt.price) AS total_price, COUNT(od.order.orderID) AS total_orders, "
+			+ "EXTRACT(DAY FROM od.createAt) AS day_of_month FROM OrderDetail od "
+			+ "JOIN Order o on od.order.orderID = o.orderID join Ticket tt on od.ticket.ticketId = tt.ticketId "
+			+ "WHERE EXTRACT(YEAR FROM od.createAt) = :year AND EXTRACT(MONTH FROM od.createAt) = :month AND od.status = true "
+			+ "GROUP BY day_of_month ORDER BY day_of_month ASC")
+	List<Object[]> getOrderDetailsByMonth(@Param("month") int month, @Param("year") int year);
+
+	@Query("SELECT SUM(tt.price) AS total_price, COUNT(od.order.orderID) AS total_orders, "
+			+ "EXTRACT(DAY FROM od.createAt) AS day_of_month FROM OrderDetail od "
+			+ "JOIN Order o on od.order.orderID = o.orderID join Ticket tt on od.ticket.ticketId = tt.ticketId "
+			+ "WHERE od.createAt >= :start AND od.createAt < :end AND od.status = true "
+			+ "GROUP BY day_of_month ORDER BY day_of_month ASC")
+	List<Object[]> getOrderDetailsByDate(@Param("start") Date start, @Param("end") Date end);
 }
