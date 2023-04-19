@@ -37,7 +37,12 @@ public class OrderDetailResponse {
 
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setOrderId(orderDetail.getOrder().getOrderID());
-        orderResponse.setTripId(orderDetail.getOrder().getTrip().getTripId());
+
+        TripResponse tripResponse = new TripResponse();
+        tripResponse.setTripId(orderDetail.getOrder().getTrip().getTripId());
+        tripResponse.setTimeStart(orderDetail.getOrder().getTrip().getTimeStart());
+
+        orderResponse.setTrip(tripResponse);
 
         UserResponse userResponse = new UserResponse();
         userResponse.setUserId(orderDetail.getOrder().getUser().getUserId());
@@ -55,6 +60,7 @@ public class OrderDetailResponse {
         chairResponse.setChairId(orderDetail.getChair().getChairId());
         chairResponse.setCarId(orderDetail.getChair().getCar().getCarId());
         chairResponse.setChairNumber(orderDetail.getChair().getChairNumber());
+        chairResponse.setStatus(orderDetail.getChair().getStatus());
 
         this.chair = chairResponse;
 

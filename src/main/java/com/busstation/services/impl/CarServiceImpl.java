@@ -26,6 +26,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -106,11 +108,11 @@ public class CarServiceImpl implements CarService {
         Optional<Employee> employee = employeeRepository.findById(employeeId);
         Optional<Car> car = carRepository.findById(carId);
 
-        if(employee.isEmpty() || car.isEmpty())
+        if (employee.isEmpty() || car.isEmpty())
             return new ApiResponse("Employee, car does not exist", HttpStatus.OK);
-        if(!employee.get().getUser().getAccount().getRole().getRoleId().equals(RoleEnum.DRIVER.toString()))
+        if (!employee.get().getUser().getAccount().getRole().getRoleId().equals(RoleEnum.DRIVER.toString()))
             return new ApiResponse("employee is not a driver", HttpStatus.OK);
-        if(employee.get().getCar() != null)
+        if (employee.get().getCar() != null)
             return new ApiResponse("Driver has a car", HttpStatus.OK);
         employee.get().setCar(car.get());
         employeeRepository.save(employee.get());
@@ -124,10 +126,17 @@ public class CarServiceImpl implements CarService {
         Optional<Trip> trip = tripRepository.findById(tripId);
         Optional<Car> car = carRepository.findById(carId);
 
-        if(trip.isEmpty() || car.isEmpty())
+        if (trip.isEmpty() || car.isEmpty())
             return new ApiResponse("Trip, car does not exist", HttpStatus.OK);
-        trip.get().getCars();
-        car.get();
+        if(trip.get().getTimeStart().compareTo(LocalDateTime.now()) < 0){
+            return new ApiResponse("trip at time start '"+trip.get().getTimeStart()+"' has passed", HttpStatus.OK);
+        }
+        List<Trip> trips = tripRepository.findAllByCar(car.get());
+        for (Trip itemTrip : trips) {
+            if (itemTrip.getTimeStart().compareTo(trip.get().getTimeStart()) == 0) {
+                return new ApiResponse("The car has a trip at " + itemTrip.getTimeStart(), HttpStatus.OK);
+            }
+        }
         trip.get().getCars().add(car.get());
         tripRepository.save(trip.get());
         return new ApiResponse("Add Successfully", HttpStatus.OK);
@@ -146,7 +155,7 @@ public class CarServiceImpl implements CarService {
             carResponse.setCarId(car.getCarId());
             carResponse.setCarNumber(car.getCarNumber());
             List<Trip> trip = tripRepository.findAllByCars(car);
-            for (Trip itemTrip : trip){
+            for (Trip itemTrip : trip) {
                 tripId.add(itemTrip.getTripId());
             }
             carResponse.setTripId(tripId);
@@ -181,7 +190,7 @@ public class CarServiceImpl implements CarService {
     public Page<CarResponse> showAllCar(int pageNumber, int pageSize) {
 
         int pageNo = pageNumber - 1;
-        if(pageNo < 0)
+        if (pageNo < 0)
             pageNo = 0;
 
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("carNumber").ascending());
@@ -191,14 +200,14 @@ public class CarServiceImpl implements CarService {
         return cars.map(car -> {
             List<Trip> trips = tripRepository.findByCars(car);
             List<String> tripIds = new ArrayList<>();
-            for(Trip itemTrip : trips){
+            for (Trip itemTrip : trips) {
                 tripIds.add(itemTrip.getTripId());
             }
 
             if (Objects.nonNull(trips)) {
                 return new CarResponse(car, tripIds);
             }
-            return new CarResponse(car,null);
+            return new CarResponse(car, null);
         });
 
     }
@@ -210,7 +219,7 @@ public class CarServiceImpl implements CarService {
 
         List<Trip> trips = tripRepository.findByCars(cars);
         List<String> tripIds = new ArrayList<>();
-        for(Trip itemTrip : trips){
+        for (Trip itemTrip : trips) {
             tripIds.add(itemTrip.getTripId());
         }
 
