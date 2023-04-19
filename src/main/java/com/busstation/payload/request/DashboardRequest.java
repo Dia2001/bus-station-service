@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DashboardRequest {
-	
-	private int month;
-	private int year;
-	
+	int month;
+	int year;
 }
