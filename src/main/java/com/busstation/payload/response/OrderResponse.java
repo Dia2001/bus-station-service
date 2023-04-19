@@ -13,6 +13,8 @@ public class OrderResponse {
 
     private String tripId;
 
+    private TripResponse trip;
+
     private String chairId;
 
     private UserResponse user;
