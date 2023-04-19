@@ -29,12 +29,12 @@ public class OrderController {
         return new ResponseEntity<>(orderDetailPage, HttpStatus.OK);
     }
 
-    @PostMapping()
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
-
-        OrderResponse orderResponse = orderService.createOrder(orderRequest);
-        return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
-    }
+//    @PostMapping()
+//    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest orderRequest) {
+//
+//        OrderResponse orderResponse = orderService.createOrder(orderRequest);
+//        return new ResponseEntity<>(orderResponse, HttpStatus.CREATED);
+//    }
 
     @PostMapping("/submit")
     public ResponseEntity<?> submitOrder(@RequestBody OrderDetailRequest orderDetailRequest) {

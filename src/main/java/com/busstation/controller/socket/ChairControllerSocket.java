@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 
 import java.util.Arrays;
@@ -35,8 +36,11 @@ public class ChairControllerSocket {
 
     @MessageMapping("/chair")
     @SendTo("/topic/chair")
-    public OrderResponse handleChairUpdate(@Payload OrderRequest orderRequest) throws Exception {
-        OrderResponse orderResponse=orderService.createOrder(orderRequest);
+    public OrderResponse handleChairUpdate(@Payload OrderRequest orderRequest, StompHeaderAccessor headers) throws Exception {
+        String bearerToken = headers.getFirstNativeHeader("Authorization");
+        String jwtToken = bearerToken.substring(7);
+
+        OrderResponse orderResponse=orderService.createOrder(orderRequest, jwtToken);
         simpMessagingTemplate.convertAndSend("/topic/disableSeat",orderResponse);
         return  orderResponse;
     }

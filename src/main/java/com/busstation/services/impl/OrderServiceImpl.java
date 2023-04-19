@@ -7,6 +7,7 @@ import com.busstation.payload.response.*;
 import com.busstation.repositories.*;
 import com.busstation.services.OrderService;
 import com.busstation.utils.GetUserUtil;
+import com.busstation.utils.JwtProviderUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +47,15 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private JwtProviderUtils jwtProviderUtils;
+
+
     @Override
     @Transactional
-    public OrderResponse createOrder(OrderRequest orderRequest) {
+    public OrderResponse createOrder(OrderRequest orderRequest,String token) {
 
-        User user = getUser();
+        User user = getUserOfSocket(token);
 
         Optional<Ticket> ticket = ticketRepository.findByAddressStartAndAddressEnd(orderRequest.getAddressStart(), orderRequest.getAddressEnd());
 
@@ -156,6 +161,12 @@ public class OrderServiceImpl implements OrderService {
 
     public User getUser(){
         Account account = accountRepository.findByusername(new GetUserUtil().GetUserName());
+        User user = userRepository.findById(account.getUser().getUserId()).orElseThrow(()->new RuntimeException("User does not exist"));
+        return user;
+    }
+    public User getUserOfSocket(String token){
+        String username = jwtProviderUtils.getUserNameFromJwtToken(token);
+        Account account = accountRepository.findByusername(username);
         User user = userRepository.findById(account.getUser().getUserId()).orElseThrow(()->new RuntimeException("User does not exist"));
         return user;
     }
