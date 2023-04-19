@@ -20,8 +20,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             config.enableSimpleBroker("/topic");
             config.setApplicationDestinationPrefixes("/app");
         }
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new MyChannelInterceptor());
-    }
+        @Override
+        public void configureClientInboundChannel(ChannelRegistration registration) {
+            registration.interceptors(new MyChannelInterceptor());
+        }
 }
