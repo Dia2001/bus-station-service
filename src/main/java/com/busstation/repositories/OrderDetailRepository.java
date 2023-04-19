@@ -21,5 +21,23 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, String
 
     @Query(value = "FROM OrderDetail od JOIN od.order o JOIN o.user u WHERE u.userId = :userId")
     Page<OrderDetail> findAllByUserId(@Param("userId") String userId, Pageable pageable);
+    
+//  dash board
+    
+    @Query("select od.ticket.price from OrderDetail od where od.status = true and EXTRACT(YEAR FROM od.createAt) = ?1")
+    List<Double> getPriceByYearAndCreateAt(Integer year);
+    
+    @Query("select od.ticket.price from OrderDetail od where od.status = true and EXTRACT(YEAR FROM od.updatedAt) = ?1")
+    List<Double> getPriceByYearAndUpdateAt(Integer year);
+    
+    @Query("select od.ticket.price from OrderDetail od "
+    		+ "where od.status = true and EXTRACT(MONTH FROM od.createAt) = ?1 and EXTRACT(YEAR FROM od.createAt) = ?2")
+	List<Double> getPriceByMonthAndCreateAt(int month, int year);
+    
+    @Query("select od.ticket.price from OrderDetail od "
+    		+ "where od.status = true and EXTRACT(MONTH FROM od.updatedAt) = ?1 and EXTRACT(YEAR FROM od.updatedAt) = ?2")
+	List<Double> getPriceByMonthAndUpdateAt(int month, int year);
+    
+
 
 }
