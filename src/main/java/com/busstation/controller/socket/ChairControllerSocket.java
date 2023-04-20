@@ -2,6 +2,7 @@ package com.busstation.controller.socket;
 
 import com.busstation.dto.ChairDto;
 import com.busstation.entities.Trip;
+import com.busstation.payload.request.CancelOrderRequest;
 import com.busstation.payload.request.OrderRequest;
 import com.busstation.payload.response.ChairResponse;
 import com.busstation.payload.response.OrderResponse;
@@ -25,6 +26,7 @@ public class ChairControllerSocket {
 
     @Autowired
     private OrderService orderService;
+
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
@@ -47,10 +49,10 @@ public class ChairControllerSocket {
 
     @MessageMapping("/chairCancel")
     @SendTo("/topic/cancel")
-    public String handleChairUpdate(@Payload String orderId, @Payload String tripId) throws Exception {
-        Boolean orderResponse =orderService.deleteOrder(orderId);
-        simpMessagingTemplate.convertAndSend("/topic/openCancel",tripId);
-        return  tripId;
+    public String handleChairUpdate(@Payload CancelOrderRequest cancelOrderRequest) throws Exception {
+        Boolean orderResponse = orderService.deleteOrder(cancelOrderRequest.orderId);
+        simpMessagingTemplate.convertAndSend("/topic/openCancel",cancelOrderRequest.tripId);
+        return cancelOrderRequest.orderId;
     }
 }
 
