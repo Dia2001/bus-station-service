@@ -28,6 +28,8 @@ public class TripResponse {
 
     private BigDecimal price;
 
+    private Boolean status;
+
     private String pickupLocation;
 
     private String dropOffLocation;
@@ -39,6 +41,7 @@ public class TripResponse {
         this.provinceEnd = trip.getProvinceEnd();
         this.timeStart = trip.getTimeStart();
         this.price = price;
+        this.status = trip.getStatus();
         this.pickupLocation = pickupLocation;
         this.dropOffLocation = dropOffLocation;
     }

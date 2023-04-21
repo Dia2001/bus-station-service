@@ -11,7 +11,7 @@ import com.busstation.payload.request.DashboardRequest;
 import com.busstation.payload.response.dashboard.YearlyRevenueResponse;
 import com.busstation.services.DashboardService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/dashboards")
 public class DashboardController {
