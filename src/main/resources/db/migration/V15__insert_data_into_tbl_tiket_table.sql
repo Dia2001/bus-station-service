@@ -1,7 +1,3 @@
-INSERT INTO public.tbl_ticket(
-    ticket_id, address_end, address_start, drop_off_location, pick_up_location, price)
-VALUES
-    ('50a76bdf-147b-4d59-bb09-8996c4282a31', '19/4 Mai Hắc Đế ', '22/5/6 Lý Thường Kiệt', 'Thành Phố Thủ Dầu Một', 'Thành Phố Đồng Xoài', 250000),
-    ('8f4ff164-55ec-4f96-a19a-5abeee8cba96', '19/4 Mai Hắc Đế ', '22/5/6 Lý Thường Kiệt', 'Thành Phố Thủ Dầu Một', 'Thành Phố Đồng Xoài', 250000),
-    ('b124704f-15b6-4633-a29e-7f0d7b01eb9f', '19/4 Mai Hắc Đế', '22/5/6 Lý Thường Kiệt', 'Thành Phố Thủ Dầu Một', 'Thành Phố Đồng Xoài', 250000),
-    ('c5e90756-b91c-4f45-8686-0ffba7d5238b', '19/4 Mai Hắc Đế ', '22/5/6 Lý Thường Kiệt', 'Thành Phố Thủ Dầu Một', 'Thành Phố Đồng Xoài', 250000);
+INSERT INTO public.tbl_ticket (ticket_id, address_end, address_start, drop_off_location,  price, pick_up_location) VALUES ('c1df685f-b746-4e7a-9674-8fae8cf980f4', 'Thị Xã An Nhơn', 'Quận Hoàn Kiếm', 'Hồ Hoàn Kiếm',  900000.00, 'GO!!');
+INSERT INTO public.tbl_ticket (ticket_id, address_end, address_start, drop_off_location,  price, pick_up_location) VALUES ('2f8dfbb4-1470-4d72-98dd-7c526ab08953', 'Quận Hoàn Kiếm', 'Quận 1', 'Hồ Hoàn Kiếm',  900000.00, NULL);
+INSERT INTO public.tbl_ticket (ticket_id, address_end, address_start, drop_off_location,  price, pick_up_location) VALUES ('65e01f5c-8b3b-4f4d-827a-f380d6bb3d30', 'Quận Ninh Kiều', 'Thành Phố Cà Mau', NULL, 900000.00, NULL);

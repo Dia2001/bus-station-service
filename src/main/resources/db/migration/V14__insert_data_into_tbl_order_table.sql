@@ -1,7 +1,12 @@
-INSERT INTO public.tbl_order(
-    order_id, created_at, trip_id, user_id)
-VALUES
-    ('HANOI1', '2023-04-16 14:20:00', 'a07bc47d-c7d7-4d2a-8a51-20e23ed402db', '648725ce-f60e-4387-a1a0-55ea098fd7a0'),
-    ('HANOI2', '2023-04-16 14:20:00', 'be91ba87-3d5b-45f4-beea-8e6742411442', 'b4a968ac-1259-4219-8354-761f24856748'),
-    ('HANOI3', '2023-04-16 14:20:00', '64ed9f5d-c4e9-467e-89fd-d754dddde44e', 'a187bd77-603b-45bb-8490-8ded54a9f1c5'),
-    ('HANOI4', '2023-04-16 14:20:00', '94e97e9b-9109-4914-86b4-80a0a6f3b0b3', '427e73af-4e5f-43a2-b00d-a3d2914859c0');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('HN24-QKHQ87EKDF', '2023-04-15 21:55:04.947', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '43752e8e-80c6-4972-8c42-97f0d68e1feb');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('TXAN9-CI5XBXF37', '2023-04-17 12:24:20.394', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '1737ed29-e569-4201-a272-0d1da19586c6');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('QHK24-WOGZRUZD4', '2023-04-21 16:28:55.831', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '43752e8e-80c6-4972-8c42-97f0d68e1feb');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('QHK24-PZL3FUWPJ', '2023-04-23 10:42:12.484', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', 'be3f8fab-46ec-4ba2-8f94-09f0dacdfcc2');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('QHK24-TMJ50RFJU', '2023-04-23 10:44:13.691', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', 'be3f8fab-46ec-4ba2-8f94-09f0dacdfcc2');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('QHK24-9WK4ZFKTZ', '2023-04-23 11:11:08.668', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', 'be3f8fab-46ec-4ba2-8f94-09f0dacdfcc2');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('QHK24-PFJCF3LYM', '2023-04-23 11:54:33.659', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', 'cb830731-6f3b-4b5f-930d-da233888e354');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('TXAN64-2HUVC0S4', '2023-04-23 12:35:59.071', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '1f01a90d-e55c-4fb6-a7e9-3a1bfe2daeef');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('TXAN64-Q8UQENDI', '2023-04-23 12:41:32.62', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '2f64c626-f89f-463d-85cc-056607cb0882');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('TXAN64-BMFJOO52', '2023-04-23 12:42:07.361', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '2f64c626-f89f-463d-85cc-056607cb0882');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('TXAN64-O92JG1J5', '2023-04-23 13:03:32.932', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '2f64c626-f89f-463d-85cc-056607cb0882');
+INSERT INTO public.tbl_order (order_id, created_at, user_id, trip_id) VALUES ('TXAN64-2PTDL61V', '2023-04-23 13:15:41.172', 'de7489f2-73cf-4fd2-bf08-41b6264d393d', '2f64c626-f89f-463d-85cc-056607cb0882');

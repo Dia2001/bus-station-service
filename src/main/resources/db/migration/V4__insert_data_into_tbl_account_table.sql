@@ -1,7 +1,7 @@
-INSERT INTO public.tbl_account
-    (account_id, role_id, username, password, created_at, updated_at)
-VALUES
-     ('5e0be621-3527-4b9e-abbd-927e45036cbe','EMPLOYEE','employee','$2a$12$TIjN4JNvLd6cbbBciAN7AetuK2KBIOUUxV/zE9yr9EvwK2TQrDkQq','2023-04-16 14:20:00', '2023-04-16 14:20:00'),
-     ('db16edcb-3721-4f3f-a638-2135ca5a91a7','USER','user','$2a$12$TIjN4JNvLd6cbbBciAN7AetuK2KBIOUUxV/zE9yr9EvwK2TQrDkQq','2023-04-16 14:20:00', '2023-04-16 14:20:00'),
-     ('a159cc9b-e0e7-4ebd-9394-a7f84061c4a4','ADMIN','admin','$2a$12$TIjN4JNvLd6cbbBciAN7AetuK2KBIOUUxV/zE9yr9EvwK2TQrDkQq','2023-04-16 14:20:00', '2023-04-16 14:20:00'),
-     ('26c885c4-5626-4520-9d9c-7d631f3e21ac','DRIVER','driver','$2a$12$TIjN4JNvLd6cbbBciAN7AetuK2KBIOUUxV/zE9yr9EvwK2TQrDkQq','2023-04-16 14:20:00', '2023-04-16 14:20:00');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('d762275e-a13b-4fe7-904c-e49ae861c7cc', '2023-04-15 16:38:53.504', '$2a$10$5sSDbC96nXs2.QbVXbD4lOQI1rnpmmQ.bUstpmngqCnqrnBIBFyqK', NULL, 'luongnguyen', 'ADMIN');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('72c0b00d-3834-4dee-9d2b-5e1d454cdae9', '2023-04-15 16:39:57.037', '$2a$10$1FKHgMJCPm9BphtOecjuxOVxXmFCiBZisdxoiv1nn1nQLlFysF/eC', NULL, 'DRIVER2', 'DRIVER');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('ec8d6f64-3bd0-4b8f-b436-41a9d381210c', '2023-04-15 16:39:40.906', '$2a$10$u9AhqYUQLFG2blJ1TUf11u10Mlzzd/ezI7oySN8y6At.HGfa4VvxO', NULL, 'DRIVER1', 'DRIVER');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('351a542a-d216-452c-a8ed-06940532112d', '2023-04-15 16:59:03.619', '$2a$10$/aL.hqQ2aEkUqCqt8W.CKuR55xLZZzE4Dn1wc9aGpkI4rPlwlRcvq', NULL, 'user1', 'USER');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('5a240c27-f6fb-462c-b9c7-5ad627e12f27', '2023-04-23 13:23:20.127', '$2a$10$yzJo34Bs5qAYvnhqYbbDT.npr6S3yMhAv.gD5NG5MYeKDEokafqBK', NULL, 'customer1', 'USER');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('622efc34-2eec-4791-8b59-700ffa97e5f7', '2023-04-23 13:47:26.22', '$2a$10$0DWVLxKNISek1la.P0q6aOKunquYpcYjE0955da1WKxFAP9xrKQO2', NULL, 'user2', 'USER');
+INSERT INTO public.tbl_account (account_id, created_at, password, updated_at, username, role_id) VALUES ('1542c527-d9be-477f-ba98-cbd77b4dd9e8', '2023-04-23 13:20:01.726', '$2a$10$bXySEPecaqu07nWKT86ibesGSfIwnJJuBvoNukjqYe7PRMHefDK1e', NULL, 'ha', 'EMPLOYEE');

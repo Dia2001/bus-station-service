@@ -1,65 +1,64 @@
-INSERT INTO public.tbl_location (location_id, name, province_id)
-VALUES
-    (1, 'Thành Phố Long Xuyên', 1),
-    (2, 'Thành Phố Bà Rịa', 2),
-    (3, 'Thành Phố Bạc Liêu', 3),
-    (4, 'Thành Phố Bắc Giang', 4),
-    (5, 'Thành Phố Bắc Kạn', 5),
-    (6, 'Thành Phố Bắc Ninh', 6),
-    (7, 'Thành Phố Bến Tre', 7),
-    (8, 'Thành Phố Thủ Dầu Một', 8),
-    (9, 'Thành Phố Quy Nhơn', 9),
-    (10, 'Thành Phố Đồng Xoài', 10),
-    (11, 'Thành Phố Phan Thiết', 11),
-    (12, 'Thành Phố Cà Mau', 12),
-    (13, 'Thành Phố Cao Bằng', 13),
-    (14, 'Quận Ninh Kiều', 14),
-    (15, 'Quận Hải Châu', 15),
-    (16, 'Thành Phố Buôn Ma Thuột', 16),
-    (17, 'Thành Phố Gia Nghĩa', 17),
-    (18, 'Thành Phố Điện Biên Phủ', 18),
-    (19, 'Thành Phố Biên Hòa', 19),
-    (20, 'Thành Phố Cao Lãnh', 20),
-    (21, 'Thành Phố Pleiku', 21),
-    (22, 'Thành Phố Hà Giang', 22),
-    (23, 'Thành Phố Phủ Lý', 23),
-    (24, 'Quận Hoàn Kiếm', 24),
-    (25, 'Thành Phố Hà Tĩnh', 25),
-    (26, 'Thành Phố Hải Dương', 26),
-    (27, 'Quận Hồng Bàng', 27),
-    (28, 'Thành Phố Vị Thanh', 28),
-    (29, 'Thành Phố Hòa Bình', 29),
-    (30, 'Quận 1', 30),
-    (31, 'Thành Phố Hưng Yên', 31),
-    (32, 'Thành Phố Nha Trang', 32),
-    (33, 'Thành Phố Rạch Giá', 33),
-    (34, 'Thành Phố Kon Tum', 34),
-    (35, 'Thành Phố Lai Châu', 35),
-    (36, 'Thành Phố Lạng Sơn', 36),
-    (37, 'Thành Phố Lào Cai', 37),
-    (38, 'Thành Phố Lộc Ninh', 38),
-    (39, 'Thành Phố Móng Cái', 39),
-    (40, 'Thành Phố Mỹ Tho', 40),
-    (41, 'Thành Phố Nam Định', 41),
-    (42, 'Thành Phố Ninh Bình', 42),
-    (43, 'Thành Phố Tam Kỳ', 43),
-    (44, 'Thành Phố Tân An', 44),
-    (45, 'Thành Phố Tây Ninh', 45),
-    (46, 'Thành Phố Đồng Hới', 46),
-    (47, 'Thành Phố Tam Kỳ', 47),
-    (48, 'Thành Phố Quảng Ngãi', 48),
-    (49, 'Thành Phố Hạ Long', 49),
-    (50, 'Thành Phố Đông Hà', 50),
-    (51, 'Thành Phố Sóc Trăng', 51),
-    (52, 'Thành Phố Sơn La', 52),
-    (53, 'Thành Phố Tây Ninh', 53),
-    (54, 'Thành Phố Thái Bình', 54),
-    (55, 'Thành Phố Thái Nguyên', 55),
-    (56, 'Thành Phố Thanh Hóa', 56),
-    (57, 'Thành Phố Huế', 57),
-    (58, 'Thành Phố Mỹ Tho', 58),
-    (59, 'Thành Phố Trà Vinh', 59),
-    (60, 'Thành Phố Tuyên Quang', 60),
-    (61, 'Thành Phố Vĩnh Long', 61),
-    (62, 'Thành Phố Vĩnh Yên', 62),
-    (63, 'Thành Phố Yên Bái', 63);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (1, 'Thành Phố Long Xuyên', 1);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (2, 'Thành Phố Bà Rịa', 2);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (3, 'Thành Phố Bạc Liêu', 3);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (4, 'Thành Phố Bắc Giang', 4);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (5, 'Thành Phố Bắc Kạn', 5);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (6, 'Thành Phố Bắc Ninh', 6);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (7, 'Thành Phố Bến Tre', 7);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (8, 'Thành Phố Thủ Dầu Một', 8);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (9, 'Thành Phố Quy Nhơn', 9);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (10, 'Thành Phố Đồng Xoài', 10);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (11, 'Thành Phố Phan Thiết', 11);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (12, 'Thành Phố Cà Mau', 12);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (13, 'Thành Phố Cao Bằng', 13);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (14, 'Quận Ninh Kiều', 14);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (15, 'Quận Hải Châu', 15);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (16, 'Thành Phố Buôn Ma Thuột', 16);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (17, 'Thành Phố Gia Nghĩa', 17);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (18, 'Thành Phố Điện Biên Phủ', 18);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (19, 'Thành Phố Biên Hòa', 19);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (20, 'Thành Phố Cao Lãnh', 20);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (21, 'Thành Phố Pleiku', 21);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (22, 'Thành Phố Hà Giang', 22);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (23, 'Thành Phố Phủ Lý', 23);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (24, 'Quận Hoàn Kiếm', 24);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (25, 'Thành Phố Hà Tĩnh', 25);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (26, 'Thành Phố Hải Dương', 26);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (27, 'Quận Hồng Bàng', 27);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (28, 'Thành Phố Vị Thanh', 28);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (29, 'Thành Phố Hòa Bình', 29);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (30, 'Quận 1', 30);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (31, 'Thành Phố Hưng Yên', 31);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (32, 'Thành Phố Nha Trang', 32);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (33, 'Thành Phố Rạch Giá', 33);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (34, 'Thành Phố Kon Tum', 34);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (35, 'Thành Phố Lai Châu', 35);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (36, 'Thành Phố Lạng Sơn', 36);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (37, 'Thành Phố Lào Cai', 37);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (38, 'Thành Phố Đà Lạt', 38);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (39, 'Thành Phố Tân An', 39);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (40, 'Thành Phố Nam Định', 40);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (41, 'Thành Phố Vinh', 41);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (42, 'Thành Phố Ninh Bình', 42);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (43, 'Thành Phố Phan Rang – Tháp Chàm', 43);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (44, 'Thành Phố Việt Trì', 44);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (45, 'Thành Phố Tuy Hòa', 45);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (46, 'Thành Phố Đồng Hới', 46);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (47, 'Thành Phố Tam Kỳ', 47);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (48, 'Thành Phố Quảng Ngãi', 48);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (49, 'Thành Phố Hạ Long', 49);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (50, 'Thành Phố Đông Hà', 50);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (51, 'Thành Phố Sóc Trăng', 51);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (52, 'Thành Phố Sơn La', 52);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (53, 'Thành Phố Tây Ninh', 53);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (54, 'Thành Phố Thái Bình', 54);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (55, 'Thành Phố Thái Nguyên', 55);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (56, 'Thành Phố Thanh Hóa', 56);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (57, 'Thành Phố Huế', 57);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (58, 'Thành Phố Mỹ Tho', 58);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (59, 'Thành Phố Trà Vinh', 59);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (60, 'Thành Phố Tuyên Quang', 60);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (61, 'Thành Phố Vĩnh Long', 61);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (62, 'Thành Phố Vĩnh Yên', 62);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (63, 'Thành Phố Yên Bái', 63);
+INSERT INTO public.tbl_location (location_id, name, province_id) VALUES (64, 'Thị Xã An Nhơn', 9);

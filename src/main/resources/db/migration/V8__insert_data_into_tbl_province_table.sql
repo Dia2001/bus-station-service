@@ -1,64 +1,63 @@
-INSERT INTO public.tbl_province (province_id, name) VALUES
-                                                        (1, 'An Giang'),
-                                                        (2, 'Bà Rịa – Vũng Tàu'),
-                                                        (3, 'Bạc Liêu'),
-                                                        (4, 'Bắc Giang'),
-                                                        (5, 'Bắc Kạn'),
-                                                        (6, 'Bắc Ninh'),
-                                                        (7, 'Bến Tre'),
-                                                        (8, 'Bình Dương'),
-                                                        (9, 'Bình Định'),
-                                                        (10, 'Bình Phước'),
-                                                        (11, 'Bình Thuận'),
-                                                        (12, 'Cà Mau'),
-                                                        (13, 'Cao Bằng'),
-                                                        (14, 'Cần Thơ'),
-                                                        (15, 'Đà Nẵng'),
-                                                        (16, 'Đắk Lắk'),
-                                                        (17, 'Đắk Nông'),
-                                                        (18, 'Điện Biên'),
-                                                        (19, 'Đồng Nai'),
-                                                        (20, 'Đồng Tháp'),
-                                                        (21, 'Gia Lai'),
-                                                        (22, 'Hà Giang'),
-                                                        (23, 'Hà Nam'),
-                                                        (24, 'Hà Nội'),
-                                                        (25, 'Hà Tĩnh'),
-                                                        (26, 'Hải Dương'),
-                                                        (27, 'Hải Phòng'),
-                                                        (28, 'Hậu Giang'),
-                                                        (29, 'Hòa Bình'),
-                                                        (30, 'Thành phố Hồ Chí Minh'),
-                                                        (31, 'Hưng Yên'),
-                                                        (32, 'Khánh Hòa'),
-                                                        (33, 'Kiên Giang'),
-                                                        (34, 'Kon Tum'),
-                                                        (35, 'Lai Châu'),
-                                                        (36, 'Lạng Sơn'),
-                                                        (37, 'Lào Cai'),
-                                                        (38, 'Lâm Đồng'),
-                                                        (39, 'Long An'),
-                                                        (40, 'Nam Định'),
-                                                        (41, 'Nghệ An'),
-                                                        (42, 'Ninh Bình'),
-                                                        (43, 'Ninh Thuận'),
-                                                        (44, 'Phú Thọ'),
-                                                        (45, 'Phú Yên'),
-                                                        (46, 'Quảng Bình'),
-                                                        (47, 'Quảng Nam'),
-                                                        (48, 'Quảng Ngãi'),
-                                                        (49, 'Quảng Ninh'),
-                                                        (50, 'Quảng Trị'),
-                                                        (51, 'Sóc Trăng'),
-                                                        (52, 'Sơn La'),
-                                                        (53, 'Tây Ninh'),
-                                                        (54, 'Thái Bình'),
-                                                        (55, 'Thái Nguyên'),
-                                                        (56, 'Thanh Hóa'),
-                                                        (57, 'Thừa Thiên Huế'),
-                                                        (58, 'Tiền Giang'),
-                                                        (59, 'Trà Vinh'),
-                                                        (60, 'Tuyên Quang'),
-                                                        (61, 'Vĩnh Long'),
-                                                        (62, 'Vĩnh Phúc'),
-                                                        (63, 'Yên Bái');
+INSERT INTO public.tbl_province (province_id, name) VALUES (1, 'An Giang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (2, 'Bà Rịa – Vũng Tàu');
+INSERT INTO public.tbl_province (province_id, name) VALUES (3, 'Bạc Liêu');
+INSERT INTO public.tbl_province (province_id, name) VALUES (4, 'Bắc Giang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (5, 'Bắc Kạn');
+INSERT INTO public.tbl_province (province_id, name) VALUES (6, 'Bắc Ninh');
+INSERT INTO public.tbl_province (province_id, name) VALUES (7, 'Bến Tre');
+INSERT INTO public.tbl_province (province_id, name) VALUES (8, 'Bình Dương');
+INSERT INTO public.tbl_province (province_id, name) VALUES (9, 'Bình Định');
+INSERT INTO public.tbl_province (province_id, name) VALUES (10, 'Bình Phước');
+INSERT INTO public.tbl_province (province_id, name) VALUES (11, 'Bình Thuận');
+INSERT INTO public.tbl_province (province_id, name) VALUES (12, 'Cà Mau');
+INSERT INTO public.tbl_province (province_id, name) VALUES (13, 'Cao Bằng');
+INSERT INTO public.tbl_province (province_id, name) VALUES (14, 'Cần Thơ');
+INSERT INTO public.tbl_province (province_id, name) VALUES (15, 'Đà Nẵng');
+INSERT INTO public.tbl_province (province_id, name) VALUES (16, 'Đắk Lắk');
+INSERT INTO public.tbl_province (province_id, name) VALUES (17, 'Đắk Nông');
+INSERT INTO public.tbl_province (province_id, name) VALUES (18, 'Điện Biên');
+INSERT INTO public.tbl_province (province_id, name) VALUES (19, 'Đồng Nai');
+INSERT INTO public.tbl_province (province_id, name) VALUES (20, 'Đồng Tháp');
+INSERT INTO public.tbl_province (province_id, name) VALUES (21, 'Gia Lai');
+INSERT INTO public.tbl_province (province_id, name) VALUES (22, 'Hà Giang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (23, 'Hà Nam');
+INSERT INTO public.tbl_province (province_id, name) VALUES (24, 'Hà Nội');
+INSERT INTO public.tbl_province (province_id, name) VALUES (25, 'Hà Tĩnh');
+INSERT INTO public.tbl_province (province_id, name) VALUES (26, 'Hải Dương');
+INSERT INTO public.tbl_province (province_id, name) VALUES (27, 'Hải Phòng');
+INSERT INTO public.tbl_province (province_id, name) VALUES (28, 'Hậu Giang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (29, 'Hòa Bình');
+INSERT INTO public.tbl_province (province_id, name) VALUES (30, 'Thành phố Hồ Chí Minh');
+INSERT INTO public.tbl_province (province_id, name) VALUES (31, 'Hưng Yên');
+INSERT INTO public.tbl_province (province_id, name) VALUES (32, 'Khánh Hòa');
+INSERT INTO public.tbl_province (province_id, name) VALUES (33, 'Kiên Giang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (34, 'Kon Tum');
+INSERT INTO public.tbl_province (province_id, name) VALUES (35, 'Lai Châu');
+INSERT INTO public.tbl_province (province_id, name) VALUES (36, 'Lạng Sơn');
+INSERT INTO public.tbl_province (province_id, name) VALUES (37, 'Lào Cai');
+INSERT INTO public.tbl_province (province_id, name) VALUES (38, 'Lâm Đồng');
+INSERT INTO public.tbl_province (province_id, name) VALUES (39, 'Long An');
+INSERT INTO public.tbl_province (province_id, name) VALUES (40, 'Nam Định');
+INSERT INTO public.tbl_province (province_id, name) VALUES (41, 'Nghệ An');
+INSERT INTO public.tbl_province (province_id, name) VALUES (42, 'Ninh Bình');
+INSERT INTO public.tbl_province (province_id, name) VALUES (43, 'Ninh Thuận');
+INSERT INTO public.tbl_province (province_id, name) VALUES (44, 'Phú Thọ');
+INSERT INTO public.tbl_province (province_id, name) VALUES (45, 'Phú Yên');
+INSERT INTO public.tbl_province (province_id, name) VALUES (46, 'Quảng Bình');
+INSERT INTO public.tbl_province (province_id, name) VALUES (47, 'Quảng Nam');
+INSERT INTO public.tbl_province (province_id, name) VALUES (48, 'Quảng Ngãi');
+INSERT INTO public.tbl_province (province_id, name) VALUES (49, 'Quảng Ninh');
+INSERT INTO public.tbl_province (province_id, name) VALUES (50, 'Quảng Trị');
+INSERT INTO public.tbl_province (province_id, name) VALUES (51, 'Sóc Trăng');
+INSERT INTO public.tbl_province (province_id, name) VALUES (52, 'Sơn La');
+INSERT INTO public.tbl_province (province_id, name) VALUES (53, 'Tây Ninh');
+INSERT INTO public.tbl_province (province_id, name) VALUES (54, 'Thái Bình');
+INSERT INTO public.tbl_province (province_id, name) VALUES (55, 'Thái Nguyên');
+INSERT INTO public.tbl_province (province_id, name) VALUES (56, 'Thanh Hóa');
+INSERT INTO public.tbl_province (province_id, name) VALUES (57, 'Thừa Thiên Huế');
+INSERT INTO public.tbl_province (province_id, name) VALUES (58, 'Tiền Giang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (59, 'Trà Vinh');
+INSERT INTO public.tbl_province (province_id, name) VALUES (60, 'Tuyên Quang');
+INSERT INTO public.tbl_province (province_id, name) VALUES (61, 'Vĩnh Long');
+INSERT INTO public.tbl_province (province_id, name) VALUES (62, 'Vĩnh Phúc');
+INSERT INTO public.tbl_province (province_id, name) VALUES (63, 'Yên Bái');

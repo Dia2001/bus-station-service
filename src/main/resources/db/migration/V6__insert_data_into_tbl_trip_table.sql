@@ -1,7 +1,8 @@
-INSERT INTO public.tbl_trip(
-    trip_id, created_at, province_end, province_start, status, time_start, update_at)
-VALUES
-    ('a07bc47d-c7d7-4d2a-8a51-20e23ed402db','2023-04-18' , 'Đà Lạt', 'Bình Định', true,'2023-04-20 14:30:00' , '2023-04-19 14:30:00'),
-    ('be91ba87-3d5b-45f4-beea-8e6742411442','2023-04-18' , 'Bình Định', 'Đà Lạt', true,'2023-04-20 14:30:00' , '2023-04-19 14:30:00'),
-    ('64ed9f5d-c4e9-467e-89fd-d754dddde44e','2023-04-18' , 'TP.HCM', 'Đăk Lăk', true,'2023-04-20 14:30:00' , '2023-04-19 14:30:00'),
-    ('94e97e9b-9109-4914-86b4-80a0a6f3b0b3','2023-04-18' , 'Đà Lạt', 'Bình Dương', true,'2023-04-20 14:30:00' , '2023-04-19 14:30:00');
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('2f64c626-f89f-463d-85cc-056607cb0882', '2023-04-20 11:02:59.463', 'Thị Xã An Nhơn', 'Quận Hoàn Kiếm', true, '2023-05-16 20:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('1737ed29-e569-4201-a272-0d1da19586c6', '2023-04-17 12:21:03.977', 'Thị Xã An Nhơn', 'Quận Hoàn Kiếm', true, '2023-05-20 20:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('1f01a90d-e55c-4fb6-a7e9-3a1bfe2daeef', '2023-04-21 08:28:18.005', 'Thị Xã An Nhơn', 'Quận Hoàn Kiếm', true, '2023-05-16 21:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('43752e8e-80c6-4972-8c42-97f0d68e1feb', '2023-04-15 16:41:30.988', 'Quận Hoàn Kiếm', 'Quận 1', true, '2023-05-18 22:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('cb830731-6f3b-4b5f-930d-da233888e354', '2023-04-15 16:41:53.092', 'Quận Hoàn Kiếm', 'Quận 1', true, '2023-05-20 20:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('be3f8fab-46ec-4ba2-8f94-09f0dacdfcc2', '2023-04-15 16:41:48.241', 'Quận Hoàn Kiếm', 'Quận 1', true, '2023-05-20 19:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('754e0eae-66de-4a39-910a-c34af64883d6', '2023-04-15 16:41:40.984', 'Quận Hoàn Kiếm', 'Quận 1', true, '2023-05-18 18:30:00', NULL);
+INSERT INTO public.tbl_trip (trip_id, created_at, province_end, province_start, status, time_start, update_at) VALUES ('6631b147-8507-40c6-bdd9-beca9ba5232f', '2023-04-23 11:25:19.683', 'Quận Ninh Kiều', 'Thành Phố Cà Mau', false, '2023-04-27 11:23:57', '2023-04-23 11:28:45.423');

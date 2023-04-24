@@ -1,8 +1,4 @@
-INSERT INTO public.tbl_car(
-    car_id, car_number, created_at, status, update_at)
-VALUES
-    ('000b070a-0b03-4b42-afae-f35f76ef83cf', 1000, '2023-04-16 14:00:00', true, '2023-04-16 14:00:00'),
-    ('eaf8efa7-adef-41a7-a4c2-cf4a30d4db4a', 1002, '2023-04-16 14:00:00', true, '2023-04-16 14:00:00'),
-    ('4595d147-f934-4886-9d03-9c72a269956d', 1003, '2023-04-16 14:00:00', true, '2023-04-16 14:00:00'),
-    ('3b80a321-ca62-401d-b049-245fc75fa52d', 1004, '2023-04-16 14:00:00', true, '2023-04-16 14:00:00');
+INSERT INTO public.tbl_car (car_id, car_number, created_at, status, update_at) VALUES ('2d62cf51-0176-44ed-ab6f-dc6ee19789a2', 7075, '2023-04-15 16:42:57.094', true, NULL);
+INSERT INTO public.tbl_car (car_id, car_number, created_at, status, update_at) VALUES ('c96feb08-9c83-4eca-af72-cb39cf079c59', 7074, '2023-04-15 16:43:02.802', true, NULL);
+INSERT INTO public.tbl_car (car_id, car_number, created_at, status, update_at) VALUES ('8a46cf74-8a13-4cc5-accb-11d9594181f7', 7073, '2023-04-15 16:43:06.509', true, NULL);
 

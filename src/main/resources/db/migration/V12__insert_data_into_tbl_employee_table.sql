@@ -1,7 +1,3 @@
-INSERT INTO public.tbl_employee(
-    employee_id, created_at, dob, update_at, yoe, car_id, user_id)
-VALUES
-    ('49c6035a-0c26-4fe6-8b54-635f169087b9', '2023-04-16 14:20:00', '2001-01-09', '2023-04-16 14:20:00', 2, '000b070a-0b03-4b42-afae-f35f76ef83cf', '648725ce-f60e-4387-a1a0-55ea098fd7a0'),
-    ('08aeaf1e-ca5c-4cbc-82ab-0bfe5d7cdb01', '2023-04-16 14:20:00', '2001-01-09', '2023-04-16 14:20:00', 2, 'eaf8efa7-adef-41a7-a4c2-cf4a30d4db4a', 'b4a968ac-1259-4219-8354-761f24856748'),
-    ('ecaf5caf-7762-4444-bd78-29691aa47913', '2023-04-16 14:20:00', '2001-01-09', '2023-04-16 14:20:00', 2, '4595d147-f934-4886-9d03-9c72a269956d', 'a187bd77-603b-45bb-8490-8ded54a9f1c5'),
-    ('62a07b5d-bd4d-4fd2-ae05-953aee845eb5', '2023-04-16 14:20:00', '2001-01-09', '2023-04-16 14:20:00', 2, '3b80a321-ca62-401d-b049-245fc75fa52d', '427e73af-4e5f-43a2-b00d-a3d2914859c0');
+INSERT INTO public.tbl_employee (employee_id, created_at, dob, update_at, yoe, car_id, user_id) VALUES ('123', '2023-04-15 16:43:52', '2023-04-15 16:43:56', NULL, 1, '2d62cf51-0176-44ed-ab6f-dc6ee19789a2', '3b4586e2-03c0-4f11-bb85-b100946c518a');
+INSERT INTO public.tbl_employee (employee_id, created_at, dob, update_at, yoe, car_id, user_id) VALUES ('124', '2023-04-15 16:45:56', '2023-04-15 16:45:58', NULL, 2, '8a46cf74-8a13-4cc5-accb-11d9594181f7', 'bb5160b8-3268-47c9-99a8-01dea2fbbb04');
+INSERT INTO public.tbl_employee (employee_id, created_at, dob, update_at, yoe, car_id, user_id) VALUES ('c8eea949-3d55-4d35-b159-d9fd6e72e6e1', '2023-04-23 13:55:21.197', '2001-01-01 07:00:00', NULL, 1, NULL, 'eab4ba71-aed1-4ff8-8a2d-75c82bcd97a6');
