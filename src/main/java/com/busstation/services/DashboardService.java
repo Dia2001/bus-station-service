@@ -6,6 +6,7 @@ import com.busstation.payload.response.dashboard.YearlyRevenueResponse;
 
 import java.util.Map;
 
+
 public interface DashboardService {
 
 	YearlyRevenueResponse getRevenueDataForYear(int year);
@@ -13,4 +14,6 @@ public interface DashboardService {
 	Map<String, Object> statistic(DashboardRequest dashboardRequest);
 
 	Map<String, Object> statistics(DashboardByDateRequest dashboardByDateRequest);
+	
+	boolean exportStatisticToExcel(DashboardRequest dashboardRequest);
 }

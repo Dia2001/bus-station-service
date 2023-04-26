@@ -19,21 +19,31 @@ public class DashboardController {
 	@Autowired
 	private DashboardService dashboardService;
 
+	@GetMapping("/export")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> exportStatisticToExcel(@RequestParam int month, @RequestParam int year) {
+		DashboardRequest request = new DashboardRequest(month, year);
+		if(dashboardService.exportStatisticToExcel(request)) {
+			return new ResponseEntity<>("Export file excel successfully", HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Export file excel failed", HttpStatus.OK);
+	}
+
 	@PostMapping("/revenue-year")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public YearlyRevenueResponse getTotalRevenue(@RequestBody DashboardRequest request){
+	public YearlyRevenueResponse getTotalRevenue(@RequestBody DashboardRequest request) {
 		return dashboardService.getRevenueDataForYear(request.getYear());
 	}
 
 	@PostMapping()
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<?> statistics(@RequestBody DashboardRequest dashboardRequest){
+	public ResponseEntity<?> statistics(@RequestBody DashboardRequest dashboardRequest) {
 		return new ResponseEntity<>(dashboardService.statistic(dashboardRequest), HttpStatus.OK);
 	}
 
 	@PostMapping("/date")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public ResponseEntity<?> statisticsByDate(@RequestBody DashboardByDateRequest dashboardByDateRequest){
-		return new ResponseEntity<>(dashboardService.statistics(dashboardByDateRequest),HttpStatus.OK);
+	public ResponseEntity<?> statisticsByDate(@RequestBody DashboardByDateRequest dashboardByDateRequest) {
+		return new ResponseEntity<>(dashboardService.statistics(dashboardByDateRequest), HttpStatus.OK);
 	}
 }

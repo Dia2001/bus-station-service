@@ -5,8 +5,8 @@ import java.io.Writer;
 
 public interface CsvFileService {
 
-	public void exportUsesToCsv(Writer writer);
+	void exportUsesToCsv(Writer writer);
 
-	public void importUserstoCsvFile(BufferedReader reader);
+	void importUserstoCsvFile(BufferedReader reader);
 
 }

@@ -31,11 +31,12 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, String
     List<Object[]> getOrderDetailsByMonth(@Param("month") int month, @Param("year") int year);
 
     @Query("SELECT SUM(tt.price) AS total_price, COUNT(od.order.orderID) AS total_orders, "
-            + "EXTRACT(DAY FROM od.createAt) AS day_of_month FROM OrderDetail od "
+            + "DATE(od.createAt) AS order_date FROM OrderDetail od "
             + "JOIN Order o on od.order.orderID = o.orderID join Ticket tt on od.ticket.ticketId = tt.ticketId "
             + "WHERE od.createAt >= :start AND od.createAt < :end AND od.status = true "
-            + "GROUP BY day_of_month ORDER BY day_of_month ASC")
+            + "GROUP BY order_date ORDER BY order_date ASC")
     List<Object[]> getOrderDetailsByDate(@Param("start") Date start, @Param("end") Date end);
+
 
     @Query("select od.ticket.price from OrderDetail od where od.status = true and EXTRACT(YEAR FROM od.createAt) = ?1")
     List<Double> getPriceByYearAndCreateAt(Integer year);
