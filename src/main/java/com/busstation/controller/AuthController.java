@@ -8,6 +8,7 @@ import com.busstation.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -26,10 +27,12 @@ public class AuthController {
         return new ResponseEntity<>(  authService.signUpUser(signupRequest),HttpStatus.CREATED);
     }
     @PostMapping("/signupemployee/{accountid}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> signUpEmployee(@PathVariable("accountid") String accountId,@RequestBody EmployeeRequest employeeRequest) {
         return new ResponseEntity<>(  authService.signUpEmployee(accountId,employeeRequest),HttpStatus.CREATED);
     }
     @PostMapping("/signupforemployee")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> signUpForEmployees(@RequestBody SignupRequest signupRequest) {
         return new ResponseEntity<>(  authService.signUpForEmployees(signupRequest),HttpStatus.CREATED);
     }

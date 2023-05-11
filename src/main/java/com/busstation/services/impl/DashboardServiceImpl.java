@@ -1,5 +1,7 @@
 package com.busstation.services.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -8,8 +10,12 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import com.busstation.common.Constant;
 import com.busstation.payload.request.DashboardByDateRequest;
 import com.busstation.payload.request.DashboardRequest;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +26,9 @@ import com.busstation.services.DashboardService;
 
 @Service
 public class DashboardServiceImpl implements DashboardService{
+
+
+	private static final String FILE_PATH = Constant.EXCEL_PARH + "/statistics.xlsx";
 
 	@Autowired
 	private OrderDetailRepository orderDetailRepository;
@@ -96,6 +105,45 @@ public class DashboardServiceImpl implements DashboardService{
 		yrr.setTotalOrder(getTotalOrderForYear(year));
 		return yrr;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public boolean exportStatisticToExcel(DashboardRequest dashboardRequest) {
+		Map<String, Object> statisticData = statistic(dashboardRequest);
+
+		try (XSSFWorkbook workbook = new XSSFWorkbook()){
+			File dataDir = new File(Constant.EXCEL_PARH);
+			if (!dataDir.exists()) {
+				dataDir.mkdir();
+			}
+			XSSFSheet sheet = workbook.createSheet("statistic");
+
+			Row header = sheet.createRow(0);
+			header.createCell(0).setCellValue("Day");
+			header.createCell(1).setCellValue("Order");
+			header.createCell(2).setCellValue("Revenue");
+
+			List<Integer> days = (List<Integer>) statisticData.get("day");
+			List<Integer> orders = (List<Integer>) statisticData.get("order");
+			List<Integer> revenues = (List<Integer>) statisticData.get("revenue");
+
+			for (int i = 0; i < days.size(); i++) {
+				Row row = sheet.createRow(i + 1);
+				row.createCell(0).setCellValue(days.get(i));
+				row.createCell(1).setCellValue(orders.get(i));
+				row.createCell(2).setCellValue(revenues.get(i));
+			}
+
+			FileOutputStream outputStream = new FileOutputStream(FILE_PATH);
+			workbook.write(outputStream);
+			outputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
+
+	}
+
 	@Override
 	public Map<String, Object> statistic(DashboardRequest dashboardRequest) {
 		List<Object[]> resultList = orderDetailRepository.getOrderDetailsByMonth(dashboardRequest.getMonth(),

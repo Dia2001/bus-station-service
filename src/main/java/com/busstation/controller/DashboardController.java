@@ -19,6 +19,18 @@ public class DashboardController {
 	@Autowired
 	private DashboardService dashboardService;
 
+
+	@GetMapping("/export")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> exportStatisticToExcel(@RequestParam int month, @RequestParam int year) {
+		DashboardRequest request = new DashboardRequest(month, year);
+		if(dashboardService.exportStatisticToExcel(request)) {
+			return new ResponseEntity<>("Export statistics successfully", HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Export statistics failed", HttpStatus.OK);
+	}
+
+
 	@PostMapping("/revenue-year")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public YearlyRevenueResponse getTotalRevenue(@RequestBody DashboardRequest request){

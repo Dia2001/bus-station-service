@@ -10,6 +10,9 @@ public interface DashboardService {
 
 	YearlyRevenueResponse getRevenueDataForYear(int year);
 
+	boolean exportStatisticToExcel(DashboardRequest dashboardRequest);
+
+
 	Map<String, Object> statistic(DashboardRequest dashboardRequest);
 
 	Map<String, Object> statistics(DashboardByDateRequest dashboardByDateRequest);

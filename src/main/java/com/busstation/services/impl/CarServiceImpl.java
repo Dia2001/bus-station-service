@@ -47,11 +47,11 @@ public class CarServiceImpl implements CarService {
     @Override
     public CarResponse updatedCar(String carId, CarRequest request) {
         Car car = carRepository.findById(carId).orElseThrow(() -> new RuntimeException("Car does not exist"));
-        Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(() -> new RuntimeException("Trip does not exist"));
+       // Trip trip = tripRepository.findById(request.getTripId()).orElseThrow(() -> new RuntimeException("Trip does not exist"));
 
         car.setStatus(request.getStatus());
         car.setCarNumber(request.getCarNumber());
-        car.setTrips(Collections.singleton(trip));
+       // car.setTrips(Collections.singleton(trip));
         carRepository.save(car);
 
         CarResponse response = new CarResponse();
@@ -59,7 +59,7 @@ public class CarServiceImpl implements CarService {
         response.setCarNumber(car.getCarNumber());
         response.setStatus(car.getStatus());
         response.setChair(setupChairResponse(car));
-        response.setTripId(Collections.singletonList(trip.getTripId()));
+       // response.setTripId(Collections.singletonList(trip.getTripId()));
 
         return response;
     }
